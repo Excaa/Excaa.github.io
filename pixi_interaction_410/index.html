@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+	body, html, div, canvas
+	{
+	margin:0;
+	padding:0;
+	overflow:hidden;
+	}
+	</style>
+</head>
+<script type="text/javascript" src="pixi.js"></script>
+<body>
+<script>
+
+var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x3030aa, transparent: false}, false);
+document.body.appendChild(renderer.view);
+
+var aspect = 16/9;
+var w = window.innerWidth;
+var h = window.innerHeight;
+renderer.resize(w, h);
+
+var stage = new PIXI.Container();
+var sprite1 = new  PIXI.Graphics();
+sprite1.beginFill(0x0, 1);
+sprite1.drawRect(0,0,40,40);
+sprite1.endFill();
+sprite1.position = new PIXI.Point(w/2,h/2);
+sprite1.interactive = true;
+stage.addChild(sprite1);
+
+sprite1.addListener("click", function(){alert("Click");});
+
+animate();
+
+function animate() {
+	renderer.render(stage);
+	requestAnimationFrame(animate);
+}
+
+
+
+
+</script>
+
+	
+</body>
+</html>
