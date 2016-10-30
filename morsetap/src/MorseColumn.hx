@@ -100,9 +100,9 @@ class MorseColumn extends Container
 			else
 			{
 				untyped block.type = "-";
-				block.drawRect(0, 0, 50, 120);
+				block.drawRect(0, 0, 70, 120);
 				block.y = 620 - 120;
-				cor.drawRect(0, 0, 50, 120);
+				cor.drawRect(0, 0, 70, 120);
 				cor.y = 620 - 120;
 			}
 			block.x = xc;
@@ -119,18 +119,17 @@ class MorseColumn extends Container
 		
 		return xc+20;
 	}
-	public function testhit(x:Int, delta:Float):Void
+	public function testhit(x:Int, delta:Float):Int
 	{
 		if (x < this.x || x > this.width + this.x)
-		 return;
+		 return 0;
 		 var rm:Array<Graphics> = [];
-		trace("test hit " + x);
+		 var dc:Int = 0;
 		 for (i in 0...blocks.length)
 		 {
 			 var b:Graphics = blocks[i];
 			if (this.x + b.x < x && this.x + b.width+b.x  > x)
 			{
-				trace("hits");
 				var c:Graphics = blocks[i];
 				if (untyped b.type == ".")
 					b.scale.y = 0;
@@ -141,12 +140,14 @@ class MorseColumn extends Container
 				}
 				if (b.scale.y <= 0)
 				{
+					dc++;
 					rm.push(b);
 				}
 			}
 		 }
 		 for (m in rm)
 			blocks.remove(m);
+		return dc;
 	}
 	
 }

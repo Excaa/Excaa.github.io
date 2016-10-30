@@ -158,12 +158,17 @@ GameView.prototype = $extend(PIXI.Container.prototype,{
 			this.spawnWord(this.wordlist);
 		}
 		if(this.down) {
+			var br = 0;
 			var _g2 = 0;
 			var _g11 = this.columns;
 			while(_g2 < _g11.length) {
 				var mc = _g11[_g2];
 				++_g2;
-				mc.testhit(this.character.x,this.speed);
+				br += mc.testhit(this.character.x,this.speed);
+			}
+			console.log(br);
+			if(br > 0) {
+				this.onup();
 			}
 		}
 		this.speed += 0.0005;
@@ -267,9 +272,9 @@ MorseColumn.prototype = $extend(PIXI.Container.prototype,{
 				cor.y = 580;
 			} else {
 				block.type = "-";
-				block.drawRect(0,0,50,120);
+				block.drawRect(0,0,70,120);
 				block.y = 500;
-				cor.drawRect(0,0,50,120);
+				cor.drawRect(0,0,70,120);
 				cor.y = 500;
 			}
 			block.x = xc;
@@ -284,17 +289,16 @@ MorseColumn.prototype = $extend(PIXI.Container.prototype,{
 	}
 	,testhit: function(x,delta) {
 		if(x < this.x || x > this.width + this.x) {
-			return;
+			return 0;
 		}
 		var rm = [];
-		console.log("test hit " + x);
+		var dc = 0;
 		var _g1 = 0;
 		var _g = this.blocks.length;
 		while(_g1 < _g) {
 			var i = _g1++;
 			var b = this.blocks[i];
 			if(this.x + b.x < x && this.x + b.width + b.x > x) {
-				console.log("hits");
 				var c = this.blocks[i];
 				if(b.type == ".") {
 					b.scale.y = 0;
@@ -303,6 +307,7 @@ MorseColumn.prototype = $extend(PIXI.Container.prototype,{
 					b.y = 620 - b.height;
 				}
 				if(b.scale.y <= 0) {
+					++dc;
 					rm.push(b);
 				}
 			}
@@ -313,6 +318,7 @@ MorseColumn.prototype = $extend(PIXI.Container.prototype,{
 			++_g2;
 			HxOverrides.remove(this.blocks,m);
 		}
+		return dc;
 	}
 });
 var Reflect = function() { };

@@ -150,8 +150,11 @@ class GameView extends Container
 		
 		if (down)
 		{
+			var br:Int = 0;
 			for ( mc in columns)
-				mc.testhit(cast character.x, speed);
+				br += mc.testhit(cast character.x, speed);
+			trace(br);
+			if (br > 0) onup();
 		}
 		speed += 0.0005;
 	}
