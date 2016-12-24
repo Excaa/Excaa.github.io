@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Have a merry christmas!</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+			a {
+				color: #ffffff;
+			}
+			#greet
+			{
+			   text-shadow: 1px 1px 4px #000000;
+				position:fixed;
+				color: #ffffff;
+				font-size: 36px;
+				bottom:20px;
+				right:0px;
+				left:0px;
+				text-align:center;
+				font-family: Impact;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="greet">Hyvää joulua!<br/>Merry Christmas!</div>
+
+		<script src="three.js"></script>
+
+		<script>
+		(function(){
+}());
+var plane;
+			var camera, scene, renderer;
+			var isUserInteracting = false,
+			onMouseDownMouseX = 0, onMouseDownMouseY = 0,
+			lon = 0, onMouseDownLon = 0,
+			lat = 0, onMouseDownLat = 0,
+			phi = 0, theta = 0;
+				
+			var balls = [];
+			var cubeind = 0;
+			var angle = 0;
+			var map =  new THREE.TextureLoader().load( 'bg.jpg' );
+			var mapb1 =  new THREE.TextureLoader().load( 'map1.jpg' );
+			mapb1.wrapS = mapb1.wrapT = THREE.RepeatWrapping;
+			mapb1.repeat.set( 4,4 );
+			
+			var mapb2 =  new THREE.TextureLoader().load( 'map2.jpg' );
+			mapb2.wrapS = mapb2.wrapT = THREE.RepeatWrapping;
+			mapb2.repeat.set( 4,4 );
+			
+			var mapb3 =  new THREE.TextureLoader().load( 'map3.jpg' );
+			mapb3.wrapS = mapb3.wrapT = THREE.RepeatWrapping;
+			mapb3.repeat.set( 4,4 );
+			
+			var maps = [mapb1, mapb3,mapb2];
+			
+			var mesh;
+			
+			var linemat = new THREE.MeshBasicMaterial({color:0x808090, transparent:true, opacity:0.6});
+			var linegeom = new THREE.BoxGeometry(0.5,100,0.5);
+			function createBalls()
+			{
+				var geom = new THREE.IcosahedronGeometry(20,3);
+				
+				var poss = [
+				new THREE.Vector3(-40, -10, 40),
+				new THREE.Vector3(30, 14, 20),
+				new THREE.Vector3(20,-20, -0),
+				new THREE.Vector3(-30, 10, -10),
+				new THREE.Vector3(0, 0, 50),
+				
+				];
+				
+				for( var i = 0; i < 5; i++)
+				{
+					var cc = new  THREE.CubeCamera(1,600,512);
+				var mat = new THREE.MeshBasicMaterial(
+				{ envMap:cc.renderTarget.texture,
+				  map: maps[i%2],
+				  specularMap:maps[i%2],
+				  reflectivity:1,
+				  //color:0xffffff*Math.random()
+				  //combine: THREE.AddOperation
+				});
+					var mesh = new THREE.Mesh(geom,mat);
+					var line = new THREE.Mesh(linegeom, linemat);
+					mesh.add(line);
+					line.position.y = 50;
+					mesh.cc=cc;
+					var deg = i/7;
+					mesh.op = poss[i];
+					mesh.position.copy(poss[i]);
+//					mesh.position.x = i*40;
+//					mesh.position.y =  0;//Math.sin(deg)*40;
+//					mesh.position.z = i*0;
+					cc.position.copy(mesh.position);
+				//	mesh.rotation.x = Math.random()*360;
+				//	mesh.rotation.z = Math.random()*360;
+				//	mesh.rotation.y = Math.random()*360;
+					
+				/*var srnd = Math.random()*0.6+0.4;
+					mesh.scale.x = srnd;
+					mesh.scale.y = srnd;
+					mesh.scale.z = srnd;
+					*/
+					balls.push(mesh);
+					scene.add(mesh);
+				}
+			}
+						function onWindowResize() {
+			
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				
+				plane.material.uniforms.resolution.value.x = window.innerWidth*5;
+				plane.material.uniforms.resolution.value.y = window.innerHeight*5;
+				
+				
+			}
+
+			//Scene display, using threejs example with small modifications.
+			init();
+	//		animate();
+			function init() {
+				var container;
+				container = document.getElementById( 'container' );
+				camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 1100 );
+				camera.position.z=-100;
+				camera.target = new THREE.Vector3( 0, 0, 0 );
+				camera.lookAt(camera.target);
+				scene = new THREE.Scene();
+				var geometry = new THREE.SphereGeometry( 500, 2, 4 );
+				geometry.scale( - 1, 1, 1 );
+				var material = new THREE.MeshBasicMaterial( {
+					map: map
+				} );
+				mesh = new THREE.Mesh( geometry, material );
+				scene.add( mesh );
+				
+				renderer = new THREE.WebGLRenderer();
+				
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				//renderer.setClearColor(0xffffff,1);
+				container.appendChild( renderer.domElement );
+			//	cubecam.updateCubeMap(renderer,scene);
+				createBalls();
+				
+				window.addEventListener( 'resize', onWindowResize, false );
+				
+				var planeg = new THREE.PlaneGeometry(1000,1000);
+				var planemat = new THREE.ShaderMaterial( {
+
+					uniforms: {
+						r: { value: 1.0 },
+						resolution: { value: new THREE.Vector2(1280,720) }
+					},
+					side:THREE.DoubleSide,
+					fragmentShader: [
+				"precision lowp float;",
+				"uniform float r;",
+				"uniform vec2 resolution;",
+				
+				'',
+				'vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )',
+				'{',
+					'return a + b*cos( 6.28318*(c*t+d) );',
+				'}',
+				
+				"void main(){",
+				'	vec2 uv = gl_FragCoord.xy/resolution;',
+				'	uv.y*=resolution.y/resolution.x;',
+				'	vec3 c = palette(uv.y+r*0.2, vec3(0.5,0.5,1.4), vec3(0.0,0.0,0.5), vec3(0.,0.,2.), vec3(0.2,0.0,0.6));',
+				//'c=0.5*c+vec3(0.5);',
+				"	gl_FragColor=vec4(c,1.)*0.2;",
+				"}"].join("\n")
+
+				} );
+				plane = new THREE.Mesh(planeg, planemat);
+				plane.position.z = 400;
+				scene.add(plane);
+				
+				onWindowResize();
+			}
+			
+			var prev = 0;
+			function animate(delta) {
+				requestAnimationFrame( animate );
+				update(prev-delta);
+				prev = delta;
+			}
+			var updc = 0;
+			function update(delta) {
+				angle+=delta*0.001;
+				plane.material.uniforms.r.value = prev*0.0001;
+				mesh.visible = true;
+				for(var i = 0; i < balls.length; i++)
+				{
+					var m = balls[i];
+					var deg = i/4;
+					m.position.z = m.op.z+ Math.sin(angle+deg+i)*2;
+					m.visible = false;
+					m.cc.position.copy(m.position);
+				//	if(updc++ < 3)
+						m.cc.updateCubeMap(renderer,scene);
+					m.visible = true;
+			//		m.position.x = Math.sin(angle+deg)*100;
+			//		m.position.y = Math.sin(deg*1+angle*5)*10;
+			//		m.position.z = Math.cos(angle+deg)*100;
+					
+			//		m.rotation.x+=0.01;
+					m.rotation.y=Math.sin(prev*0.00021+i);
+					
+				}
+				mesh.visible = false;
+				renderer.render( scene, camera );
+			}
+			animate(0);
+			
+		</script>
+	</body>
+</html>
