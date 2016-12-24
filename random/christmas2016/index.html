@@ -37,10 +37,26 @@
 				text-align:center;
 				font-family: 'Mirza', cursive;
 			}
+			
+			#loading
+			{
+			z-index:0;
+				font-family: 'Mirza', cursive;
+				text-align:center;
+				position:fixed;
+				font-size:40px;
+				left:0px;
+				top:0px;
+				right:0px;
+				bottom:0px;
+				color:#ffffff;
+				background:#112;
+			}
 		</style>
 	</head>
 	<body>
 
+		<div id="loading">Loading...</div>
 		<div id="container"></div>
 		<div id="greet">Hyvää joulua!<br/>Merry Christmas!</div>
 
@@ -60,7 +76,15 @@ var plane;
 			var balls = [];
 			var cubeind = 0;
 			var angle = 0;
-			var map =  new THREE.TextureLoader().load( 'bg.jpg' );
+			var ldr = new THREE.TextureLoader();
+			
+ldr.manager.onLoad =  function(event){
+
+    // The actual texture is returned in the event.content
+    document.getElementById("loading").remove();
+
+};
+			var map =  ldr.load( 'bg.jpg' );
 			var mapb1 =  new THREE.TextureLoader().load( 'map1.jpg' );
 			mapb1.wrapS = mapb1.wrapT = THREE.RepeatWrapping;
 			mapb1.repeat.set( 4,4 );
