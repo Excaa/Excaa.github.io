@@ -29,8 +29,10 @@ class Main
 	
 	private var velocities:Float32Array;
 	private var vertices:Float32Array;
+	private var indices:Float32Array;
 	private var vertexBuffers:Array<Buffer>;
 	private var velocityBuffers:Array<Buffer>;
+	private var indexBuffers:Array<Buffer>;
 	private var feedbackProgram:Program;
 	private var displayProgram:Program;
 	
@@ -96,16 +98,14 @@ class Main
 	
 	private function initializeControls():Void
 	{
-		this.vertices = new Float32Array(points*2);
+		this.vertices = new Float32Array(points * 2);
+		this.velocities = new Float32Array(points * 2); 
+		this.indices = new Float32Array(points * 2);
 		for ( i in 0...vertices.length)
 		{
 			vertices[i] = Math.random() * 2 - 1;
-		}
-		
-		this.velocities = new Float32Array(points * 2); 
-		for ( i in 0...velocities.length)
-		{
 			velocities[i] = 0;
+			indices[i] = i;
 		}
 		
 		vertexBuffers = [
@@ -117,6 +117,12 @@ class Main
 			GLUtil.createBufferFromArray(gl, velocities, RenderingContext.STATIC_DRAW),
 			GLUtil.createBufferWithSize(gl, points*2*4, RenderingContext.STATIC_DRAW)
 		];
+		
+		indexBuffers = [
+			GLUtil.createBufferFromArray(gl, indices, RenderingContext.STATIC_DRAW),
+			GLUtil.createBufferWithSize(gl, points*2*4, RenderingContext.STATIC_DRAW)
+		];
+		
 		
 		this.feedbackProgram = GLUtil.createProgram(gl, Resource.getString("calc.vert"), Resource.getString("empty.frag"),
 		                                            ['v_position', 'v_velocity'], untyped gl.SEPARATE_ATTRIBS);
@@ -135,6 +141,12 @@ class Main
 				location: 1,
 				elementSize:2
 			}
+			,
+			{
+				data:indexBuffers[0],
+				location: 2,
+				elementSize:2
+			}
 		]));
 		
 		feedbackVAO.push( GLUtil.createVAO(gl, [
@@ -147,6 +159,11 @@ class Main
 				data:velocityBuffers[1],
 				location:1,
 				elementSize:2
+			},
+			{
+				data:indexBuffers[0],
+				location: 2,
+				elementSize:2
 			}
 		]));
 		
@@ -155,6 +172,11 @@ class Main
 				data:vertexBuffers[0],
 				location: 0,
 				elementSize: 2
+			},
+			{
+				data:velocityBuffers[0],
+				location: 1,
+				elementSize:2
 			}
 		]));
 		
@@ -162,6 +184,11 @@ class Main
 			{
 				data:vertexBuffers[1],
 				location: 0,
+				elementSize:2
+			},
+			{
+				data:velocityBuffers[1],
+				location: 1,
 				elementSize:2
 			}
 		]));
@@ -184,7 +211,6 @@ class Main
 		untyped gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, transformFeedback);
 		untyped gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 0, vertexBuffers[invertedIndex]);
 		untyped gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER, 1, velocityBuffers[invertedIndex]);
-		
 		gl.useProgram(feedbackProgram);
 		gl.uniform2fv(mouseLocation, [mousePoint.x, mousePoint.y]);
 		gl.uniform1f(timeLocation, time);
