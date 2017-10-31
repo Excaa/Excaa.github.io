@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+	body, html, div, canvas
+	{
+	margin:0;
+	padding:0;
+	}
+	</style>
+</head>
+<script type="text/javascript" src="pixi.min.js"></script>
+<body>
+<script>
+
+var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x3030aa, transparent: false}, true);
+document.body.appendChild(renderer.view);
+
+var stage = new PIXI.Container();
+
+
+var uvs = [0.0, 0.0, 1, 0, 1, 1, 0, 1];
+var vertices = [0, 0, 100, 0, 100, 100, 0, 100];
+var indices = [0,1,2, 0,2,3];
+var mesh = new PIXI.mesh.Mesh( PIXI.Texture.fromImage("rabbit.png"), new Float32Array(vertices), new Float32Array(uvs), new Int16Array(indices), PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES);
+stage.addChild(mesh);
+
+var mesh2 = new PIXI.mesh.Mesh( PIXI.Texture.fromImage("rabbit.png"), new Float32Array(vertices), new Float32Array(uvs), new Int16Array(indices), PIXI.mesh.Mesh.DRAW_MODES.TRIANGLE_MESH);
+mesh2.x = 200;
+stage.addChild(mesh2);
+
+
+animate();
+
+function animate() {
+	renderer.render(stage);
+	requestAnimationFrame(animate);
+}
+
+
+
+
+</script>
+
+	
+</body>
+</html>
