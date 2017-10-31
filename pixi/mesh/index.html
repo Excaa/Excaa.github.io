@@ -15,21 +15,59 @@
 <body>
 <script>
 
-var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x3030aa, transparent: false}, true);
+var renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0xffffff, transparent: false}, true);
 document.body.appendChild(renderer.view);
 
 var stage = new PIXI.Container();
 
 
-var uvs = [0.0, 0.0, 1, 0, 1, 1, 0, 1];
-var vertices = [0, 0, 100, 0, 100, 100, 0, 100];
-var indices = [0,1,2, 0,2,3];
-var mesh = new PIXI.mesh.Mesh( PIXI.Texture.fromImage("rabbit.png"), new Float32Array(vertices), new Float32Array(uvs), new Int16Array(indices), PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES);
-stage.addChild(mesh);
 
-var mesh2 = new PIXI.mesh.Mesh( PIXI.Texture.fromImage("rabbit.png"), new Float32Array(vertices), new Float32Array(uvs), new Int16Array(indices), PIXI.mesh.Mesh.DRAW_MODES.TRIANGLE_MESH);
-mesh2.x = 200;
-stage.addChild(mesh2);
+var uvs = [0.0, 0.0,  1, 0,  1, 1,     0, 1];
+var vertices =[0, 0, 100, 0, 100, 100, 0, 100];
+var indices = [0,1,2, 0,2,3];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES, 0,30, "0,1,2 CW / 0,2,3 CW")
+
+uvs = [0.0, 0.0,  1, 0,  1, 1,     0, 1];
+vertices =[0, 0, 100, 0, 100, 100, 0, 100];
+indices = [0,2,1, 0,2,3];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES, 150,30, "0,2,1 CCW / 0,2,3 CW")
+
+uvs = [0.0, 0.0,  1, 0,  1, 1,     0, 1];
+vertices =[0, 0, 100, 0, 100, 100, 0, 100];
+indices = [0,2,1, 0,3,2];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES, 300,30, "0,2,1 CCW / 0,3,2 CCW")
+
+uvs = [0.0, 0.0,  1, 0,  1, 1,     0, 1];
+vertices =[0, 0, 100, 0, 100, 100, 0, 100];
+indices = [0,1,2, 0,3,2];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES, 450,30, "0,1,2 CW / 0,3,2 CCW")
+
+
+uvs = [0.0, 0.0,  1, 0,  1, 1,     0, 1];
+vertices =[0, 0, 100, 0, 100, 100, 0, 100];
+indices = [3,1,2, 0,1,3];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES, 1500,30, "3,1,2 / 0,1,3")
+
+//TRIANGLE_MESH
+uvs = [0.0, 0.0,  1, 0,  1, 1,     0,0, 1,1, 0,1];
+vertices =[0, 0, 100, 0, 100, 100,   0, 0, 100,100, 0,100];
+indices = [];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLE_MESH, 0,230, "0,1,2 CW / 0,2,3 CW")
+
+uvs = [ 0,0, 1,1, 1,0,   0,0, 1,1, 0,1  ];
+vertices =[0,0,  100,100, 100,0,    0,0, 100,100, 0,100];
+indices = [];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLE_MESH, 150,230, "0,2,1 CCW / 0,2,3 CW")
+
+uvs = [  0,0, 1,1, 1,0,   0,0, 0,1, 1,1 ];
+vertices =[ 0,0, 100,100, 100,0,  0,0, 0,100, 100, 100,];
+indices = [];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLE_MESH, 300,230, "0,2,1 CCW / 0,3,2 CCW")
+
+uvs = [  0,0,  1,0,1,1,   0,0, 0,1, 1,1 ];
+vertices =[ 0,0, 100,0, 100,100,  0,0, 0,100, 100, 100,];
+indices = [];
+buildMesh(uvs, vertices, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLE_MESH, 450,230, "0,2,1 CW / 0,3,2 CCW")
 
 
 animate();
@@ -39,7 +77,17 @@ function animate() {
 	requestAnimationFrame(animate);
 }
 
-
+function buildMesh(uvs, vertices, indices, mode, x,y,title)
+{
+	var mesh = new PIXI.mesh.Mesh( PIXI.Texture.fromImage("rabbit.png"), new Float32Array(vertices), new Float32Array(uvs), new Int16Array(indices), mode);
+	stage.addChild(mesh);
+	mesh.x = x;
+	mesh.y = y;
+	var text = new PIXI.Text(title);
+	text.style.fontSize = 10;
+	mesh.addChild(text);
+	text.y = -15;
+}
 
 
 </script>
