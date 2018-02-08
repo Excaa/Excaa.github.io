@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<script>
+
+var soundbuffer = null;
+// Fix up prefixing
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var context = new AudioContext();
+
+function playSound(buffer) {
+  var source = context.createBufferSource();
+  source.buffer = buffer;
+  source.connect(context.destination);
+  source.loop = true;
+  source.start(0);
+}
+
+function onError(e) {
+	console.log(e);
+}
+
+function loadSound(url) {
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'arraybuffer';
+
+  // Decode asynchronously
+  request.onload = function() {
+    context.decodeAudioData(request.response, function(buffer) {
+	  console.log("start play");
+      soundbuffer = buffer;
+	  playSound(buffer);
+    }, onError);
+  }
+  request.send();
+}
+
+loadSound("Konvergence_Kapital_soundtrack_minomus_m1t.mp3");
+
+//Sound enabler
+window.addEventListener('touchstart', function() {
+
+	// create empty buffer
+	var buffer = context.createBuffer(1, 1, 22050);
+	var source = context.createBufferSource();
+	source.buffer = buffer;
+
+	// connect to output (your speakers)
+	source.connect(context.destination);
+
+	// play the file
+	source.noteOn(0);
+
+}, false);
+
+</script>
+
+	
+</body>
+</html>
