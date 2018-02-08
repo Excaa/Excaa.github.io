@@ -1144,19 +1144,23 @@ wl_sounds_SoundWL.initializeFFT = function() {
 	var context = wl_sounds_SoundWL.context;
 	var fftsize = wl_sounds_SoundWL.FFT_PRECISION;
 	if(context != null && $bind(context,context.createAnalyser) != null) {
+		var mergerNode = context.createChannelMerger();
+		mergerNode.connect(context.destination);
 		wl_sounds_SoundWL.analyserNodeLeft = context.createAnalyser();
 		wl_sounds_SoundWL.analyserNodeLeft.fftSize = fftsize;
 		wl_sounds_SoundWL.analyserNodeLeft.smoothingTimeConstant = 0.0;
-		wl_sounds_SoundWL.analyserNodeLeft.connect(context.destination);
+	//	wl_sounds_SoundWL.analyserNodeLeft.connect(mergerNode);
 		wl_sounds_SoundWL.analyserNodeRight = context.createAnalyser();
 		wl_sounds_SoundWL.analyserNodeRight.fftSize = fftsize;
 		wl_sounds_SoundWL.analyserNodeRight.smoothingTimeConstant = 0.0;
+		wl_sounds_SoundWL.analyserNodeRight.connect(context.destination);
 		var dynamicsNode = wl_sounds_SoundWL.dynamicsCompressorNode;
 		dynamicsNode.disconnect();
 		var splitterNode = context.createChannelSplitter(2);
 		dynamicsNode.connect(splitterNode);
 		splitterNode.connect(wl_sounds_SoundWL.analyserNodeLeft,0);
 		splitterNode.connect(wl_sounds_SoundWL.analyserNodeRight,1);
+		
 		wl_sounds_SoundWL.freqFloatDataLeft = new Float32Array(wl_sounds_SoundWL.analyserNodeLeft.frequencyBinCount);
 		wl_sounds_SoundWL.freqByteDataLeft = new Uint8Array(wl_sounds_SoundWL.analyserNodeLeft.frequencyBinCount);
 		wl_sounds_SoundWL.timeByteDataLeft = new Uint8Array(wl_sounds_SoundWL.analyserNodeLeft.frequencyBinCount);
