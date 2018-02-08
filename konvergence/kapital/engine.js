@@ -1093,7 +1093,7 @@ wl_sounds_SoundWL.init = function() {
 	wl_sounds_SoundWL.loadMusicFile();
 	wl_sounds_SoundWL.context = createjs.Sound.activePlugin.context;
 	wl_sounds_SoundWL.sampleRate = createjs.Sound.activePlugin.context.sampleRate;
-	wl_sounds_SoundWL.dynamicsCompressorNode = createjs.Sound.activePlugin.dynamicsCompressorNode;
+	wl_sounds_SoundWL.dynamicsCompressorNode = createjs.Sound.activePlugin.gainNode;
 	if(wl_core_Config.ENABLE_FFT) {
 		wl_sounds_SoundWL.initializeFFT();
 	}
