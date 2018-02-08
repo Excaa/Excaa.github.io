@@ -1144,22 +1144,22 @@ wl_sounds_SoundWL.initializeFFT = function() {
 	var context = wl_sounds_SoundWL.context;
 	var fftsize = wl_sounds_SoundWL.FFT_PRECISION;
 	if(context != null && $bind(context,context.createAnalyser) != null) {
-		var mergerNode = context.createChannelMerger();
+		var mergerNode = context.createChannelMerger(2);
 		mergerNode.connect(context.destination);
 		wl_sounds_SoundWL.analyserNodeLeft = context.createAnalyser();
 		wl_sounds_SoundWL.analyserNodeLeft.fftSize = fftsize;
 		wl_sounds_SoundWL.analyserNodeLeft.smoothingTimeConstant = 0.0;
-	//	wl_sounds_SoundWL.analyserNodeLeft.connect(mergerNode);
+		wl_sounds_SoundWL.analyserNodeLeft.connect(mergerNode);
 		wl_sounds_SoundWL.analyserNodeRight = context.createAnalyser();
 		wl_sounds_SoundWL.analyserNodeRight.fftSize = fftsize;
 		wl_sounds_SoundWL.analyserNodeRight.smoothingTimeConstant = 0.0;
-		wl_sounds_SoundWL.analyserNodeRight.connect(context.destination);
+		wl_sounds_SoundWL.analyserNodeRight.connect(mergerNode,0,1);
 		var dynamicsNode = wl_sounds_SoundWL.dynamicsCompressorNode;
 		dynamicsNode.disconnect();
 		var splitterNode = context.createChannelSplitter(2);
 		dynamicsNode.connect(splitterNode);
-		splitterNode.connect(wl_sounds_SoundWL.analyserNodeLeft,0);
-		splitterNode.connect(wl_sounds_SoundWL.analyserNodeRight,1);
+		splitterNode.connect(wl_sounds_SoundWL.analyserNodeLeft,0,0);
+		splitterNode.connect(wl_sounds_SoundWL.analyserNodeRight,1,0);
 		
 		wl_sounds_SoundWL.freqFloatDataLeft = new Float32Array(wl_sounds_SoundWL.analyserNodeLeft.frequencyBinCount);
 		wl_sounds_SoundWL.freqByteDataLeft = new Uint8Array(wl_sounds_SoundWL.analyserNodeLeft.frequencyBinCount);
@@ -1170,7 +1170,7 @@ wl_sounds_SoundWL.initializeFFT = function() {
 		wl_sounds_SoundWL.scriptProcessor = context.createScriptProcessor(wl_sounds_SoundWL.FFT_PRECISION * 2,2,2);
 		wl_sounds_SoundWL.scriptProcessor.onaudioprocess = wl_sounds_SoundWL.updateFFT;
 		wl_sounds_SoundWL.analyserNodeLeft.connect(wl_sounds_SoundWL.scriptProcessor);
-		wl_sounds_SoundWL.scriptProcessor.connect(context.destination);
+		//wl_sounds_SoundWL.scriptProcessor.connect(mergerNode,0,0);
 	} else {
 		console.log("FFT could not be initialized.");
 	}
