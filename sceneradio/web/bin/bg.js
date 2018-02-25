@@ -44,7 +44,7 @@
 			
 			buildShader("attribute vec2 e;void main(){gl_Position=vec4(e,0,1);}",gl.VERTEX_SHADER);
 			buildShader([
-				"precision lowp float;",
+				"precision mediump float;",
 				"uniform float r;",
 				"uniform vec2 resolution;",
 				'vec3 pal( float t, vec3 a, vec3 b, vec3 c, vec3 d )',
@@ -54,8 +54,8 @@
 				"void main(){",
 				'	vec2 uv = gl_FragCoord.xy/resolution;',
 				'	uv.y*=resolution.y/resolution.x;',
-				'	uv*=sin(r/5.)*2. + 3.;',
-				'	float t = r*2.0;',
+				'	uv*=sin(r/5.)*1. + 1.5;',
+				'	float t = r*0.7;',
 				'	float p = sin(uv.y*0.5-uv.x*0.5 + cos(uv.x+uv.y+t*.1)*1.)*.5+',
 				'	cos(uv.y*0.9-uv.x*0.7 + cos(uv.x+uv.y+t*.2)*2.)*.5;',
 				'	vec3 col = pal( p, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );',
