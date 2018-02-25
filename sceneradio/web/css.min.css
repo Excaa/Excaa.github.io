@@ -1,0 +1,7 @@
+#mainContainer{position:relative;top:80px;background:rgba(0,0,0,0.65);padding:20px;margin-bottom:40px;border:2px solid rgba(255,255,255,0.75);}
+.linktarget:before{display:block;content:" ";margin-top:-60px;height:60px;visibility:hidden;;}
+@media (max-width:768px){.linktarget:before{display:block;content:" ";margin-top:-270px;height:270px;visibility:hidden;;}}
+#demo{padding:0px;background:url('img/bg.png');}
+#demo{position:fixed;top:0px;bottom:0px;left:0px;right:0px;z-index:0;}
+#logo{margin-top:60px;margin-bottom:-50px;position:relative;z-index:1;margin-left:auto;margin-right:auto;text-align:center;}
+
