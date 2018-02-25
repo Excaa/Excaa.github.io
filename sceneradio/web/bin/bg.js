@@ -18,7 +18,7 @@
 			}
 			else
 			{
-				title.text("Sceneradio @ Wappuradio 101,6 MHz - 20.4. 21-24");
+				title.text("Sceneradio @ Wappuradio 107,1 MHz - 20.4. 21-24");
 			}
 		}
 		$(window).resize(titleResize);
