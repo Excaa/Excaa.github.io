@@ -42,29 +42,25 @@
 				gl.attachShader(program, shader);
 			}
 			
+			
 			buildShader("attribute vec2 e;void main(){gl_Position=vec4(e,0,1);}",gl.VERTEX_SHADER);
 			buildShader([
 				"precision mediump float;",
 				"uniform float r;",
 				"uniform vec2 resolution;",
-				'vec3 pal( float t, vec3 a, vec3 b, vec3 c, vec3 d )',
-				'{',
-				'	return a + b*cos( 6.28318*(c*t+d) );',
+				'float sind(vec2 p, float ph, float rad, float off, float tmp){',
+				'return 1./abs(p.y*ph-sin(off+p.x+r*tmp*0.24)*rad);',
 				'}',
 				"void main(){",
-				'	vec2 uv = gl_FragCoord.xy/resolution;',
-				'	uv.y*=resolution.y/resolution.x;',
-				'	uv*=sin(r/5.)*1. + 1.5;',
-				'	float t = r*0.7;',
-				'	float p = sin(uv.y*0.5-uv.x*0.5 + cos(uv.x+uv.y+t*.1)*1.)*.5+',
-				'	cos(uv.y*0.9-uv.x*0.7 + cos(uv.x+uv.y+t*.2)*2.)*.5;',
-				'	vec3 col = pal( p, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );',
-				'	col = col+vec3(0.15,0.0,0.2);',
-				'	col*=col*col;',
-				'	float s = 10.;',
-				'	col*=abs(0.5-mod(gl_FragCoord.x,s)/s)*2.;',
-				'	col*=abs(0.5-mod(gl_FragCoord.y,s)/s)*2.;',
-				"	gl_FragColor=vec4(col,1.);",
+				'	vec2 uv = gl_FragCoord.xy/resolution-vec2(0.5);',
+				'	vec3 col = vec3(0.);',
+				'	vec3 b = 0.5 + 0.5*cos(r+uv.xyx+vec3(0,2,4));',
+				'	col+=sind(uv, 20., 5.,0.0,0.2)*b;',
+				'	col+=sind(uv, 40., 10.,1.0,0.4)*b;',
+				'	col+=sind(uv, 60., 20.,2.0,0.6)*b;',
+				'	col+=sind(uv, 80., 30.,3.0,0.8)*b;',
+				'	col+=sind(uv, 100., 40.,4.0,1.0)*b;',
+				"	gl_FragColor=vec4(col*.25,1.);",
 				"}"
 				].join("\n"), gl.FRAGMENT_SHADER) //FRAGMENT
 			
