@@ -49,7 +49,7 @@
 				"uniform float r;",
 				"uniform vec2 resolution;",
 				'float sind(vec2 p, float ph, float rad, float off, float tmp){',
-				'return 1./abs(p.y*ph-sin(off+p.x+r*tmp*0.24)*rad);',
+				'return smoothstep(0.,8.,1./abs(p.y*ph-sin(off+p.x+r*tmp*0.24)*rad))*8.;',
 				'}',
 				"void main(){",
 				'	vec2 uv = gl_FragCoord.xy/resolution-vec2(0.5);',
