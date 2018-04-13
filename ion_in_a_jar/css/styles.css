@@ -5,7 +5,17 @@ body, div
 	overflow:hidden;
 }
 
+
+
 body
 {
 	font-family: 'pigment_demoregular';
+}
+
+#preload
+{
+	font-size:50px;
+	text-align:center;
+	top:50%;
+	width:100%;
 }

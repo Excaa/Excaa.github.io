@@ -3096,7 +3096,7 @@ util_LoaderWrapper.assetLoaded = function() {
 };
 util_LoaderWrapper.updateText = function() {
 	var other = Math.floor(util_LoaderWrapper.loadCount / util_LoaderWrapper.totalCount) * 100;
-	window.document.getElementById("preload").innerHTML = "Loading: " + Math.min(other,other) + "%";
+	window.document.getElementById("preload").innerHTML = "Loading: please wait a moment. ";
 };
 util_LoaderWrapper.handleSound = function() {
 	sounds_Sounds.loadChange = util_LoaderWrapper.updateSoundText;
