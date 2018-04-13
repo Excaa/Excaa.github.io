@@ -898,13 +898,14 @@ controls_EndUi.prototype = $extend(PIXI.Container.prototype,{
 	initializeControls: function() {
 		this.replay = util_Asset.getImage("UI_replay.png",true);
 		this.info = util_Asset.getImage("UI_info button.png",true);
-		this.infoLabel = util_Asset.getImage("help_bg.png",true);
+		this.infoLabel = util_Asset.getImage("end_InfoLabel.png",true);
 		this.replay.scale.x = this.replay.scale.y = 0.5;
 		this.info.scale.x = this.info.scale.y = 0.5;
 		this.replay.interactive = true;
 		var ts = { };
 		ts.wordWrap = false;
-		ts.fontSize = 24;
+		ts.fontSize = 20;
+		ts.align = "center";
 		ts.fontFamily = "pigment_demoregular";
 		this.infoText = new PIXI.Text("Lithium oxide or lithia is an\ninorganic chemical compound.\nIt is a white solid.",ts);
 		var ts1 = { };
@@ -943,6 +944,7 @@ controls_EndUi.prototype = $extend(PIXI.Container.prototype,{
 		sounds_Sounds.playEffect(sounds_Sounds.TOGGLE);
 	}
 	,resize: function(size) {
+		this.size = size;
 		this.info.x = size.width - this.info.width;
 		this.info.y = 50;
 		this.replay.x = 0;
@@ -950,7 +952,7 @@ controls_EndUi.prototype = $extend(PIXI.Container.prototype,{
 		this.infoC.x = (size.width - this.infoC.width) / 2;
 		this.infoC.y = size.height - this.infoC.height - 10;
 		this.rating.x = size.width / 2;
-		this.rating.y = 300;
+		this.rating.y = 200;
 	}
 	,hide: function() {
 		createjs.Tween.removeTweens(this.rating.scale);
@@ -960,6 +962,25 @@ controls_EndUi.prototype = $extend(PIXI.Container.prototype,{
 	}
 	,show: function(rating) {
 		this.visible = true;
+		if(controls_GameView.CONF.compound == controls_CompoundType.alu_bromide) {
+			this.infoText.text = "Aluminium bromide is any chemical compound\nwith the empirical formula AlBr.\nAluminium tribromide is the most common\nform of aluminium bromide.";
+		} else if(controls_GameView.CONF.compound == controls_CompoundType.alu_oxide) {
+			this.infoText.text = "Aluminium oxide is a chemical\ncompound of aluminium and oxygen.\nIt is the most commonly occurring of\nseveral aluminium oxides";
+		} else if(controls_GameView.CONF.compound == controls_CompoundType.lithium_bromide) {
+			this.infoText.text = "Lithium bromide is a chemical\ncompound of lithium and bromine.\nIts extreme hygroscopic character makes\nLiBr useful as a desiccant in\ncertain air conditioning systems.";
+		} else if(controls_GameView.CONF.compound == controls_CompoundType.lithium_oxide) {
+			this.infoText.text = "Lithium oxide or lithia is an\ninorganic chemical compound.\nIt is a white solid. ";
+		} else if(controls_GameView.CONF.compound == controls_CompoundType.mag_bromide) {
+			this.infoText.text = "Magnesium bromide is a chemical compound\nof magnesium and bromine that is\nwhite and deliquescent.\nIt is often used as a mild sedative and\nas an anticonvulsant for treatment\nof nervous disorders.";
+		} else if(controls_GameView.CONF.compound == controls_CompoundType.mag_oxide) {
+			this.infoText.text = "Magnesium oxide, or magnesia,\nis a white hygroscopic solid mineral that\noccurs naturally as periclase\nand is a source of magnesium.";
+		}
+		this.infoLabel.width = this.infoText.width + 220;
+		this.infoLabel.height = this.infoText.height + 120;
+		this.infoText.x = 110;
+		this.infoText.y = 60;
+		this.infoC.x = (this.size.width - this.infoC.width) / 2;
+		this.infoC.y = this.size.height - this.infoC.height - 10;
 		if(rating == 0) {
 			this.rating.text = "Extra materials\ndetected.";
 		} else if(rating == 1) {
