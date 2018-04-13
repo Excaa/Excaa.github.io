@@ -1,0 +1,52 @@
+{"frames": {
+
+"Blink/Aluminium oxide_blink.png":
+{
+	"frame": {"x":818,"y":1,"w":268,"h":286},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":6,"w":268,"h":286},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium oxide_1.png":
+{
+	"frame": {"x":1088,"y":1,"w":268,"h":286},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":6,"w":268,"h":286},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium oxide_2.png":
+{
+	"frame": {"x":274,"y":1,"w":270,"h":286},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":6,"w":270,"h":286},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium oxide_3.png":
+{
+	"frame": {"x":1,"y":1,"w":271,"h":286},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":6,"w":271,"h":286},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium oxide_4.png":
+{
+	"frame": {"x":546,"y":1,"w":270,"h":286},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":6,"w":270,"h":286},
+	"sourceSize": {"w":300,"h":300}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "alu_oxide.png",
+	"format": "RGBA8888",
+	"size": {"w":1357,"h":288},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:dc593ffa9460ca5e18dfba101d45e8e0:a8d47c39702489003951d633c44ef97e:8a3f09d4a967f2101e639f8e5cd08be0$"
+}
+}

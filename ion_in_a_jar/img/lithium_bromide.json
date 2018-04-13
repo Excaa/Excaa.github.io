@@ -1,0 +1,52 @@
+{"frames": {
+
+"Blink/Lithium bromide_blink.png":
+{
+	"frame": {"x":285,"y":1,"w":285,"h":285},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":15,"w":285,"h":285},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Lithium bromide_1.png":
+{
+	"frame": {"x":1144,"y":1,"w":278,"h":285},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":17,"y":15,"w":278,"h":285},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Lithium bromide_2.png":
+{
+	"frame": {"x":1,"y":1,"w":282,"h":287},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":13,"w":282,"h":287},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Lithium bromide_3.png":
+{
+	"frame": {"x":859,"y":1,"w":283,"h":285},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":15,"w":283,"h":285},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Lithium bromide_4.png":
+{
+	"frame": {"x":572,"y":1,"w":285,"h":285},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":15,"w":285,"h":285},
+	"sourceSize": {"w":300,"h":300}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "lithium_bromide.png",
+	"format": "RGBA8888",
+	"size": {"w":1423,"h":289},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7cf9a1ad83b51ad34b60669819657f9b:aba68be1f1d7ad313fc2bb66a35b4672:1c6c3642550ce5b85b78f6d2ac60ed58$"
+}
+}

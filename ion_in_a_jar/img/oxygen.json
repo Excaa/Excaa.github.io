@@ -1,0 +1,44 @@
+{"frames": {
+
+"Blink/oxygen_blink.png":
+{
+	"frame": {"x":1,"y":1,"w":275,"h":300},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":0,"w":275,"h":300},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/oxygen_1.png":
+{
+	"frame": {"x":278,"y":1,"w":275,"h":300},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":0,"w":275,"h":300},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/oxygen_2.png":
+{
+	"frame": {"x":555,"y":1,"w":275,"h":300},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":0,"w":275,"h":300},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/oxygen_3.png":
+{
+	"frame": {"x":832,"y":1,"w":275,"h":300},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":0,"w":275,"h":300},
+	"sourceSize": {"w":300,"h":300}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "oxygen.png",
+	"format": "RGBA8888",
+	"size": {"w":1108,"h":302},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:99ec71de078895da448445e456437be2:8c11d93e8fc2934a88bd328c395dcb20:8fe69a54bbaa03269d050a03de31a591$"
+}
+}

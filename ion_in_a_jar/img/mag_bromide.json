@@ -1,0 +1,52 @@
+{"frames": {
+
+"Blink/Mag bromide_blink.png":
+{
+	"frame": {"x":587,"y":1,"w":291,"h":269},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":30,"w":291,"h":269},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Mag bromide_1.png":
+{
+	"frame": {"x":1163,"y":1,"w":277,"h":260},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":30,"w":277,"h":260},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Mag bromide_2.png":
+{
+	"frame": {"x":293,"y":1,"w":292,"h":269},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":30,"w":292,"h":269},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Mag bromide_3.png":
+{
+	"frame": {"x":1,"y":1,"w":290,"h":270},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":29,"w":290,"h":270},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Mag bromide_4.png":
+{
+	"frame": {"x":880,"y":1,"w":281,"h":260},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":30,"w":281,"h":260},
+	"sourceSize": {"w":300,"h":300}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "mag_bromide.png",
+	"format": "RGBA8888",
+	"size": {"w":1441,"h":272},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3cb7acb1cfa737dd060bedc422d3d7d5:463184d27443a577154ddc67e0f778d9:6963a4d80a81d1663fb010cf7f69fab6$"
+}
+}

@@ -1,0 +1,44 @@
+{"frames": {
+
+"Blink/Magnesium_blink.png":
+{
+	"frame": {"x":1,"y":1,"w":282,"h":289},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":11,"w":282,"h":289},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Magnesium_1.png":
+{
+	"frame": {"x":285,"y":1,"w":282,"h":289},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":11,"w":282,"h":289},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Magnesium_2.png":
+{
+	"frame": {"x":569,"y":1,"w":282,"h":289},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":11,"w":282,"h":289},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Magnesium_3.png":
+{
+	"frame": {"x":853,"y":1,"w":282,"h":289},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":14,"y":11,"w":282,"h":289},
+	"sourceSize": {"w":300,"h":300}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "magnesium.png",
+	"format": "RGBA8888",
+	"size": {"w":1136,"h":291},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6b4d2c024a2ccf95ce6bbe45c0869189:77cff5aa342b8a2b6df5e8d7d498a72b:e5725190bf868536d5f5353a2035a5fa$"
+}
+}

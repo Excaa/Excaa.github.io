@@ -1,0 +1,52 @@
+{"frames": {
+
+"Blink/Aluminium bromide_blink.png":
+{
+	"frame": {"x":1064,"y":1,"w":260,"h":295},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":19,"y":0,"w":260,"h":295},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium bromide_1.png":
+{
+	"frame": {"x":1,"y":1,"w":265,"h":295},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":19,"y":0,"w":265,"h":295},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium bromide_2.png":
+{
+	"frame": {"x":268,"y":1,"w":265,"h":295},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":265,"h":295},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium bromide_3.png":
+{
+	"frame": {"x":535,"y":1,"w":264,"h":295},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":0,"w":264,"h":295},
+	"sourceSize": {"w":300,"h":300}
+},
+"Idle/Aluminium bromide_4.png":
+{
+	"frame": {"x":801,"y":1,"w":261,"h":295},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":261,"h":295},
+	"sourceSize": {"w":300,"h":300}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "alu_bromide.png",
+	"format": "RGBA8888",
+	"size": {"w":1325,"h":297},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6869466386bef5277d4ddf198e73d862:aac2d4e6b9bbedcec5763903fd25d438:8120a394a64d1c1e6337ef5c81ca1786$"
+}
+}
