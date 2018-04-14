@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ion in a jar</title>
+	<meta name="msapplication-tap-highlight" content="no" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, target-densitydpi=device-dpi, user-scalable=no" />
+	
+	<link rel="stylesheet" type="text/css" media="all" href="css/styles.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="fonts/stylesheet.css" />
+	
+	<script type="text/javascript" charset="utf-8" src="libs/pixi.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="libs/soundjs-0.6.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="libs/tweenjs-0.6.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="libs/tweenjs-0.6.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="libs/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="game.js"></script>
+	<script type="text/javascript" charset="utf-8" src="libs/three.js"></script>
+	<script type="text/javascript" charset="utf-8" src="libs/webvr-polyfill.js"></script>
+	
+	<script type="text/javascript" charset="utf-8" src="libs/decomp.js"></script>
+	<script type="text/javascript" charset="utf-8" src="libs/matter.js"></script>
+	
+	<script type="text/javascript" charset="utf-8" src="libs/NoSleep.js"></script>
+
+</head>
+<body ontouchstart="">
+
+<div id="game"></div>
+<div id="preload"></div>
+	
+<script>
+Config.LANG="fi";
+var noSleep = new NoSleep();
+
+function enableNoSleep() {
+  noSleep.enable();
+  document.removeEventListener('click', enableNoSleep, false);
+}
+
+// Enable wake lock.
+// (must be wrapped in a user input event handler e.g. a mouse or touch handler)
+document.addEventListener('click', enableNoSleep, false);
+document.addEventListener('pointerup', enableNoSleep, false);
+document.addEventListener('touchend', enableNoSleep, false);
+
+</script>
+</body>
+</html>
