@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Atlas test</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+			a {
+				color: #ffffff;
+			}
+			#log
+			{
+			   text-shadow: 1px 1px 4px #000000;
+				position:absolute;
+				color: #ffffff;
+				font-size: 16px;
+				top:0px;
+				left:0px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="log"></div>
+
+		<script src="threeR90.js"></script>
+
+		<script>
+		
+			var camera, scene, renderer;
+			
+			var textures = [];
+			
+			var atlasString = '{"frames": {\
+\
+"img1.png":\
+{\
+	"frame": {"x":1,"y":1,"w":463,"h":481},\
+	"rotated": false,\
+	"trimmed": true,\
+	"spriteSourceSize": {"x":0,"y":0,"w":463,"h":481},\
+	"sourceSize": {"w":465,"h":484}\
+},\
+"img2.png":\
+{\
+	"frame": {"x":1,"y":484,"w":463,"h":481},\
+	"rotated": false,\
+	"trimmed": true,\
+	"spriteSourceSize": {"x":0,"y":0,"w":463,"h":481},\
+	"sourceSize": {"w":465,"h":484}\
+},\
+"img3.png":\
+{\
+	"frame": {"x":466,"y":1,"w":463,"h":481},\
+	"rotated": true,\
+	"trimmed": true,\
+	"spriteSourceSize": {"x":0,"y":0,"w":463,"h":481},\
+	"sourceSize": {"w":465,"h":484}\
+},\
+"img4.png":\
+{\
+	"frame": {"x":466,"y":466,"w":463,"h":481},\
+	"rotated": false,\
+	"trimmed": true,\
+	"spriteSourceSize": {"x":0,"y":0,"w":463,"h":481},\
+	"sourceSize": {"w":465,"h":484}\
+}},\
+"meta": {\
+	"app": "https://www.codeandweb.com/texturepacker",\
+	"version": "1.0",\
+	"image": "atlas.png",\
+	"format": "RGBA8888",\
+	"size": {"w":1024,"h":1024},\
+	"scale": "1",\
+	"smartupdate": "$TexturePacker:SmartUpdate:8d651d675f680e00f7d3a46f1440df34:35aa42b2d1be4912d2b7462af8a6a4d6:cbce6b53f0f49e0bf15173c25c41f876$"\
+}\
+}\
+'
+			var atlasData = JSON.parse(atlasString);
+			
+			var cubes = [];
+			var cubeind = 0;
+			var angle = 0;
+			var map =  new THREE.TextureLoader().load( 'bg.jpg' );
+			textures.push(map);
+			function cubeworm()
+			{
+				var geom = new THREE.BoxGeometry(10,10,10);
+				var mat = new THREE.MeshBasicMaterial(
+				{ map:map }
+				);
+				for( var i = 0; i < 20; i++)
+				{
+					var mesh = new THREE.Mesh(geom,mat);
+					var deg = i/7;
+					mesh.position.x = Math.sin(0+deg)*100;
+					mesh.position.y = Math.sin(deg)*40;
+					mesh.position.z = Math.cos(0+deg)*100;
+					
+					mesh.rotation.x = Math.random()*360;
+					mesh.rotation.z = Math.random()*360;
+					mesh.rotation.y = Math.random()*360;
+					
+					mesh.scale.x = Math.random()*0.3+1;
+					mesh.scale.y = Math.random()*0.3+1;
+					mesh.scale.z = Math.random()*0.3+1;
+					
+					cubes.push(mesh);
+					scene.add(mesh);
+				}
+			}
+			
+			init();
+	
+			function init() {
+				var container, mesh;
+				container = document.getElementById( 'container' );
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
+				camera.target = new THREE.Vector3( 0, 0, 0 );
+				camera.lookAt(new THREE.Vector3(10,0,0));
+				scene = new THREE.Scene();
+				var geometry = new THREE.SphereGeometry( 500, 60, 40 );
+				geometry.scale( - 1, 1, 1 );
+				var material = new THREE.MeshBasicMaterial( {
+					map: map
+				} );
+				mesh = new THREE.Mesh( geometry, material );
+				scene.add( mesh );
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+				cubeworm();
+				window.addEventListener( 'resize', onWindowResize, false );
+				
+				var frames = atlasData.frames;
+				new THREE.TextureLoader().load("atlas.png", function(t){
+				renderer.setTexture2D(t);
+				textures.push(t);
+					for( n in frames)
+					{
+						var tex = t.clone();
+						var frame = frames[n].frame;
+						tex.uuid = t.uuid;
+						tex.repeat.set(frame.w / t.image.width, frame.h / t.image.height);
+						tex.offset.x = ((frame.x) / t.image.width);
+						tex.offset.y = 1 - (frame.h / t.image.height) - (frame.y / t.image.height);
+						tex.needsUpdate = true;
+						textures.push(tex);
+					}
+				});
+			}
+			
+			function onWindowResize() {
+			
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+			var prev = 0;
+			function animate(delta) {
+				requestAnimationFrame( animate );
+				update(prev-delta);
+				prev = delta;
+			}
+			
+			function update(delta) {
+				angle+=delta*0.0005;
+				for(var i = 0; i < cubes.length; i++)
+				{
+					var m = cubes[i];
+					var deg = i/4;
+					m.position.x = Math.sin(angle+deg)*100;
+					m.position.y = Math.sin(deg*1+angle*5)*10;
+					m.position.z = Math.cos(angle+deg)*100;
+					
+					m.rotation.x+=0.01;
+					m.rotation.y+=0.021;
+					
+				}
+				
+				document.getElementById("log").innerHTML = JSON.stringify(renderer.info.memory);
+				
+				renderer.render( scene, camera );
+			}
+			animate(0);
+			
+			var textureIndex = 0;
+			window.addEventListener("click", function(){
+				if(textures.length > 0)
+				{
+					cubes[0].material.map = textures[textureIndex%textures.length];
+					cubes[0].material.needsUpdate = true;
+				}
+				textureIndex++;
+			});
+			
+		</script>
+	</body>
+</html>
