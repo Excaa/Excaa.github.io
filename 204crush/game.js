@@ -978,7 +978,7 @@ var controls_StartView = function() {
 	this.initializeControls();
 	this.soundObj = sounds_Sounds.playEffect(sounds_Sounds.START,0,0.3);
 	this.soundObj.addEventListener("complete",function() {
-		sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,null,0.3);
+		sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,0.3);
 	});
 };
 controls_StartView.__name__ = true;
@@ -1690,13 +1690,12 @@ logic_GridLogic.prototype = {
 		if(node.value != -1) {
 			throw new js__$Boot_HaxeError("Randomizing node with existing value.");
 		}
-		if(Math.random() < Math.min(0.2,this.swipes / 100)) {
+		node.value = Math.floor(Math.random() * logic_GridLogic.MAX_VALUE);
+		if(Math.random() < Math.min(0.2,(this.swipes - 20) / 400)) {
 			node.value = logic_GridLogic.MAX_VALUE;
-		} else {
-			node.value = Math.floor(Math.random() * logic_GridLogic.MAX_VALUE);
-			if(this.remove().length > 0) {
-				node.value = -1;
-			}
+		}
+		if(this.remove().length > 0) {
+			node.value = -1;
 		}
 	}
 	,swipe: function(direction) {
@@ -1835,7 +1834,7 @@ logic_GridLogic.prototype = {
 			++_g3;
 			var match = this.testSquareMatch(n);
 			if(match != null && match.length > 0) {
-				haxe_Log.trace("-is square logic",{ fileName : "GridLogic.hx", lineNumber : 268, className : "logic.GridLogic", methodName : "remove"});
+				haxe_Log.trace("-is square logic",{ fileName : "GridLogic.hx", lineNumber : 266, className : "logic.GridLogic", methodName : "remove"});
 				if(outLines != null) {
 					outLines.push({ isSquare : true, value : n.value, nodes : match, orientation : null});
 				}
@@ -1867,7 +1866,7 @@ logic_GridLogic.prototype = {
 			}
 		}
 		if(removed.length > 0) {
-			haxe_Log.trace("REMVOED: " + removed.length,{ fileName : "GridLogic.hx", lineNumber : 289, className : "logic.GridLogic", methodName : "remove"});
+			haxe_Log.trace("REMVOED: " + removed.length,{ fileName : "GridLogic.hx", lineNumber : 287, className : "logic.GridLogic", methodName : "remove"});
 		}
 		return removed;
 	}
@@ -1883,11 +1882,11 @@ logic_GridLogic.prototype = {
 				toClear.push(n);
 			}
 		}
-		haxe_Log.trace("SQUARE CLEARS: " + toClear.length,{ fileName : "GridLogic.hx", lineNumber : 304, className : "logic.GridLogic", methodName : "applySquareClear"});
+		haxe_Log.trace("SQUARE CLEARS: " + toClear.length,{ fileName : "GridLogic.hx", lineNumber : 302, className : "logic.GridLogic", methodName : "applySquareClear"});
 		return toClear;
 	}
 	,applyLineClear: function(x,y,orientation) {
-		haxe_Log.trace("Clear line: " + x + ", " + y + ", " + Std.string(orientation),{ fileName : "GridLogic.hx", lineNumber : 310, className : "logic.GridLogic", methodName : "applyLineClear"});
+		haxe_Log.trace("Clear line: " + x + ", " + y + ", " + Std.string(orientation),{ fileName : "GridLogic.hx", lineNumber : 308, className : "logic.GridLogic", methodName : "applyLineClear"});
 		if(orientation == logic_Orientation.horizontal) {
 			var _g1 = 0;
 			var _g = logic_GridLogic.GRID_WIDTH;
@@ -2000,7 +1999,7 @@ logic_GridLogic.prototype = {
 			}
 			s += "\n";
 		}
-		haxe_Log.trace(s,{ fileName : "GridLogic.hx", lineNumber : 431, className : "logic.GridLogic", methodName : "printGrid"});
+		haxe_Log.trace(s,{ fileName : "GridLogic.hx", lineNumber : 429, className : "logic.GridLogic", methodName : "printGrid"});
 	}
 	,__class__: logic_GridLogic
 };
@@ -2647,13 +2646,13 @@ sounds_Sounds.MATCH_SQUARE = "ExeCUTE_match_square.ogg";
 sounds_Sounds.TAP = "ExeCUTE_tap.ogg";
 sounds_Sounds.START = "ExeCUTE_start.ogg";
 sounds_Sounds.BACKGROUND = "ExeCUTE_loop.ogg";
-sounds_Sounds.bg_volume = 1;
+sounds_Sounds.bg_volume = 0.3;
 sounds_Sounds.totalSounds = 0;
 sounds_Sounds.initok = false;
 sounds_Sounds.soundsLoaded = 0;
 sounds_Sounds.waitingForIOS = false;
 sounds_Sounds.ingame = false;
-sounds_Sounds.musicvol = 0.5;
+sounds_Sounds.musicvol = 0.3;
 util_Asset._init = false;
 util_Asset._prepared = [];
 util_BrowserDetect.dataBrowser = [{ string : window.navigator.userAgent, subString : "Windows Phone 10.0", identity : "WindowsPhone10Edge"},{ string : window.navigator.userAgent, subString : "Chrome", identity : "Chrome"},{ string : window.navigator.userAgent, subString : "OmniWeb", versionSearch : "OmniWeb/", identity : "OmniWeb"},{ string : window.navigator.vendor, subString : "Apple", identity : "Safari", versionSearch : "Version"},{ string : window.navigator.vendor, subString : "iCab", identity : "iCab"},{ string : window.navigator.vendor, subString : "KDE", identity : "Konqueror"},{ string : window.navigator.userAgent, subString : "Firefox", identity : "Firefox"},{ string : window.navigator.vendor, subString : "Camino", identity : "Camino"},{ string : window.navigator.userAgent, subString : "Netscape", identity : "Netscape"},{ string : window.navigator.userAgent, subString : "MSIE", identity : "Explorer", versionSearch : "MSIE"},{ string : window.navigator.userAgent, subString : "Trident", identity : "Explorer11", versionSearch : "MSIE"},{ string : window.navigator.userAgent, subString : "Gecko", identity : "Mozilla", versionSearch : "rv"},{ string : window.navigator.userAgent, subString : "Mozilla", identity : "Netscape", versionSearch : "Mozilla"},{ prop : window.navigator.vendor, identity : "Opera", versionSearch : "Version"}];
