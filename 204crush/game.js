@@ -67,14 +67,14 @@ HxOverrides.remove = function(a,obj) {
 };
 var Main = $hx_exports["Game"] = function() {
 	this.tickListeners = [];
-	haxe_Log.trace("new game",{ fileName : "Main.hx", lineNumber : 84, className : "Main", methodName : "new"});
+	haxe_Log.trace("new game",{ fileName : "Main.hx", lineNumber : 85, className : "Main", methodName : "new"});
 	createjs.Ticker = null;
 	util_LoaderWrapper.LOAD_ASSETS(Config.ASSETS,$bind(this,this.onAssetsLoaded));
 	sounds_Sounds.initSounds();
 };
 Main.__name__ = true;
 Main.main = function() {
-	haxe_Log.trace("Main",{ fileName : "Main.hx", lineNumber : 73, className : "Main", methodName : "main"});
+	haxe_Log.trace("Main",{ fileName : "Main.hx", lineNumber : 74, className : "Main", methodName : "main"});
 	$().ready(function() {
 		Main.instance = new Main();
 	});
@@ -114,10 +114,14 @@ Main.prototype = {
 		options.clearBeforeRender = true;
 		options.preserveDrawingBuffer = false;
 		options.roundPixels = false;
+		options.resolution = 1.25;
 		this.renderer = PIXI.autoDetectRenderer(size.width,size.height,options);
+		this.renderer.view.style.transform = "scale(0.8, 0.8)";
+		this.renderer.view.style.transformOrigin = "0 0";
 		window.document.getElementById("game").appendChild(this.renderer.view);
 	}
 	,initializeControls: function() {
+		var _gthis = this;
 		particles_ParticleManager.init();
 		this.mainContainer = new PIXI.Container();
 		this.game = new controls_GameView();
@@ -131,6 +135,29 @@ Main.prototype = {
 		this.mainContainer.addChild(this.end);
 		this.mainContainer.addChild(particles_ParticleManager.particles);
 		this.soundBtn = util_Asset.getImage("button_sound_on.png",true);
+		this.mainContainer.addChild(this.soundBtn);
+		this.soundBtn.interactive = true;
+		var soundsOn = this.soundBtn.texture;
+		var soundsOff = util_Asset.getTexture("button_sound_off.png",true);
+		this.soundBtn.scale.x = this.soundBtn.scale.y = 0.5;
+		this.soundBtn.x = 10;
+		this.soundBtn.y = 10;
+		this.soundBtn.addListener("click",function() {
+			_gthis.soundBtn.texture = _gthis.soundBtn.texture == soundsOn ? soundsOff : soundsOn;
+			if(_gthis.soundBtn.texture == soundsOff) {
+				sounds_Sounds.disableSounds();
+			} else {
+				sounds_Sounds.enableSounds();
+			}
+		});
+		this.soundBtn.addListener("tap",function() {
+			_gthis.soundBtn.texture = _gthis.soundBtn.texture == soundsOn ? soundsOff : soundsOn;
+			if(_gthis.soundBtn.texture == soundsOff) {
+				sounds_Sounds.disableSounds();
+			} else {
+				sounds_Sounds.enableSounds();
+			}
+		});
 		this.onResize(null);
 		this.ticker = new PIXI.ticker.Ticker();
 		this.ticker.start();
@@ -168,8 +195,8 @@ Main.prototype = {
 		sounds_Sounds.playEffect(sounds_Sounds.TAP);
 		logic_GridLogic.GRID_HEIGHT = 8;
 		logic_GridLogic.GRID_WIDTH = 8;
-		logic_GridLogic.RANDOM_SPAWN_AMOUNT.min = 5;
-		logic_GridLogic.RANDOM_SPAWN_AMOUNT.max = 10;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.min = 3;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.max = 8;
 		this.onStartClick();
 	}
 	,onStartClick: function() {
@@ -264,7 +291,7 @@ controls_Block.__name__ = true;
 controls_Block.__super__ = PIXI.Container;
 controls_Block.prototype = $extend(PIXI.Container.prototype,{
 	initializeControls: function() {
-		var colors = ["blue","green","orange","purple"];
+		var colors = ["blue","green","orange","purple","red"];
 		if(controls_Block.moveLeft.length == 0) {
 			var _g = 0;
 			while(_g < colors.length) {
@@ -343,7 +370,7 @@ controls_Block.prototype = $extend(PIXI.Container.prototype,{
 			createjs.Tween.get(this.bright).wait(200,true).to({ alpha : 0.5},150).to({ alpha : 0},50);
 			createjs.Tween.removeTweens(this.scale);
 			createjs.Tween.get(this.scale).wait(200,true).call(function() {
-				particles_ParticleManager.squares.spawn(particles_ParticleManager.squares.toLocal(new PIXI.Point(),_gthis),[255,65280,16776960,10386634][_gthis.prevValue]);
+				particles_ParticleManager.squares.spawn(particles_ParticleManager.squares.toLocal(new PIXI.Point(),_gthis),[255,65280,16776960,10386634,16711680][_gthis.prevValue]);
 			}).to({ x : 0, y : 0},250,createjs.Ease.quadIn);
 		} else if(!this.active && this.node.value >= 0) {
 			this.prevValue = this.node.value;
@@ -793,7 +820,7 @@ controls_LineAnimator.prototype = $extend(PIXI.Container.prototype,{
 			this.curind++;
 			s.visible = true;
 			if(line.value != -1) {
-				s.tint = [255,65280,16776960,10386634][line.value];
+				s.tint = [255,65280,16776960,10386634,16711680][line.value];
 			}
 			s.x = tx;
 			s.y = ty;
@@ -817,7 +844,7 @@ controls_LineAnimator.prototype = $extend(PIXI.Container.prototype,{
 			this.curind++;
 			s.visible = true;
 			if(line.value != -1) {
-				s.tint = [255,65280,16776960,16777215][line.value];
+				s.tint = [255,65280,16776960,16777215,16711680][line.value];
 			}
 			s.x = tx;
 			s.y = ty;
@@ -841,7 +868,7 @@ controls_LineAnimator.prototype = $extend(PIXI.Container.prototype,{
 			this.curind++;
 			s.visible = true;
 			if(line.value != -1) {
-				s.tint = [255,65280,16776960,16777215][line.value];
+				s.tint = [255,65280,16776960,16777215,16711680][line.value];
 			}
 			s.x = tx;
 			s.y = ty;
@@ -946,7 +973,7 @@ controls_Score.prototype = $extend(PIXI.Container.prototype,{
 });
 var controls_StartView = function() {
 	this.minRectPortraitGame = new PIXI.Rectangle(568,0,920,1580);
-	this.minRectGame = new PIXI.Rectangle(272,170,1528,1152);
+	this.minRectGame = new PIXI.Rectangle(272,170,1528,1352);
 	PIXI.Container.call(this);
 	this.initializeControls();
 	this.soundObj = sounds_Sounds.playEffect(sounds_Sounds.START,0,0.3);
@@ -965,34 +992,34 @@ controls_StartView.prototype = $extend(PIXI.Container.prototype,{
 		this.swipe = util_Asset.getImage("tutorial_swipe.png",false);
 		this.swipe.anchor.set(0.5,0);
 		this.swipe.x = 760;
-		this.swipe.y = 530;
+		this.swipe.y = 630;
 		this.match = util_Asset.getImage("tutorial_match.png",false);
 		this.match.anchor.set(0.5,0);
 		this.match.x = 760;
-		this.match.y = 850;
+		this.match.y = 950;
 		this.text = util_Asset.getImage("text_tutorial.png",false);
 		this.text.anchor.set(0.5,0);
 		this.text.x = 1184;
-		this.text.y = 710;
+		this.text.y = 810;
 		this.start_small = util_Asset.getImage("button_board_small.png",false);
 		this.start_small.anchor.set(0.5,0);
 		this.start_small.x = 764;
-		this.start_small.y = 1174;
+		this.start_small.y = 1299;
 		this.start_small.interactive = true;
 		this.start_medium = util_Asset.getImage("button_board_medium.png",false);
 		this.start_medium.anchor.set(0.5,0);
 		this.start_medium.x = 1024;
-		this.start_medium.y = 1174;
+		this.start_medium.y = 1299;
 		this.start_medium.interactive = true;
 		this.start_big = util_Asset.getImage("button_board_big.png",false);
 		this.start_big.anchor.set(0.5,0);
 		this.start_big.x = 1284;
-		this.start_big.y = 1174;
+		this.start_big.y = 1299;
 		this.start_big.interactive = true;
 		this.bg_boardselection = util_Asset.getImage("bg_boardselection.png",false);
 		this.bg_boardselection.anchor.set(0.5,0);
 		this.bg_boardselection.x = 1024;
-		this.bg_boardselection.y = 1104;
+		this.bg_boardselection.y = 1224;
 		this.bg_boardselection.interactive = true;
 		this.bg = util_Asset.getImage("bg.png",false);
 		this.bg.anchor.set(0,0.15);
@@ -1599,7 +1626,8 @@ logic_Orientation.vertical = ["vertical",1];
 logic_Orientation.vertical.toString = $estr;
 logic_Orientation.vertical.__enum__ = logic_Orientation;
 var logic_GridLogic = function() {
-	haxe_Log.trace(logic_GridLogic.GRID_WIDTH,{ fileName : "GridLogic.hx", lineNumber : 37, className : "logic.GridLogic", methodName : "new", customParams : [logic_GridLogic.GRID_HEIGHT,logic_GridLogic.MAX_VALUE]});
+	this.swipes = 0;
+	haxe_Log.trace(logic_GridLogic.GRID_WIDTH,{ fileName : "GridLogic.hx", lineNumber : 39, className : "logic.GridLogic", methodName : "new", customParams : [logic_GridLogic.GRID_HEIGHT,logic_GridLogic.MAX_VALUE]});
 	this.grid = [];
 	this.nodes = [];
 	var _g1 = 0;
@@ -1662,12 +1690,17 @@ logic_GridLogic.prototype = {
 		if(node.value != -1) {
 			throw new js__$Boot_HaxeError("Randomizing node with existing value.");
 		}
-		node.value = Math.floor(Math.random() * logic_GridLogic.MAX_VALUE);
-		if(this.remove().length > 0) {
-			node.value = -1;
+		if(Math.random() < Math.min(0.2,this.swipes / 100)) {
+			node.value = logic_GridLogic.MAX_VALUE;
+		} else {
+			node.value = Math.floor(Math.random() * logic_GridLogic.MAX_VALUE);
+			if(this.remove().length > 0) {
+				node.value = -1;
+			}
 		}
 	}
 	,swipe: function(direction) {
+		this.swipes++;
 		if(direction == logic_Direction.right) {
 			this.bubbleRight();
 		} else if(direction == logic_Direction.left) {
@@ -1802,7 +1835,7 @@ logic_GridLogic.prototype = {
 			++_g3;
 			var match = this.testSquareMatch(n);
 			if(match != null && match.length > 0) {
-				haxe_Log.trace("-is square logic",{ fileName : "GridLogic.hx", lineNumber : 259, className : "logic.GridLogic", methodName : "remove"});
+				haxe_Log.trace("-is square logic",{ fileName : "GridLogic.hx", lineNumber : 268, className : "logic.GridLogic", methodName : "remove"});
 				if(outLines != null) {
 					outLines.push({ isSquare : true, value : n.value, nodes : match, orientation : null});
 				}
@@ -1834,7 +1867,7 @@ logic_GridLogic.prototype = {
 			}
 		}
 		if(removed.length > 0) {
-			haxe_Log.trace("REMVOED: " + removed.length,{ fileName : "GridLogic.hx", lineNumber : 280, className : "logic.GridLogic", methodName : "remove"});
+			haxe_Log.trace("REMVOED: " + removed.length,{ fileName : "GridLogic.hx", lineNumber : 289, className : "logic.GridLogic", methodName : "remove"});
 		}
 		return removed;
 	}
@@ -1850,11 +1883,11 @@ logic_GridLogic.prototype = {
 				toClear.push(n);
 			}
 		}
-		haxe_Log.trace("SQUARE CLEARS: " + toClear.length,{ fileName : "GridLogic.hx", lineNumber : 295, className : "logic.GridLogic", methodName : "applySquareClear"});
+		haxe_Log.trace("SQUARE CLEARS: " + toClear.length,{ fileName : "GridLogic.hx", lineNumber : 304, className : "logic.GridLogic", methodName : "applySquareClear"});
 		return toClear;
 	}
 	,applyLineClear: function(x,y,orientation) {
-		haxe_Log.trace("Clear line: " + x + ", " + y + ", " + Std.string(orientation),{ fileName : "GridLogic.hx", lineNumber : 301, className : "logic.GridLogic", methodName : "applyLineClear"});
+		haxe_Log.trace("Clear line: " + x + ", " + y + ", " + Std.string(orientation),{ fileName : "GridLogic.hx", lineNumber : 310, className : "logic.GridLogic", methodName : "applyLineClear"});
 		if(orientation == logic_Orientation.horizontal) {
 			var _g1 = 0;
 			var _g = logic_GridLogic.GRID_WIDTH;
@@ -1967,7 +2000,7 @@ logic_GridLogic.prototype = {
 			}
 			s += "\n";
 		}
-		haxe_Log.trace(s,{ fileName : "GridLogic.hx", lineNumber : 422, className : "logic.GridLogic", methodName : "printGrid"});
+		haxe_Log.trace(s,{ fileName : "GridLogic.hx", lineNumber : 431, className : "logic.GridLogic", methodName : "printGrid"});
 	}
 	,__class__: logic_GridLogic
 };
@@ -2581,7 +2614,7 @@ if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_html_compat_ArrayBuffer.sliceImpl;
 }
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
-Config.ASSETS = ["img/ui.json","img/block_green.json","img/block_purple.json","img/block_orange.json","img/block_blue.json","img/bg.jpg","img/bg.png","img/bg_no_sky.png","img/bg_sky.png","img/trail.png","img/logo.png","img/button_board_small.png","img/button_board_medium.png","img/button_board_big.png","img/bg_boardselection.png","img/tutorial_swipe.png","img/tutorial_match.png","img/text_tutorial.png","img/bg_finalscore.png","img/bg_score.png","img/text_credits.png","img/button_again.png","img/button_endgame.png"];
+Config.ASSETS = ["img/ui.json","img/block_green.json","img/block_purple.json","img/block_orange.json","img/block_blue.json","img/block_red.json","img/bg.jpg","img/bg.png","img/bg_no_sky.png","img/bg_sky.png","img/trail.png","img/logo.png","img/button_board_small.png","img/button_board_medium.png","img/button_board_big.png","img/bg_boardselection.png","img/tutorial_swipe.png","img/tutorial_match.png","img/text_tutorial.png","img/bg_finalscore.png","img/bg_score.png","img/text_credits.png","img/button_again.png","img/button_endgame.png"];
 Config.VERSION = "204crush 0.1";
 controls_Block.moveLeft = [];
 controls_Block.moveRight = [];

@@ -1,0 +1,88 @@
+{"frames": {
+
+"death/blockie_red_death01.png":
+{
+	"frame": {"x":1,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"death/blockie_red_death02.png":
+{
+	"frame": {"x":127,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"default/blockie_red.png":
+{
+	"frame": {"x":253,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"down/blockie_red_moving_down.png":
+{
+	"frame": {"x":379,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"idle/blockie_red_idle01.png":
+{
+	"frame": {"x":505,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"idle/blockie_red_idle02.png":
+{
+	"frame": {"x":631,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"left/blockie_red_moving_left.png":
+{
+	"frame": {"x":757,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"right/blockie_red_moving_right.png":
+{
+	"frame": {"x":883,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+},
+"up/blockie_red_moving_up.png":
+{
+	"frame": {"x":1009,"y":1,"w":124,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":124,"h":124},
+	"sourceSize": {"w":124,"h":124}
+}},
+"animations": {
+	"death/blockie_red_death": ["death/blockie_red_death01.png","death/blockie_red_death02.png"],
+	"idle/blockie_red_idle": ["idle/blockie_red_idle01.png","idle/blockie_red_idle02.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "block_red.png",
+	"format": "RGBA8888",
+	"size": {"w":1134,"h":126},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:91970f14065fe033294b3fc178402f41:163ed4fea0bed6661b2dcecbd4a1df96:1d1a7774ad3e35e684232eb325d23f22$"
+}
+}
