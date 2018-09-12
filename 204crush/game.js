@@ -67,14 +67,14 @@ HxOverrides.remove = function(a,obj) {
 };
 var Main = $hx_exports["Game"] = function() {
 	this.tickListeners = [];
-	haxe_Log.trace("new game",{ fileName : "Main.hx", lineNumber : 83, className : "Main", methodName : "new"});
+	haxe_Log.trace("new game",{ fileName : "Main.hx", lineNumber : 84, className : "Main", methodName : "new"});
 	createjs.Ticker = null;
 	util_LoaderWrapper.LOAD_ASSETS(Config.ASSETS,$bind(this,this.onAssetsLoaded));
 	sounds_Sounds.initSounds();
 };
 Main.__name__ = true;
 Main.main = function() {
-	haxe_Log.trace("Main",{ fileName : "Main.hx", lineNumber : 72, className : "Main", methodName : "main"});
+	haxe_Log.trace("Main",{ fileName : "Main.hx", lineNumber : 73, className : "Main", methodName : "main"});
 	$().ready(function() {
 		Main.instance = new Main();
 	});
@@ -130,6 +130,7 @@ Main.prototype = {
 		this.mainContainer.addChild(this.game);
 		this.mainContainer.addChild(this.end);
 		this.mainContainer.addChild(particles_ParticleManager.particles);
+		this.soundBtn = util_Asset.getImage("button_sound_on.png",true);
 		this.onResize(null);
 		this.ticker = new PIXI.ticker.Ticker();
 		this.ticker.start();
@@ -148,23 +149,31 @@ Main.prototype = {
 		this.mainContainer.visible = false;
 	}
 	,onStartClick_Small: function() {
+		sounds_Sounds.playEffect(sounds_Sounds.TAP);
 		logic_GridLogic.GRID_HEIGHT = 6;
 		logic_GridLogic.GRID_WIDTH = 6;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.min = 1;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.max = 3;
 		this.onStartClick();
 	}
 	,onStartClick_Medium: function() {
+		sounds_Sounds.playEffect(sounds_Sounds.TAP);
 		logic_GridLogic.GRID_HEIGHT = 7;
 		logic_GridLogic.GRID_WIDTH = 7;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.min = 2;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.max = 5;
 		this.onStartClick();
 	}
 	,onStartClick_Big: function() {
+		sounds_Sounds.playEffect(sounds_Sounds.TAP);
 		logic_GridLogic.GRID_HEIGHT = 8;
 		logic_GridLogic.GRID_WIDTH = 8;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.min = 5;
+		logic_GridLogic.RANDOM_SPAWN_AMOUNT.max = 10;
 		this.onStartClick();
 	}
 	,onStartClick: function() {
 		var _gthis = this;
-		sounds_Sounds.playEffect(sounds_Sounds.TOGGLE);
 		this.start.interactiveChildren = false;
 		this.start.visible = false;
 		this.end._score.setScore(0);
@@ -180,14 +189,12 @@ Main.prototype = {
 		this.onStartClick();
 	}
 	,onBackClick: function() {
-		sounds_Sounds.playEffect(sounds_Sounds.TOGGLE);
 		this.end.interactiveChildren = false;
 		this.end.visible = false;
 		this.start.visible = true;
 		this.start.interactiveChildren = true;
 	}
 	,onGameEnd: function() {
-		sounds_Sounds.playEffect(sounds_Sounds.TOGGLE);
 		this.end.interactiveChildren = true;
 		this.end._score.setScore(controls_GameView._score);
 		this.game.interactiveChildren = false;
@@ -375,6 +382,8 @@ controls_Block.prototype = $extend(PIXI.Container.prototype,{
 	,__class__: controls_Block
 });
 var controls_EndView = function() {
+	this.minRectPortraitGame = new PIXI.Rectangle(568,0,920,1580);
+	this.minRectGame = new PIXI.Rectangle(272,170,1528,1352);
 	PIXI.Container.call(this);
 	this.initializeControls();
 };
@@ -420,15 +429,30 @@ controls_EndView.prototype = $extend(PIXI.Container.prototype,{
 		this.addChild(this._score);
 	}
 	,resize: function(size) {
-		var s = Math.max(size.width / this.bg.width,size.height / this.bg.height);
-		this.scale.x = this.scale.y = s;
-		this.x = Math.round((size.width - this.bg.width * s) / 2);
-		this.y = Math.round((size.height - this.bg.height * s) / 2);
+		this.size = size;
+		var tr = this.getTargetRect();
+		this.scale.x = this.scale.y = Math.min(tr.width / 2048,tr.height / 2048);
+		this.x = tr.x;
+		this.y = tr.y;
+	}
+	,getTargetRect: function() {
+		var ret = new PIXI.Rectangle(0,0,0,0);
+		var iswide = this.size.width > this.size.height;
+		var mr = iswide ? this.minRectGame : this.minRectPortraitGame;
+		var s = Math.min(this.size.width / mr.width,this.size.height / mr.height);
+		ret.width = this.bg.width * s;
+		ret.height = this.bg.height * s;
+		ret.x = Math.round((this.size.width - this.bg.width * s) / 2);
+		ret.y = Math.floor(Math.max(-mr.y * s,Math.floor(this.size.height - this.bg.height * s + 50 * s)));
+		if(this.size.width < this.size.height) {
+			ret.y = Math.floor(Math.max(ret.y,-1970 * s + this.size.height));
+		}
+		return ret;
 	}
 	,__class__: controls_EndView
 });
 var controls_GameView = $hx_exports["GV"] = function() {
-	this.minRectPortraitGame = new PIXI.Rectangle(568,0,920,1080);
+	this.minRectPortraitGame = new PIXI.Rectangle(568,0,920,1580);
 	this.minRectGame = new PIXI.Rectangle(272,50,1528,1050);
 	this.scorePos = new PIXI.Point(0,0);
 	this.logoPos = new PIXI.Point(0,0);
@@ -493,10 +517,10 @@ controls_GameView.prototype = $extend(PIXI.Container.prototype,{
 			this.logoPos.set(450,512);
 			this.scorePos.set(1624,512);
 		} else {
-			this.y += 200;
-			this.bgSky.y = -200 / this.scale.y;
-			this.logoPos.set(824,0);
-			this.scorePos.set(1224,0);
+			this.y += 100;
+			this.bgSky.y = -100 / this.scale.y;
+			this.logoPos.set(924,0);
+			this.scorePos.set(1124,0);
 		}
 		this.score.x = this.scorePos.x;
 		this.score.y = this.scorePos.y + 30;
@@ -599,25 +623,33 @@ controls_GridControl.prototype = $extend(PIXI.Container.prototype,{
 				var line = _g1[_g];
 				++_g;
 				if(line.isSquare) {
-					haxe_Log.trace("IS SQUARE",{ fileName : "GridControl.hx", lineNumber : 137, className : "controls.GridControl", methodName : "handleSpecial"});
+					haxe_Log.trace("IS SQUARE",{ fileName : "GridControl.hx", lineNumber : 135, className : "controls.GridControl", methodName : "handleSpecial"});
+					sounds_Sounds.playEffect(sounds_Sounds.MATCH_SQUARE);
+					sounds_Sounds.playEffect(sounds_Sounds.LINE_CLEAR,0,1,250);
 					var cleared = this.logic.applySquareClear(line.value);
 					this.lineAnimator.animateNodes(cleared,line);
 				} else if(line.nodes.length == 5) {
+					sounds_Sounds.playEffect(sounds_Sounds.MATCH_5);
+					sounds_Sounds.playEffect(sounds_Sounds.LINE_CLEAR,0,1,250);
 					this.logic.applyLineClear(line.nodes[2].x,line.nodes[2].y,logic_Orientation.vertical);
 					this.logic.applyLineClear(line.nodes[2].x,line.nodes[2].y,logic_Orientation.horizontal);
-					haxe_Log.trace("CLEAR 5",{ fileName : "GridControl.hx", lineNumber : 146, className : "controls.GridControl", methodName : "handleSpecial"});
+					haxe_Log.trace("CLEAR 5",{ fileName : "GridControl.hx", lineNumber : 148, className : "controls.GridControl", methodName : "handleSpecial"});
 					found = true;
 					this.lineAnimator.animateHorizontal(line.nodes[2],line);
 					this.lineAnimator.animateVertical(line.nodes[2],line);
 				} else if(line.nodes.length == 4) {
+					sounds_Sounds.playEffect(sounds_Sounds.MATCH_4);
+					sounds_Sounds.playEffect(sounds_Sounds.LINE_CLEAR,0,1,250);
 					this.logic.applyLineClear(line.nodes[0].x,line.nodes[0].y,line.orientation);
-					haxe_Log.trace("CLEAR 4",{ fileName : "GridControl.hx", lineNumber : 154, className : "controls.GridControl", methodName : "handleSpecial"});
+					haxe_Log.trace("CLEAR 4",{ fileName : "GridControl.hx", lineNumber : 158, className : "controls.GridControl", methodName : "handleSpecial"});
 					found = true;
 					if(line.orientation == logic_Orientation.horizontal) {
 						this.lineAnimator.animateHorizontal(line.nodes[0],line);
 					} else {
 						this.lineAnimator.animateVertical(line.nodes[0],line);
 					}
+				} else {
+					sounds_Sounds.playEffect(sounds_Sounds.MATCH_3);
 				}
 				var _g2 = 0;
 				var _g3 = this.lastLines;
@@ -682,6 +714,7 @@ controls_GridControl.prototype = $extend(PIXI.Container.prototype,{
 	}
 	,doSwipe: function(direction) {
 		if(direction != null && this.enabled) {
+			sounds_Sounds.playEffect(sounds_Sounds.SWOOSH);
 			this.chains = 0;
 			this.enabled = false;
 			this.lastSwipeDirection = direction;
@@ -912,10 +945,14 @@ controls_Score.prototype = $extend(PIXI.Container.prototype,{
 	,__class__: controls_Score
 });
 var controls_StartView = function() {
-	this.minRectPortraitGame = new PIXI.Rectangle(568,0,920,1080);
+	this.minRectPortraitGame = new PIXI.Rectangle(568,0,920,1580);
 	this.minRectGame = new PIXI.Rectangle(272,170,1528,1152);
 	PIXI.Container.call(this);
 	this.initializeControls();
+	this.soundObj = sounds_Sounds.playEffect(sounds_Sounds.START,0,0.3);
+	this.soundObj.addEventListener("complete",function() {
+		sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,null,0.3);
+	});
 };
 controls_StartView.__name__ = true;
 controls_StartView.__super__ = PIXI.Container;
@@ -962,6 +999,9 @@ controls_StartView.prototype = $extend(PIXI.Container.prototype,{
 		this.bg_sky = util_Asset.getImage("bg_sky.png",false);
 		this.bg_no_sky = util_Asset.getImage("bg_no_sky.png",false);
 		this.addChild(this.bg);
+		this.start_small.buttonMode = true;
+		this.start_medium.buttonMode = true;
+		this.start_big.buttonMode = true;
 		this.addChild(this.logo);
 		this.addChild(this.swipe);
 		this.addChild(this.match);
@@ -2023,13 +2063,13 @@ sounds_Sounds.initSounds = function() {
 	sounds_Sounds.loaded = [];
 	sounds_Sounds.soundMap = new haxe_ds_StringMap();
 	var base = "snd/";
-	sounds_Sounds.sounds = [{ s : sounds_Sounds.BACKGROUND, c : 1}];
+	sounds_Sounds.sounds = [{ s : sounds_Sounds.START, c : 1},{ s : sounds_Sounds.BACKGROUND, c : 1},{ s : sounds_Sounds.SWOOSH, c : 4},{ s : sounds_Sounds.LINE_CLEAR, c : 4},{ s : sounds_Sounds.MATCH_3, c : 4},{ s : sounds_Sounds.MATCH_4, c : 4},{ s : sounds_Sounds.MATCH_5, c : 4},{ s : sounds_Sounds.MATCH_SQUARE, c : 4},{ s : sounds_Sounds.TAP, c : 4}];
 	var _g = 0;
 	var _g1 = sounds_Sounds.sounds;
 	while(_g < _g1.length) {
 		var s = _g1[_g];
 		++_g;
-		createjs.Sound.registerSound(base + Std.string(s.s) + ".mp3",s.s,s.c);
+		createjs.Sound.registerSound(base + Std.string(s.s),s.s,s.c);
 	}
 	var iOS = new RegExp("iPad|iPhone|iPod").test(window.navigator.userAgent) && !window.MSStream;
 	if(iOS) {
@@ -2056,7 +2096,7 @@ sounds_Sounds.initSounds = function() {
 		} else {
 			createjs.Sound.setMute(false);
 			if(!createjs.Sound.getMute() && !sounds_Sounds.waitingForIOS) {
-				sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,1);
+				sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,sounds_Sounds.musicvol);
 			}
 		}
 	});
@@ -2072,9 +2112,7 @@ sounds_Sounds.soundLoadHandler = function(e) {
 	if(e.id != null) {
 		sounds_Sounds.loaded.push(e.id);
 	}
-	if(e.id == sounds_Sounds.BACKGROUND && !createjs.Sound.getMute() && !sounds_Sounds.waitingForIOS && !sounds_Sounds.ingame) {
-		sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,sounds_Sounds.bg_volume);
-	}
+	var tmp = e.id == sounds_Sounds.BACKGROUND && !createjs.Sound.getMute() && !sounds_Sounds.waitingForIOS && !sounds_Sounds.ingame;
 	if(sounds_Sounds.soundsLoaded == sounds_Sounds.totalSounds && sounds_Sounds.loadedHandler != null) {
 		sounds_Sounds.loadedHandler();
 	}
@@ -2085,7 +2123,7 @@ sounds_Sounds.handleInitClick = function(event) {
 	window.removeEventListener("click",sounds_Sounds.handleInitClick,true);
 	if(!createjs.Sound.getMute()) {
 		if(sounds_Sounds.loaded.indexOf(sounds_Sounds.BACKGROUND) >= 0) {
-			sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,sounds_Sounds.bg_volume);
+			sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,sounds_Sounds.musicvol);
 		}
 	}
 };
@@ -2141,7 +2179,7 @@ sounds_Sounds.enableSounds = function() {
 		createjs.Sound.setMute(false);
 		sounds_Sounds.stopSound(sounds_Sounds.BACKGROUND);
 		if(sounds_Sounds.loaded.indexOf(sounds_Sounds.BACKGROUND) >= 0) {
-			sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,sounds_Sounds.bg_volume);
+			sounds_Sounds.playEffect(sounds_Sounds.BACKGROUND,-1,sounds_Sounds.musicvol);
 		}
 	}
 };
@@ -2567,26 +2605,22 @@ logic_GridLogic.GRID_WIDTH = 6;
 logic_GridLogic.GRID_HEIGHT = 6;
 logic_GridLogic.MAX_VALUE = 4;
 logic_GridLogic.RANDOM_SPAWN_AMOUNT = { min : 1, max : 3};
-sounds_Sounds.BLOB_SUCK = "blob_suck";
-sounds_Sounds.BLOB_WRONG = "blob_wrong";
-sounds_Sounds.BLOBS_COMBINE = "blobs_combine";
-sounds_Sounds.BLOCK_BREAK = "block_break";
-sounds_Sounds.BLOCK_HIT = "block_hit";
-sounds_Sounds.TOGGLE = "toggle";
-sounds_Sounds.ALU_BROMIDE = "alu_bromide";
-sounds_Sounds.ALU_OXIDE = "alu_oxide";
-sounds_Sounds.LITHIUM_BROMIDE = "lithium_bromide";
-sounds_Sounds.LITHIUM_OXIDE = "lithium_oxide";
-sounds_Sounds.MAG_BROMIDE = "mag_bromide";
-sounds_Sounds.MAG_OXIDE = "mag_oxide";
-sounds_Sounds.VICTORY = "victory";
-sounds_Sounds.BACKGROUND = "Ion_in_A_Jar_01";
+sounds_Sounds.SWOOSH = "swoosh.ogg";
+sounds_Sounds.LINE_CLEAR = "ExeCUTE_line_clear.ogg";
+sounds_Sounds.MATCH_3 = "ExeCUTE_match_3.ogg";
+sounds_Sounds.MATCH_4 = "ExeCUTE_match_4.ogg";
+sounds_Sounds.MATCH_5 = "ExeCUTE_match_5.ogg";
+sounds_Sounds.MATCH_SQUARE = "ExeCUTE_match_square.ogg";
+sounds_Sounds.TAP = "ExeCUTE_tap.ogg";
+sounds_Sounds.START = "ExeCUTE_start.ogg";
+sounds_Sounds.BACKGROUND = "ExeCUTE_loop.ogg";
 sounds_Sounds.bg_volume = 1;
 sounds_Sounds.totalSounds = 0;
 sounds_Sounds.initok = false;
 sounds_Sounds.soundsLoaded = 0;
 sounds_Sounds.waitingForIOS = false;
 sounds_Sounds.ingame = false;
+sounds_Sounds.musicvol = 0.5;
 util_Asset._init = false;
 util_Asset._prepared = [];
 util_BrowserDetect.dataBrowser = [{ string : window.navigator.userAgent, subString : "Windows Phone 10.0", identity : "WindowsPhone10Edge"},{ string : window.navigator.userAgent, subString : "Chrome", identity : "Chrome"},{ string : window.navigator.userAgent, subString : "OmniWeb", versionSearch : "OmniWeb/", identity : "OmniWeb"},{ string : window.navigator.vendor, subString : "Apple", identity : "Safari", versionSearch : "Version"},{ string : window.navigator.vendor, subString : "iCab", identity : "iCab"},{ string : window.navigator.vendor, subString : "KDE", identity : "Konqueror"},{ string : window.navigator.userAgent, subString : "Firefox", identity : "Firefox"},{ string : window.navigator.vendor, subString : "Camino", identity : "Camino"},{ string : window.navigator.userAgent, subString : "Netscape", identity : "Netscape"},{ string : window.navigator.userAgent, subString : "MSIE", identity : "Explorer", versionSearch : "MSIE"},{ string : window.navigator.userAgent, subString : "Trident", identity : "Explorer11", versionSearch : "MSIE"},{ string : window.navigator.userAgent, subString : "Gecko", identity : "Mozilla", versionSearch : "rv"},{ string : window.navigator.userAgent, subString : "Mozilla", identity : "Netscape", versionSearch : "Mozilla"},{ prop : window.navigator.vendor, identity : "Opera", versionSearch : "Version"}];
