@@ -1,84 +1,76 @@
 {"frames": {
 
-"blockie_purple.png":
-{
-	"frame": {"x":1,"y":1,"w":492,"h":492},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
-},
 "death/blockie_purple_death01.png":
 {
-	"frame": {"x":495,"y":1,"w":492,"h":492},
+	"frame": {"x":1,"y":1,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "death/blockie_purple_death02.png":
 {
-	"frame": {"x":989,"y":1,"w":492,"h":492},
+	"frame": {"x":1,"y":131,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "default/blockie_purple.png":
 {
-	"frame": {"x":1,"y":1,"w":492,"h":492},
+	"frame": {"x":1,"y":261,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "down/blockie_purple_moving_down.png":
 {
-	"frame": {"x":1,"y":495,"w":492,"h":492},
+	"frame": {"x":131,"y":1,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "idle/blockie_purple_idle01.png":
 {
-	"frame": {"x":1,"y":989,"w":492,"h":492},
+	"frame": {"x":261,"y":1,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "idle/blockie_purple_idle02.png":
 {
-	"frame": {"x":495,"y":495,"w":492,"h":492},
+	"frame": {"x":131,"y":131,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "left/blockie_purple_moving_left.png":
 {
-	"frame": {"x":989,"y":495,"w":492,"h":492},
+	"frame": {"x":131,"y":261,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "right/blockie_purple_moving_right.png":
 {
-	"frame": {"x":495,"y":989,"w":492,"h":492},
+	"frame": {"x":261,"y":131,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 },
 "up/blockie_purple_moving_up.png":
 {
-	"frame": {"x":989,"y":989,"w":492,"h":492},
+	"frame": {"x":261,"y":261,"w":128,"h":128},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":10,"y":10,"w":492,"h":492},
-	"sourceSize": {"w":512,"h":512}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
 }},
 "animations": {
 	"death/blockie_purple_death": ["death/blockie_purple_death01.png","death/blockie_purple_death02.png"],
@@ -89,8 +81,8 @@
 	"version": "1.0",
 	"image": "block_purple.png",
 	"format": "RGBA8888",
-	"size": {"w":1482,"h":1482},
+	"size": {"w":390,"h":390},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:c2909fafd695d95a907a07aa5bfb9c8d:5e91f733f0f5fb615d1eb4d4e84a3230:559db020fcff84c539dce62d981cf2cf$"
+	"smartupdate": "$TexturePacker:SmartUpdate:0ffe3390779c506fafaa8b77775ba1c8:765af50ed0bfb6c0777b42dfab7818b6:559db020fcff84c539dce62d981cf2cf$"
 }
 }
