@@ -1836,7 +1836,7 @@ logic_GridLogic.prototype = {
 			if(match != null && match.length > 0) {
 				haxe_Log.trace("-is square logic",{ fileName : "GridLogic.hx", lineNumber : 266, className : "logic.GridLogic", methodName : "remove"});
 				if(outLines != null) {
-					outLines.push({ isSquare : true, value : n.value, nodes : match, orientation : null});
+					outLines.push({ isSquare : true, value : match[0].value, nodes : match, orientation : null});
 				}
 				var _g21 = 0;
 				while(_g21 < match.length) {
@@ -1877,12 +1877,12 @@ logic_GridLogic.prototype = {
 		while(_g < _g1.length) {
 			var n = _g1[_g];
 			++_g;
-			if(n.value == value && value > 0) {
+			if(n.value == value && value >= 0) {
 				n.value = -1;
 				toClear.push(n);
 			}
 		}
-		haxe_Log.trace("SQUARE CLEARS: " + toClear.length,{ fileName : "GridLogic.hx", lineNumber : 302, className : "logic.GridLogic", methodName : "applySquareClear"});
+		haxe_Log.trace("SQUARE CLEARS: " + toClear.length + " of value " + value,{ fileName : "GridLogic.hx", lineNumber : 302, className : "logic.GridLogic", methodName : "applySquareClear"});
 		return toClear;
 	}
 	,applyLineClear: function(x,y,orientation) {
