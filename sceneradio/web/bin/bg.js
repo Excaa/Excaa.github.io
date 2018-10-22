@@ -18,7 +18,7 @@
 			}
 			else
 			{
-				title.text("Sceneradio @ Wappuradio - 22.10. 22-24");
+				title.text("Sceneradio @ Wappuradio - 22.10. 21.30-24");
 			}
 		}
 		$(window).resize(titleResize);
