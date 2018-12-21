@@ -78,7 +78,7 @@ Main.prototype = {
 			_gthis.card.scale.x = _gthis.card.scale.y = 1;
 			if(size.width > size.height) {
 				_gthis.card.gfx.texture = util_Asset.getTexture("card.png",false);
-				var s = Math.min(size.width / _gthis.card.gfx.width,size.height / _gthis.card.gfx.height);
+				var s = Math.min(size.width / _gthis.card.gfx.width,size.height / _gthis.card.gfx.height) * 0.9;
 				if(s > 1) {
 					s = 1;
 				}
