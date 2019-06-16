@@ -73,6 +73,7 @@ var Main = $hx_exports["Main"] = function() {
 	Main.CO2Emissions.set(controls_ItemType.FOREST,-29841);
 	Main.CO2Emissions.set(controls_ItemType.FARMINGLAND,7270);
 	Main.CO2Emissions.set(controls_ItemType.GRASS,630);
+	Main.CO2Emissions.set(controls_ItemType.BOMB,0);
 	Main.CH4Emissions = new haxe_ds_EnumValueMap();
 	Main.CH4Emissions.set(controls_ItemType.ENERGY,287);
 	Main.CH4Emissions.set(controls_ItemType.FACTORY,0);
@@ -80,6 +81,7 @@ var Main = $hx_exports["Main"] = function() {
 	Main.CH4Emissions.set(controls_ItemType.FOREST,846);
 	Main.CH4Emissions.set(controls_ItemType.FARMINGLAND,0);
 	Main.CH4Emissions.set(controls_ItemType.GRASS,0);
+	Main.CH4Emissions.set(controls_ItemType.BOMB,0);
 	Main.N2OEmissions = new haxe_ds_EnumValueMap();
 	Main.N2OEmissions.set(controls_ItemType.ENERGY,559);
 	Main.N2OEmissions.set(controls_ItemType.FACTORY,257);
@@ -87,6 +89,7 @@ var Main = $hx_exports["Main"] = function() {
 	Main.N2OEmissions.set(controls_ItemType.FOREST,1997);
 	Main.N2OEmissions.set(controls_ItemType.FARMINGLAND,7);
 	Main.N2OEmissions.set(controls_ItemType.GRASS,1);
+	Main.N2OEmissions.set(controls_ItemType.BOMB,0);
 	Main.instance = this;
 	console.log("new game");
 	createjs.Ticker = null;
@@ -204,6 +207,47 @@ Std.__name__ = true;
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
+var controls_Bar = function(title,color) {
+	PIXI.Container.call(this);
+	this.left = util_Asset.getImage("fill_edge.png",true);
+	this.right = util_Asset.getImage("fill_edge.png",true);
+	this.right.scale.x = -1;
+	var ts = { };
+	ts.fontFamily = "Impact";
+	ts.fontSize = 30;
+	ts.fill = 0;
+	this.title = new PIXI.Text(title,ts);
+	this.addChild(this.title);
+	ts.fill = 16777215;
+	ts.fontSize = 24;
+	this.valText = new PIXI.Text("100",ts);
+	this.valText.y = 2;
+	this.left.x = 50;
+	this.right.x = 300;
+	this.bg = util_Asset.getImage("bar_fill.png",true);
+	this.fill = util_Asset.getImage("bar_fill.png",true);
+	this.bg.width = 190;
+	this.bg.tint = color;
+	this.bg.x = this.left.x + 32 - 2;
+	this.fill.x = this.bg.x;
+	this.fill.blendMode = PIXI.BLEND_MODES.ADD;
+	this.fill.width = 0;
+	this.addChild(this.bg);
+	this.addChild(this.fill);
+	this.addChild(this.left);
+	this.addChild(this.right);
+	this.addChild(this.valText);
+	this.setValue(0);
+};
+controls_Bar.__name__ = true;
+controls_Bar.__super__ = PIXI.Container;
+controls_Bar.prototype = $extend(PIXI.Container.prototype,{
+	setValue: function(val) {
+		this.valText.text = Std.string(Math.round(val / 1000));
+		this.valText.x = this.left.x + 32 + Math.round((this.bg.width - this.valText.width) / 2);
+	}
+	,__class__: controls_Bar
+});
 var controls_BounceItem = function(tex) {
 	PIXI.Container.call(this);
 	if(controls_BounceItem.points == null) {
@@ -229,7 +273,43 @@ controls_BounceItem.__super__ = PIXI.Container;
 controls_BounceItem.prototype = $extend(PIXI.Container.prototype,{
 	__class__: controls_BounceItem
 });
+var controls_EndPopup = function() {
+	PIXI.Container.call(this);
+	this.bg = new PIXI.mesh.NineSlicePlane(util_Asset.getTexture("popup_bg.png",true),20,20,20,20);
+	this.addChild(this.bg);
+	this.bg.width = 400;
+	this.bg.height = 400;
+	var ts = { };
+	ts.fontFamily = "Impact";
+	ts.fontSize = 30;
+	ts.fill = 0;
+	this.title = new PIXI.Text("Well done!",ts);
+	this.addChild(this.title);
+	ts.fontSize = 18;
+	ts.fill = 0;
+	ts.wordWrap = true;
+	ts.wordWrapWidth = 380;
+	this.instruction = new PIXI.Text("Your colony is complete!\nPress replay to play again.",ts);
+	this.addChild(this.instruction);
+	this.title.y = 20;
+	this.title.x = Math.round((400 - this.title.width) / 2);
+	this.instruction.y = 70;
+	this.instruction.x = Math.round((400 - this.instruction.width) / 2);
+	ts.fontSize = 30;
+	this.start = new PIXI.Text("Replay",ts);
+	this.addChild(this.start);
+	this.start.y = 344;
+	this.start.x = Math.round((400 - this.start.width) / 2);
+	this.start.interactive = true;
+	this.start.buttonMode = true;
+};
+controls_EndPopup.__name__ = true;
+controls_EndPopup.__super__ = PIXI.Container;
+controls_EndPopup.prototype = $extend(PIXI.Container.prototype,{
+	__class__: controls_EndPopup
+});
 var controls_GameGrid = function(ui) {
+	this.currentTypeLevel = 0;
 	this.nodes = [];
 	PIXI.Container.call(this);
 	this.ui = ui;
@@ -254,6 +334,7 @@ controls_GameGrid.prototype = $extend(PIXI.Container.prototype,{
 				n.x = i * 100;
 				n.y = j * 100;
 				n.interactive = true;
+				n.buttonMode = true;
 				n.addListener("click",$bind(this,this.onNodeClick));
 				n.addListener("tap",$bind(this,this.onNodeClick));
 				this.addChild(n);
@@ -261,13 +342,64 @@ controls_GameGrid.prototype = $extend(PIXI.Container.prototype,{
 				this.nodes.push(n);
 			}
 		}
+		this.ui.storage.interactive = true;
+		this.ui.storage.buttonMode = true;
+		this.ui.storage.addListener("click",$bind(this,this.onStorageClick));
+		this.ui.storage.addListener("tap",$bind(this,this.onStorageClick));
+		this.ui.next.interactive = true;
+		this.ui.next.buttonMode = true;
+		this.ui.next.addListener("click",$bind(this,this.onNextClick));
+		this.ui.next.addListener("tap",$bind(this,this.onNextClick));
+	}
+	,onNextClick: function(e) {
+		this.ui.storage.selection.alpha = 0;
+		this.ui.next.selection.alpha = 0.5;
+		this.updateEnabled();
+	}
+	,onStorageClick: function(e) {
+		if(this.ui.storage.item == null) {
+			this.ui.storage.setItem(this.currentType,this.currentTypeLevel);
+			this.randomizeNext();
+		} else {
+			this.ui.next.selection.alpha = 0.0;
+			this.ui.storage.selection.alpha = 0.5;
+			this.updateEnabled();
+		}
+	}
+	,updateEnabled: function() {
+		var _g = 0;
+		var _g1 = this.nodes;
+		while(_g < _g1.length) {
+			var n = _g1[_g];
+			++_g;
+			n.interactive = false;
+			if(this.ui.storage.selection.alpha > 0) {
+				if(n.item == null && this.ui.storage.item.type != controls_ItemType.BOMB) {
+					n.interactive = true;
+				} else if(n.item != null && this.ui.storage.item.type == controls_ItemType.BOMB) {
+					n.interactive = true;
+				}
+			} else if(n.item == null && this.currentType != controls_ItemType.BOMB) {
+				n.interactive = true;
+			} else if(n.item != null && this.currentType == controls_ItemType.BOMB) {
+				n.interactive = true;
+			}
+		}
 	}
 	,onNodeClick: function(e) {
 		var node = e.target;
 		if(node.interactive) {
 			node.interactive = false;
-			node.setItem(this.currentType,0);
-			this.checkCombine(node);
+			if(this.ui.storage.selection.alpha > 0) {
+				node.setItem(this.ui.storage.item.type,this.ui.storage.item.level);
+				this.ui.storage.removeItem();
+				this.ui.storage.selection.alpha = 0;
+				this.ui.next.selection.alpha = 0.5;
+				this.checkCombine(node,false);
+			} else {
+				node.setItem(this.currentType,this.currentTypeLevel);
+				this.checkCombine(node,true);
+			}
 		}
 	}
 	,getNode: function(x,y) {
@@ -276,8 +408,16 @@ controls_GameGrid.prototype = $extend(PIXI.Container.prototype,{
 		}
 		return null;
 	}
-	,checkCombine: function(node) {
+	,checkCombine: function(node,updateNext) {
 		var _gthis = this;
+		if(node.item == null) {
+			this.interactiveChildren = true;
+			if(updateNext) {
+				this.randomizeNext();
+			}
+			this.updateEmissions();
+			return;
+		}
 		var same = [];
 		var nearBy;
 		var toSearch = [node];
@@ -317,18 +457,73 @@ controls_GameGrid.prototype = $extend(PIXI.Container.prototype,{
 				n2.interactive = true;
 			}
 			haxe_Timer.delay(function() {
-				_gthis.checkCombine(node);
+				_gthis.checkCombine(node,updateNext);
 			},150);
 		} else {
 			this.interactiveChildren = true;
-			this.randomizeNext();
+			if(updateNext) {
+				this.randomizeNext();
+			}
+			this.updateEmissions();
 		}
 	}
+	,updateEmissions: function() {
+		var co2 = 0;
+		var ch4 = 0;
+		var n2o = 0;
+		var _g = 0;
+		var _g1 = this.nodes;
+		while(_g < _g1.length) {
+			var n = _g1[_g];
+			++_g;
+			if(n.item != null) {
+				if(Main.CO2Emissions.get(n.item.type) > 0) {
+					co2 += Main.CO2Emissions.get(n.item.type) * Math.log(n.item.level + 2);
+				} else {
+					co2 += Main.CO2Emissions.get(n.item.type) * (n.item.level + 1);
+				}
+				if(Main.CH4Emissions.get(n.item.type) > 0) {
+					ch4 += Main.CH4Emissions.get(n.item.type) * Math.log(n.item.level + 2);
+				} else {
+					ch4 += Main.CH4Emissions.get(n.item.type) * (n.item.level + 1);
+				}
+				if(Main.N2OEmissions.get(n.item.type) > 0) {
+					n2o += Main.N2OEmissions.get(n.item.type) * Math.log(n.item.level + 2);
+				} else {
+					n2o += Main.N2OEmissions.get(n.item.type) * (n.item.level + 1);
+				}
+			}
+		}
+		this.ui.scores.co2.setValue(co2);
+		this.ui.scores.ch4.setValue(ch4);
+		this.ui.scores.n2o.setValue(n2o);
+	}
 	,start: function() {
+		var _g = 0;
+		var _g1 = this.nodes;
+		while(_g < _g1.length) {
+			var n = _g1[_g];
+			++_g;
+			n.removeItem();
+			n.interactive = true;
+		}
+		this.updateEmissions();
+		var n1 = Math.floor(Math.random() * 6);
+		var blank = this.nodes.slice(0);
+		var _g11 = 0;
+		while(_g11 < n1) {
+			++_g11;
+			this.randomizeNext(true);
+			blank[Math.floor(Math.random() * blank.length)].setItem(this.currentType,this.currentTypeLevel);
+		}
+		this.ui.next.selection.alpha = 0.5;
+		this.ui.storage.removeItem();
+		this.ui.storage.selection.alpha = 0;
+		this.ui.interactiveChildren = true;
 		this.interactiveChildren = true;
 		this.randomizeNext();
 	}
-	,randomizeNext: function() {
+	,randomizeNext: function(ignoreAdd) {
 		var typeCount = new haxe_ds_EnumValueMap();
 		var chance = new haxe_ds_EnumValueMap();
 		chance.set(controls_ItemType.ENERGY,1);
@@ -337,6 +532,8 @@ controls_GameGrid.prototype = $extend(PIXI.Container.prototype,{
 		chance.set(controls_ItemType.FARMINGLAND,1);
 		chance.set(controls_ItemType.FOREST,1);
 		chance.set(controls_ItemType.GRASS,1);
+		var total = 0;
+		var avgLevel = 0;
 		var _g = 0;
 		var _g1 = this.nodes;
 		while(_g < _g1.length) {
@@ -348,7 +545,15 @@ controls_GameGrid.prototype = $extend(PIXI.Container.prototype,{
 				} else {
 					typeCount.set(n.item.type,1);
 				}
+				avgLevel += n.item.level;
+				++total;
 			}
+		}
+		chance.set(controls_ItemType.BOMB,total < 10 ? 0 : (total - 10) / 50);
+		if(total == 0) {
+			avgLevel = 0;
+		} else {
+			avgLevel /= total;
 		}
 		var type = typeCount.keys();
 		while(type.hasNext()) {
@@ -370,36 +575,65 @@ controls_GameGrid.prototype = $extend(PIXI.Container.prototype,{
 				break;
 			}
 		}
+		this.currentTypeLevel = Math.floor(Math.random() * Math.random() * (avgLevel + 1));
 		this.ui.next.removeItem();
-		this.ui.next.setItem(this.currentType,0);
+		if(!ignoreAdd) {
+			this.ui.next.setItem(this.currentType,this.currentTypeLevel);
+		}
+		var allOccupied = true;
+		var _g2 = 0;
+		var _g11 = this.nodes;
+		while(_g2 < _g11.length) {
+			var n1 = _g11[_g2];
+			++_g2;
+			if(n1.item == null) {
+				allOccupied = false;
+				break;
+			}
+		}
+		if(this.ui.next.item != null && this.ui.next.item.type == controls_ItemType.BOMB || this.ui.storage.item != null && this.ui.storage.item.type == controls_ItemType.BOMB) {
+			allOccupied = false;
+		}
+		this.updateEnabled();
+		if(allOccupied) {
+			this.interactiveChildren = false;
+			this.emit(controls_GameGrid.GAME_OVER);
+		}
 	}
 	,__class__: controls_GameGrid
 });
-var controls_ItemType = { __ename__ : true, __constructs__ : ["ENERGY","FACTORY","FARM","FARMINGLAND","FOREST","GRASS","DECORATION"] };
-controls_ItemType.ENERGY = ["ENERGY",0];
+var controls_ItemType = { __ename__ : true, __constructs__ : ["BOMB","ENERGY","FACTORY","FARM","FARMINGLAND","FOREST","GRASS","DECORATION"] };
+controls_ItemType.BOMB = ["BOMB",0];
+controls_ItemType.BOMB.toString = $estr;
+controls_ItemType.BOMB.__enum__ = controls_ItemType;
+controls_ItemType.ENERGY = ["ENERGY",1];
 controls_ItemType.ENERGY.toString = $estr;
 controls_ItemType.ENERGY.__enum__ = controls_ItemType;
-controls_ItemType.FACTORY = ["FACTORY",1];
+controls_ItemType.FACTORY = ["FACTORY",2];
 controls_ItemType.FACTORY.toString = $estr;
 controls_ItemType.FACTORY.__enum__ = controls_ItemType;
-controls_ItemType.FARM = ["FARM",2];
+controls_ItemType.FARM = ["FARM",3];
 controls_ItemType.FARM.toString = $estr;
 controls_ItemType.FARM.__enum__ = controls_ItemType;
-controls_ItemType.FARMINGLAND = ["FARMINGLAND",3];
+controls_ItemType.FARMINGLAND = ["FARMINGLAND",4];
 controls_ItemType.FARMINGLAND.toString = $estr;
 controls_ItemType.FARMINGLAND.__enum__ = controls_ItemType;
-controls_ItemType.FOREST = ["FOREST",4];
+controls_ItemType.FOREST = ["FOREST",5];
 controls_ItemType.FOREST.toString = $estr;
 controls_ItemType.FOREST.__enum__ = controls_ItemType;
-controls_ItemType.GRASS = ["GRASS",5];
+controls_ItemType.GRASS = ["GRASS",6];
 controls_ItemType.GRASS.toString = $estr;
 controls_ItemType.GRASS.__enum__ = controls_ItemType;
-controls_ItemType.DECORATION = ["DECORATION",6];
+controls_ItemType.DECORATION = ["DECORATION",7];
 controls_ItemType.DECORATION.toString = $estr;
 controls_ItemType.DECORATION.__enum__ = controls_ItemType;
 var controls_Item = function() {
 	this.level = 0;
 	PIXI.Container.call(this);
+	this.container = new PIXI.Container();
+	this.pivot.x = 50;
+	this.pivot.y = 80;
+	this.addChild(this.container);
 };
 controls_Item.__name__ = true;
 controls_Item.__super__ = PIXI.Container;
@@ -408,6 +642,20 @@ controls_Item.prototype = $extend(PIXI.Container.prototype,{
 		this.level = to;
 	}
 	,__class__: controls_Item
+});
+var controls_ItemBomb = function() {
+	controls_Item.call(this);
+	this.sprite1 = util_Asset.getImage("clear.png",true);
+	this.type = controls_ItemType.BOMB;
+	this.container.addChild(this.sprite1);
+};
+controls_ItemBomb.__name__ = true;
+controls_ItemBomb.__super__ = controls_Item;
+controls_ItemBomb.prototype = $extend(controls_Item.prototype,{
+	updateLevel: function(to) {
+		controls_Item.prototype.updateLevel.call(this,to);
+	}
+	,__class__: controls_ItemBomb
 });
 var controls_ItemDecoration = function() {
 	controls_Item.call(this);
@@ -425,16 +673,10 @@ var controls_ItemEnergy = function() {
 	this.sprite3 = new controls_BounceItem(util_Asset.getTexture("powerplant.png",true));
 	this.sprite4 = new controls_BounceItem(util_Asset.getTexture("powerplant.png",true));
 	this.type = controls_ItemType.ENERGY;
-	this.tmp = new PIXI.Graphics();
-	this.tmp.beginFill(16776960,1);
-	this.tmp.drawCircle(0,0,45);
-	this.tmp.endFill();
-	this.tmp.x = 50;
-	this.tmp.y = 50;
-	this.addChild(this.sprite2);
-	this.addChild(this.sprite3);
-	this.addChild(this.sprite4);
-	this.addChild(this.sprite1);
+	this.container.addChild(this.sprite2);
+	this.container.addChild(this.sprite3);
+	this.container.addChild(this.sprite4);
+	this.container.addChild(this.sprite1);
 	this.sprite2.x = -14;
 	this.sprite2.y = -15;
 	this.sprite2.scale.set(0.8,0.8);
@@ -464,10 +706,10 @@ var controls_ItemFactory = function() {
 	this.sprite3 = new controls_BounceItem(util_Asset.getTexture("factory.png",true));
 	this.sprite4 = new controls_BounceItem(util_Asset.getTexture("factory.png",true));
 	this.type = controls_ItemType.FACTORY;
-	this.addChild(this.sprite2);
-	this.addChild(this.sprite3);
-	this.addChild(this.sprite4);
-	this.addChild(this.sprite1);
+	this.container.addChild(this.sprite2);
+	this.container.addChild(this.sprite3);
+	this.container.addChild(this.sprite4);
+	this.container.addChild(this.sprite1);
 	this.sprite2.x = -10;
 	this.sprite2.y = -15;
 	this.sprite2.scale.set(0.8,0.8);
@@ -497,10 +739,10 @@ var controls_ItemFarm = function() {
 	this.sprite3 = new controls_BounceItem(util_Asset.getTexture("farm.png",true));
 	this.sprite4 = new controls_BounceItem(util_Asset.getTexture("farm.png",true));
 	this.type = controls_ItemType.FARM;
-	this.addChild(this.sprite2);
-	this.addChild(this.sprite3);
-	this.addChild(this.sprite4);
-	this.addChild(this.sprite1);
+	this.container.addChild(this.sprite2);
+	this.container.addChild(this.sprite3);
+	this.container.addChild(this.sprite4);
+	this.container.addChild(this.sprite1);
 	this.sprite2.x = -10;
 	this.sprite2.y = -15;
 	this.sprite2.scale.set(0.8,0.8);
@@ -530,10 +772,10 @@ var controls_ItemFarmingLand = function() {
 	this.sprite3 = new controls_BounceItem(util_Asset.getTexture("farmland.png",true));
 	this.sprite4 = new controls_BounceItem(util_Asset.getTexture("farmland.png",true));
 	this.type = controls_ItemType.FARMINGLAND;
-	this.addChild(this.sprite3);
-	this.addChild(this.sprite4);
-	this.addChild(this.sprite2);
-	this.addChild(this.sprite1);
+	this.container.addChild(this.sprite3);
+	this.container.addChild(this.sprite4);
+	this.container.addChild(this.sprite2);
+	this.container.addChild(this.sprite1);
 	this.sprite2.x = -3;
 	this.sprite2.y = 0;
 	this.sprite2.scale.set(0.6,0.6);
@@ -563,10 +805,10 @@ var controls_ItemForest = function() {
 	this.sprite3 = new controls_BounceItem(util_Asset.getTexture("forest.png",true));
 	this.sprite4 = new controls_BounceItem(util_Asset.getTexture("forest.png",true));
 	this.type = controls_ItemType.FOREST;
-	this.addChild(this.sprite2);
-	this.addChild(this.sprite3);
-	this.addChild(this.sprite4);
-	this.addChild(this.sprite1);
+	this.container.addChild(this.sprite2);
+	this.container.addChild(this.sprite3);
+	this.container.addChild(this.sprite4);
+	this.container.addChild(this.sprite1);
 	this.sprite2.x = -14;
 	this.sprite2.y = -15;
 	this.sprite2.scale.set(0.8,0.8);
@@ -596,10 +838,10 @@ var controls_ItemGrass = function() {
 	this.sprite3 = new controls_BounceItem(util_Asset.getTexture("grass.png",true));
 	this.sprite4 = new controls_BounceItem(util_Asset.getTexture("grass.png",true));
 	this.type = controls_ItemType.GRASS;
-	this.addChild(this.sprite3);
-	this.addChild(this.sprite4);
-	this.addChild(this.sprite2);
-	this.addChild(this.sprite1);
+	this.container.addChild(this.sprite3);
+	this.container.addChild(this.sprite4);
+	this.container.addChild(this.sprite2);
+	this.container.addChild(this.sprite1);
 	this.sprite2.x = -3;
 	this.sprite2.y = 0;
 	this.sprite2.scale.set(0.6,0.6);
@@ -630,40 +872,91 @@ controls_MainStage.__name__ = true;
 controls_MainStage.__super__ = PIXI.Container;
 controls_MainStage.prototype = $extend(PIXI.Container.prototype,{
 	initializeControls: function() {
+		this.gameArea = new PIXI.Container();
 		this.bg = new PIXI.extras.TilingSprite(util_Asset.getTexture("tile.png",true),100,100);
 		this.bg.tileScale.set(3,3);
 		this.addChild(this.bg);
 		this.ui = new controls_UI();
+		this.ui.interactiveChildren = false;
 		this.grid = new controls_GameGrid(this.ui);
-		this.addChild(this.grid);
-		this.addChild(this.ui);
-		this.grid.start();
+		this.gameArea.addChild(this.grid);
+		this.gameArea.addChild(this.ui);
+		this.grid.y = 130;
+		this.grid.addListener(controls_GameGrid.GAME_OVER,$bind(this,this.ongameover));
+		this.startPopup = new controls_StartPopup();
+		this.endPopup = new controls_EndPopup();
+		this.endPopup.visible = false;
+		this.addChild(this.gameArea);
+		this.addChild(this.startPopup);
+		this.addChild(this.endPopup);
+		this.startPopup.interactive = true;
+		this.startPopup.start.addListener("click",$bind(this,this.onstartClick));
+		this.startPopup.start.addListener("tap",$bind(this,this.onstartClick));
+		this.endPopup.start.addListener("click",$bind(this,this.onstartClick));
+		this.endPopup.start.addListener("tap",$bind(this,this.onstartClick));
+	}
+	,onstartClick: function() {
+		this.startPopup.interactive = false;
+		createjs.Tween.get(this.startPopup.pivot).to({ y : 400},500,createjs.Ease.backIn);
+		createjs.Tween.get(this.startPopup).wait(300,true).to({ alpha : 0},200,createjs.Ease.quadInOut).set({ visible : false}).call(($_=this.grid,$bind($_,$_.start)));
+		this.endPopup.interactive = false;
+		createjs.Tween.get(this.endPopup.pivot).to({ y : 400},500,createjs.Ease.backIn);
+		createjs.Tween.get(this.endPopup).wait(300,true).to({ alpha : 0},200,createjs.Ease.quadInOut).set({ visible : false});
 	}
 	,resize: function(size) {
 		this.bg.width = size.width;
 		this.bg.height = size.height;
-		var s = Math.min((size.width - 150) / 500,(size.height - 300) / 700);
-		this.grid.scale.set(s,s);
-		this.grid.x = Math.round((size.width - 500 * s) / 2);
-		this.grid.y = Math.round(size.height - 750 * s);
+		this.gameArea.scale.set(1,1);
+		var s = Math.min((size.width - 100) / this.gameArea.width,(size.height - 80) / this.gameArea.height);
+		this.gameArea.scale.set(s,s);
+		this.gameArea.x = Math.round((size.width - this.gameArea.width) / 2);
+		this.gameArea.y = Math.round((size.height - this.gameArea.height) / 2);
+		var ps = Math.min(1,Math.min(size.width / 500,size.height / 500));
+		this.endPopup.scale.set(ps,ps);
+		this.startPopup.scale.set(ps,ps);
+		this.endPopup.x = Math.round((size.width - this.endPopup.width) / 2);
+		this.endPopup.y = Math.round((size.height - this.endPopup.height) / 2);
+		this.startPopup.x = Math.round((size.width - this.startPopup.width) / 2);
+		this.startPopup.y = Math.round((size.height - this.startPopup.height) / 2);
+	}
+	,ongameover: function() {
+		this.ui.interactiveChildren = false;
+		this.grid.interactiveChildren = false;
+		this.endPopup.interactive = false;
+		this.endPopup.visible = true;
+		this.endPopup.pivot.y = 400;
+		this.endPopup.alpha = 0;
+		createjs.Tween.get(this.endPopup.pivot).to({ y : 0},500,createjs.Ease.backOut);
+		createjs.Tween.get(this.endPopup).to({ alpha : 1},200,createjs.Ease.quadInOut);
 	}
 	,__class__: controls_MainStage
 });
 var controls_Node = function() {
+	this.isNextIndicator = false;
 	PIXI.Container.call(this);
 	this.bg = new PIXI.Graphics();
 	this.bg.beginFill(16777215,0.0);
 	this.bg.lineStyle(2,16777215,1);
 	this.bg.drawRect(0,0,100,100);
+	this.selection = new PIXI.Graphics();
+	this.selection.beginFill(16777215,1.0);
+	this.selection.drawRect(0,0,100,100);
+	this.selection.alpha = 0;
 	this.addChild(this.bg);
+	this.addChild(this.selection);
 };
 controls_Node.__name__ = true;
 controls_Node.__super__ = PIXI.Container;
 controls_Node.prototype = $extend(PIXI.Container.prototype,{
 	setItem: function(to,level) {
+		if(to == controls_ItemType.BOMB && !this.isNextIndicator) {
+			this.removeItem();
+			return true;
+		}
 		if(this.item != null) {
 			return false;
 		}
+		console.log("set item " + Std.string(to));
 		this.item = null;
 		if(to == controls_ItemType.ENERGY) {
 			this.item = new controls_ItemEnergy();
@@ -679,26 +972,99 @@ controls_Node.prototype = $extend(PIXI.Container.prototype,{
 			this.item = new controls_ItemForest();
 		} else if(to == controls_ItemType.GRASS) {
 			this.item = new controls_ItemGrass();
+		} else if(to == controls_ItemType.BOMB) {
+			this.item = new controls_ItemBomb();
 		}
 		this.item.updateLevel(level);
+		this.item.x = 50;
+		this.item.y = 80;
 		this.addChild(this.item);
+		this.item.scale.set(0,0);
+		createjs.Tween.get(this.item.scale).wait(250,true).to({ x : 1, y : 1},250,createjs.Ease.backOut);
 		return true;
 	}
 	,removeItem: function() {
+		var _gthis = this;
 		if(this.item == null) {
 			return;
 		}
-		this.removeChild(this.item);
+		console.log("remove item");
+		var ti = this.item;
+		this.item.scale.set(1,1);
+		createjs.Tween.removeTweens(this.item.scale);
+		createjs.Tween.get(this.item.scale).to({ x : 0, y : 0},250,createjs.Ease.backIn).call(function() {
+			_gthis.removeChild(ti);
+		});
 		this.item = null;
 	}
 	,__class__: controls_Node
 });
+var controls_ScoreTable = function() {
+	PIXI.Container.call(this);
+	this.co2 = new controls_Bar("CO2",3158064);
+	this.ch4 = new controls_Bar("CH4",7368816);
+	this.n2o = new controls_Bar("N2O",12448);
+	this.addChild(this.co2);
+	this.addChild(this.ch4);
+	this.addChild(this.n2o);
+	this.ch4.y = 40;
+	this.n2o.y = 80;
+};
+controls_ScoreTable.__name__ = true;
+controls_ScoreTable.__super__ = PIXI.Container;
+controls_ScoreTable.prototype = $extend(PIXI.Container.prototype,{
+	__class__: controls_ScoreTable
+});
+var controls_StartPopup = function() {
+	PIXI.Container.call(this);
+	this.bg = new PIXI.mesh.NineSlicePlane(util_Asset.getTexture("popup_bg.png",true),20,20,20,20);
+	this.addChild(this.bg);
+	this.bg.width = 400;
+	this.bg.height = 400;
+	var ts = { };
+	ts.fontFamily = "Impact";
+	ts.fontSize = 30;
+	ts.fill = 0;
+	this.title = new PIXI.Text("Welcome!",ts);
+	this.addChild(this.title);
+	ts.fontSize = 18;
+	ts.fill = 0;
+	ts.wordWrap = true;
+	ts.wordWrapWidth = 380;
+	this.instruction = new PIXI.Text("Your goal is to place buildings, forests and farms down while trying to get as little emissions as possible.\n\n" + "Whenever three or more same type units are nearby, they combine into a more effective unit with better performance numbers.\n\n" + "Game ends when you cannot place anymore units. Use empty slot to store a unit temporarily.\n\nThis game has been made during Eko Game Jam 2019 and is inspired a lot by Triple town.",ts);
+	this.addChild(this.instruction);
+	this.title.y = 20;
+	this.title.x = Math.round((400 - this.title.width) / 2);
+	this.instruction.y = 70;
+	this.instruction.x = Math.round((400 - this.instruction.width) / 2);
+	ts.fontSize = 30;
+	this.start = new PIXI.Text("Start",ts);
+	this.addChild(this.start);
+	this.start.y = 344;
+	this.start.x = Math.round((400 - this.start.width) / 2);
+	this.start.interactive = true;
+	this.start.buttonMode = true;
+};
+controls_StartPopup.__name__ = true;
+controls_StartPopup.__super__ = PIXI.Container;
+controls_StartPopup.prototype = $extend(PIXI.Container.prototype,{
+	__class__: controls_StartPopup
+});
 var controls_UI = function() {
 	PIXI.Container.call(this);
 	this.next = new controls_Node();
-	this.next.x = 550;
-	this.next.y = 50;
+	this.next.x = 0;
+	this.next.y = 0;
 	this.addChild(this.next);
+	this.storage = new controls_Node();
+	this.storage.x = 110;
+	this.storage.y = 0;
+	this.addChild(this.storage);
+	this.next.isNextIndicator = true;
+	this.storage.isNextIndicator = true;
+	this.scores = new controls_ScoreTable();
+	this.addChild(this.scores);
+	this.scores.x = 500 - this.scores.width + 22;
 };
 controls_UI.__name__ = true;
 controls_UI.__super__ = PIXI.Container;
@@ -1924,6 +2290,7 @@ var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
 Config.ASSETS = ["img/ui.json"];
 Config.VERSION = "0h game jam 2018";
 controls_BounceItem.baseY = [100,80,60,40,20,0];
+controls_GameGrid.GAME_OVER = "gameover";
 haxe_crypto_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 haxe_crypto_Base64.BYTES = haxe_io_Bytes.ofString(haxe_crypto_Base64.CHARS);
 js_Boot.__toStr = ({ }).toString;
