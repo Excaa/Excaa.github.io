@@ -297,11 +297,13 @@ controls_CircleRenderer.prototype = $extend(PIXI.Container.prototype,{
 			ep.set(controls_CircleRenderer.WIDTH / 2 + this.radius,controls_CircleRenderer.HEIGHT / 2);
 		}
 		var _g12 = 0;
-		var _g3 = this.rope.points.length - 1;
+		var _g3 = this.rope.points.length;
 		while(_g12 < _g3) {
 			var i1 = _g12++;
-			this.rope.points[i1].copy(this.trackPoints[Math.floor(i1 / this.rope.points.length * this.trackPoints.length)]);
+			this.rope.points[i1].set(controls_CircleRenderer.WIDTH / 2 + this.radius,controls_CircleRenderer.HEIGHT / 2);
 		}
+		this.curpos = new PIXI.Point(controls_CircleRenderer.WIDTH / 2,controls_CircleRenderer.HEIGHT / 2);
+		this.centerPoint.set(controls_CircleRenderer.WIDTH / 2,controls_CircleRenderer.HEIGHT / 2);
 		Main.instance.renderer.clearBeforeRender = true;
 		Main.instance.renderer.render(this.container,this.renderTexture);
 		Main.instance.renderer.clearBeforeRender = false;
@@ -460,7 +462,6 @@ controls_StartView.prototype = $extend(PIXI.Container.prototype,{
 		this.survival.anchor.set(0.5,0.5);
 		this.rescue.anchor.set(0.5,0.5);
 		this.artmode.anchor.set(0.5,0.5);
-		this.survival.blendMode = this.rescue.blendMode = this.artmode.blendMode = PIXI.BLEND_MODES.ADD;
 		this.survival.alpha = this.rescue.alpha = this.artmode.alpha = 0.75;
 		this.artmode.y = 0;
 		this.survival.y = 120;
@@ -498,6 +499,7 @@ controls_StartView.prototype = $extend(PIXI.Container.prototype,{
 	}
 	,toView: function() {
 		var _gthis = this;
+		this.btns.x = this.size.width - this.btns.width;
 		createjs.Tween.get(this.rescue).wait(4000,true).to({ alpha : 1},350);
 		createjs.Tween.get(this.survival).wait(4150,true).to({ alpha : 1},350);
 		createjs.Tween.get(this.artmode).wait(4300,true).to({ alpha : 1},350).call(function() {
@@ -517,6 +519,7 @@ controls_StartView.prototype = $extend(PIXI.Container.prototype,{
 		});
 	}
 	,resize: function(size) {
+		this.size = size;
 		this.btns.scale.set(1,1);
 		var s = Math.min(size.width / this.btns.width,size.height / this.btns.height);
 		if(s > 1) {
