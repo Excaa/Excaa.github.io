@@ -18,7 +18,7 @@
 			}
 			else
 			{
-				title.text("Sceneradio @ Wappuradio 107,1 MHz - 20.4. 21-24");
+				title.text("Sceneradio @ Wappuradio - 17.4. 21-24");
 			}
 		}
 		$(window).resize(titleResize);
@@ -60,6 +60,9 @@
 				'	col+=sind(uv, 60., 20.,2.0,0.6)*b;',
 				'	col+=sind(uv, 80., 30.,3.0,0.8)*b;',
 				'	col+=sind(uv, 100., 40.,4.0,1.0)*b;',
+				'	col=clamp(vec3(0.), vec3(1.), col);',
+				'	col*=mod(gl_FragCoord.x*0.5, 1.5);',
+				'	col*=mod(gl_FragCoord.y*0.5, 1.5);',
 				"	gl_FragColor=vec4(col*.25,1.);",
 				"}"
 				].join("\n"), gl.FRAGMENT_SHADER) //FRAGMENT
