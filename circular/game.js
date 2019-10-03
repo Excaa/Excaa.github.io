@@ -182,6 +182,14 @@ var controls_CircleRenderer = function() {
 	this.curpos = new PIXI.Point(controls_CircleRenderer.WIDTH / 2,controls_CircleRenderer.HEIGHT / 2);
 	var _gthis = this;
 	PIXI.Container.call(this);
+	this.curs = new PIXI.Graphics();
+	this.curs.beginFill(16748544,1);
+	this.curs.drawCircle(0,0,2);
+	this.curs.endFill();
+	this.nexs = new PIXI.Graphics();
+	this.nexs.beginFill(16711680,1);
+	this.nexs.drawCircle(0,0,1);
+	this.nexs.endFill();
 	var _g1 = 0;
 	var _g = controls_CircleRenderer.WIDTH * controls_CircleRenderer.HEIGHT;
 	while(_g1 < _g) {
@@ -220,6 +228,8 @@ var controls_CircleRenderer = function() {
 	this.sprite.addChild(this.blast);
 	this.blast.anchor.set(0.5,0.5);
 	this.blast.visible = false;
+	this.sprite.addChild(this.curs);
+	this.sprite.addChild(this.nexs);
 	this.powersups = [];
 	var _g4 = 0;
 	while(_g4 < 50) {
@@ -283,6 +293,7 @@ controls_CircleRenderer.prototype = $extend(PIXI.Container.prototype,{
 		this.hitArea = size;
 	}
 	,start: function() {
+		this.curs.visible = this.nexs.visible = true;
 		var _g1 = 0;
 		var _g = this.hits.length;
 		while(_g1 < _g) {
@@ -335,6 +346,10 @@ controls_CircleRenderer.prototype = $extend(PIXI.Container.prototype,{
 			var i1 = _g11++;
 			this.rope.points[i1].copy(this.trackPoints[Math.floor(i1 / this.rope.points.length * this.trackPoints.length)]);
 		}
+		this.curs.position.copy(this.centerPoint);
+		var dy = Math.sin(this.angle) * this.radius;
+		var dx = Math.cos(this.angle) * this.radius;
+		this.nexs.position.set(this.centerPoint.x + dx * 2,this.centerPoint.y + dy * 2);
 		var ep = this.rope.points[this.rope.points.length - 1];
 		ep.x = Math.cos(this.angle) * this.radius + this.centerPoint.x;
 		ep.y = Math.sin(this.angle) * this.radius + this.centerPoint.y;
@@ -375,9 +390,9 @@ controls_CircleRenderer.prototype = $extend(PIXI.Container.prototype,{
 					continue;
 				}
 				sp.rotation += delta / 15;
-				var dx = sp.x - ep.x;
-				var dy = sp.y - ep.y;
-				if(Math.sqrt(dx * dx + dy * dy) < 25) {
+				var dx1 = sp.x - ep.x;
+				var dy1 = sp.y - ep.y;
+				if(Math.sqrt(dx1 * dx1 + dy1 * dy1) < 25) {
 					hits.push(sp);
 				}
 			}
@@ -402,6 +417,7 @@ controls_CircleRenderer.prototype = $extend(PIXI.Container.prototype,{
 		}
 	}
 	,ongameover: function() {
+		this.curs.visible = this.nexs.visible = false;
 		var ts = Math.min(this.size.width / controls_CircleRenderer.WIDTH,this.size.height / controls_CircleRenderer.HEIGHT);
 		createjs.Tween.get(this.sprite.scale).to({ x : ts * 0.75, y : ts * 0.75},3500,createjs.Ease.quadInOut);
 		var _g = 0;
