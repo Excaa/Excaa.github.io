@@ -29,8 +29,12 @@ class Main
 	
 	private var velocities:Float32Array;
 	private var vertices:Float32Array;
+	private var verticesMsg1:Float32Array;
+	private var verticesMsg2:Float32Array;
 	private var indices:Float32Array;
 	private var vertexBuffers:Array<Buffer>;
+	private var verticesMsg1Buffers:Array<Buffer>;
+	private var verticesMsg2Buffers:Array<Buffer>;
 	private var velocityBuffers:Array<Buffer>;
 	private var indexBuffers:Array<Buffer>;
 	private var feedbackProgram:Program;
@@ -101,9 +105,15 @@ class Main
 		this.vertices = new Float32Array(points * 2);
 		this.velocities = new Float32Array(points * 2); 
 		this.indices = new Float32Array(points * 2);
+		
+		this.verticesMsg1 = new Float32Array(points * 2);
+		this.verticesMsg2 = new Float32Array(points * 2);
+		
 		for ( i in 0...vertices.length)
 		{
 			vertices[i] = 0;// Math.random() * 2 - 1;
+			verticesMsg1[i] = Math.random() * 2 - 1;
+			verticesMsg2[i] = Math.random() * 2 - 1;
 			velocities[i] = 0;
 			indices[i] = i;
 		}
@@ -123,6 +133,16 @@ class Main
 			GLUtil.createBufferWithSize(gl, points*2*4, RenderingContext.STATIC_DRAW)
 		];
 		
+		verticesMsg1Buffers = [
+			GLUtil.createBufferFromArray(gl,verticesMsg1, RenderingContext.STATIC_DRAW),
+			GLUtil.createBufferFromArray(gl,verticesMsg1, RenderingContext.STATIC_DRAW),
+//			GLUtil.createBufferWithSize(gl, points*2*4, RenderingContext.STATIC_DRAW)
+		];
+		verticesMsg2Buffers = [
+			GLUtil.createBufferFromArray(gl,verticesMsg2, RenderingContext.STATIC_DRAW),
+			GLUtil.createBufferFromArray(gl,verticesMsg2, RenderingContext.STATIC_DRAW),
+//			GLUtil.createBufferWithSize(gl, points*2*4, RenderingContext.STATIC_DRAW)
+		];
 		
 		this.feedbackProgram = GLUtil.createProgram(gl, Resource.getString("calc.vert"), Resource.getString("empty.frag"),
 		                                            ['v_position', 'v_velocity'], untyped gl.SEPARATE_ATTRIBS);
@@ -146,7 +166,18 @@ class Main
 				data:indexBuffers[0],
 				location: 2,
 				elementSize:2
+			},
+			{
+				data:verticesMsg1Buffers[0],
+				location: 3,
+				elementSize:2
+			},
+			{
+				data:verticesMsg2Buffers[0],
+				location: 4,
+				elementSize:2
 			}
+			
 		]));
 		
 		feedbackVAO.push( GLUtil.createVAO(gl, [
@@ -161,8 +192,18 @@ class Main
 				elementSize:2
 			},
 			{
-				data:indexBuffers[0],
+				data:indexBuffers[1],
 				location: 2,
+				elementSize:2
+			},
+			{
+				data:verticesMsg1Buffers[1],
+				location: 3,
+				elementSize:2
+			},
+			{
+				data:verticesMsg2Buffers[1],
+				location: 4,
 				elementSize:2
 			}
 		]));
