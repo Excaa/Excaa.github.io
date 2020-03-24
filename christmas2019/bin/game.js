@@ -107,6 +107,8 @@ HxOverrides.substr = function(s,pos,len) {
 	return s.substr(pos,len);
 };
 var Main = $hx_exports["Main"] = function() {
+	this.msgamount = 0;
+	this.msgpos = 0;
 	this.currentIndex = 0;
 	this.displayVAO = [];
 	this.feedbackVAO = [];
@@ -161,13 +163,27 @@ Main.prototype = {
 		this.indices = new Float32Array(Main.points * 2);
 		this.verticesMsg1 = new Float32Array(Main.points * 2);
 		this.verticesMsg2 = new Float32Array(Main.points * 2);
+		var ar = new RegExp("a=([^,]*),?","");
+		var match = ar.exec(window.location.hash);
+		var $as = "HYVÄÄ JOULUA";
+		if(match != null && match.length > 1) {
+			$as = decodeURIComponent(match[1].split("+").join(" "));
+		}
+		var br = new RegExp("b=(.*)","");
+		var match1 = br.exec(window.location.hash);
+		var bs = "ONNELLISTA\nUUTTA VUOTTA";
+		if(match1 != null && match1.length > 1) {
+			bs = decodeURIComponent(match1[1].split("+").join(" "));
+		}
+		var txt1 = TextGenerator.getPoints($as,this.vertices.length);
+		var txt2 = TextGenerator.getPoints(bs,this.vertices.length);
 		var _g1 = 0;
 		var _g = this.vertices.length;
 		while(_g1 < _g) {
 			var i = _g1++;
 			this.vertices[i] = 0;
-			this.verticesMsg1[i] = Math.random() * 2 - 1;
-			this.verticesMsg2[i] = Math.random() * 2 - 1;
+			this.verticesMsg1[i] = txt1[i % txt1.length] + this.canvas.width / 256 * (Math.random() - 0.5) / 128;
+			this.verticesMsg2[i] = txt2[i % txt2.length] + this.canvas.width / 256 * (Math.random() - 0.5) / 128;
 			this.velocities[i] = 0;
 			this.indices[i] = i;
 		}
@@ -180,11 +196,26 @@ Main.prototype = {
 		this.displayProgram = GLUtil.createProgram(this.gl,haxe_Resource.getString("display.vert"),haxe_Resource.getString("display.frag"),null,null);
 		this.feedbackVAO.push(GLUtil.createVAO(this.gl,[{ data : this.vertexBuffers[0], location : 0, elementSize : 2},{ data : this.velocityBuffers[0], location : 1, elementSize : 2},{ data : this.indexBuffers[0], location : 2, elementSize : 2},{ data : this.verticesMsg1Buffers[0], location : 3, elementSize : 2},{ data : this.verticesMsg2Buffers[0], location : 4, elementSize : 2}]));
 		this.feedbackVAO.push(GLUtil.createVAO(this.gl,[{ data : this.vertexBuffers[1], location : 0, elementSize : 2},{ data : this.velocityBuffers[1], location : 1, elementSize : 2},{ data : this.indexBuffers[1], location : 2, elementSize : 2},{ data : this.verticesMsg1Buffers[1], location : 3, elementSize : 2},{ data : this.verticesMsg2Buffers[1], location : 4, elementSize : 2}]));
-		this.displayVAO.push(GLUtil.createVAO(this.gl,[{ data : this.vertexBuffers[0], location : 0, elementSize : 2},{ data : this.velocityBuffers[0], location : 1, elementSize : 2}]));
-		this.displayVAO.push(GLUtil.createVAO(this.gl,[{ data : this.vertexBuffers[1], location : 0, elementSize : 2},{ data : this.velocityBuffers[1], location : 1, elementSize : 2}]));
+		this.displayVAO.push(GLUtil.createVAO(this.gl,[{ data : this.vertexBuffers[0], location : 0, elementSize : 2},{ data : this.velocityBuffers[0], location : 1, elementSize : 2},{ data : this.verticesMsg1Buffers[0], location : 2, elementSize : 2},{ data : this.verticesMsg2Buffers[0], location : 3, elementSize : 2}]));
+		this.displayVAO.push(GLUtil.createVAO(this.gl,[{ data : this.vertexBuffers[1], location : 0, elementSize : 2},{ data : this.velocityBuffers[1], location : 1, elementSize : 2},{ data : this.verticesMsg1Buffers[1], location : 2, elementSize : 2},{ data : this.verticesMsg2Buffers[1], location : 3, elementSize : 2}]));
 		this.transformFeedback = this.gl.createTransformFeedback();
 		this.mouseLocation = this.gl.getUniformLocation(this.feedbackProgram,"u_mouse");
 		this.timeLocation = this.gl.getUniformLocation(this.feedbackProgram,"time");
+		this.msgposLocation = this.gl.getUniformLocation(this.feedbackProgram,"msgpos");
+		this.msgamountLocation = this.gl.getUniformLocation(this.feedbackProgram,"msgamount");
+		this.dispmsgposLocation = this.gl.getUniformLocation(this.displayProgram,"msgpos");
+		this.dispmsgamountLocation = this.gl.getUniformLocation(this.displayProgram,"msgamount");
+		this.msgTimer = new haxe_Timer(10000);
+		this.msgTimer.run = $bind(this,this.ontimer);
+	}
+	,ontimer: function() {
+		var _gthis = this;
+		this.msgTimer.stop();
+		createjs.Tween.get(this).to({ msgamount : 1},3000,createjs.Ease.backOut).wait(3000,true).to({ msgpos : 1},3000,createjs.Ease.backInOut).wait(3000,true).to({ msgamount : 0},3000,createjs.Ease.quadInOut).call(function() {
+			_gthis.msgpos = 0;
+			_gthis.msgTimer = new haxe_Timer(10000);
+			_gthis.msgTimer.run = $bind(_gthis,_gthis.ontimer);
+		});
 	}
 	,draw: function(vao) {
 		this.gl.bindVertexArray(vao);
@@ -199,6 +230,8 @@ Main.prototype = {
 		this.gl.useProgram(this.feedbackProgram);
 		this.gl.uniform2fv(this.mouseLocation,[Math.sin(time * 0.1) * 0.2,Math.cos(time * 0.1) * 0.2]);
 		this.gl.uniform1f(this.timeLocation,time);
+		this.gl.uniform1f(this.msgposLocation,this.msgpos);
+		this.gl.uniform1f(this.msgamountLocation,this.msgamount);
 		this.gl.beginTransformFeedback(0);
 		this.draw(this.feedbackVAO[currentIndex]);
 		this.gl.endTransformFeedback();
@@ -212,6 +245,8 @@ Main.prototype = {
 		this.gl.clear(16384);
 		this.calculateFeedback(this.currentIndex,t * 0.01);
 		this.gl.useProgram(this.displayProgram);
+		this.gl.uniform1f(this.dispmsgposLocation,this.msgpos);
+		this.gl.uniform1f(this.dispmsgamountLocation,this.msgamount);
 		this.draw(this.displayVAO[invertedIndex]);
 		this.currentIndex = (this.currentIndex + 1) % 2;
 		window.requestAnimationFrame($bind(this,this.ontick));
@@ -234,6 +269,71 @@ Std.parseInt = function(x) {
 	}
 	return v;
 };
+var TextGenerator = function() {
+};
+TextGenerator.__name__ = true;
+TextGenerator.getPoints = function(text,pointCount) {
+	if(TextGenerator.canvas == null) {
+		TextGenerator.canvas = window.document.createElement("canvas");
+		TextGenerator.ctx = TextGenerator.canvas.getContext("2d",null);
+		TextGenerator.canvas.width = 256;
+		TextGenerator.canvas.height = 256;
+	}
+	TextGenerator.ctx.clearRect(0,0,TextGenerator.canvas.width,TextGenerator.canvas.height);
+	TextGenerator.ctx.fillStyle = "#ff0000";
+	TextGenerator.ctx.fillStyle = "#ffffff";
+	TextGenerator.ctx.font = "20px sans";
+	var txt = text.split("\n");
+	if(text.indexOf("\\n") >= 0) {
+		txt = text.split("\\n");
+	}
+	var c = 0;
+	TextGenerator.ctx.textAlign = "center";
+	var _g = 0;
+	while(_g < txt.length) {
+		var t = txt[_g];
+		++_g;
+		TextGenerator.ctx.fillText(t,128,80 + 24 * c,256);
+		++c;
+	}
+	var id = TextGenerator.ctx.getImageData(0,0,256,256);
+	var points = [];
+	var maxx = 0;
+	var maxy = 0;
+	var miny = 256;
+	var minx = 256;
+	var _g1 = 0;
+	var _g2 = id.height;
+	while(_g1 < _g2) {
+		var i = _g1++;
+		var _g3 = 0;
+		var _g21 = id.width;
+		while(_g3 < _g21) {
+			var j = _g3++;
+			if(id.data[(i * id.width + j) * 4] > 100) {
+				maxy = Math.max(i,maxx);
+				maxx = Math.max(j,maxy);
+				miny = Math.min(i,miny);
+				minx = Math.min(j,minx);
+				points.push(j);
+				points.push(i);
+			}
+		}
+	}
+	var _g11 = 0;
+	var _g4 = Math.floor(points.length / 2);
+	while(_g11 < _g4) {
+		var i1 = _g11++;
+		points[i1 * 2] -= minx;
+		points[i1 * 2 + 1] -= miny;
+		points[i1 * 2] = points[i1 * 2] / (maxx - minx) - 0.5;
+		points[i1 * 2 + 1] = 1 - points[i1 * 2 + 1] / (maxy - miny) - 0.75;
+	}
+	return points;
+};
+TextGenerator.prototype = {
+	__class__: TextGenerator
+};
 var haxe_Resource = function() { };
 haxe_Resource.__name__ = true;
 haxe_Resource.getString = function(name) {
@@ -250,6 +350,25 @@ haxe_Resource.getString = function(name) {
 		}
 	}
 	return null;
+};
+var haxe_Timer = function(time_ms) {
+	var me = this;
+	this.id = setInterval(function() {
+		me.run();
+	},time_ms);
+};
+haxe_Timer.__name__ = true;
+haxe_Timer.prototype = {
+	stop: function() {
+		if(this.id == null) {
+			return;
+		}
+		clearInterval(this.id);
+		this.id = null;
+	}
+	,run: function() {
+	}
+	,__class__: haxe_Timer
 };
 var haxe_io_Bytes = function(data) {
 	this.length = data.byteLength;
@@ -408,7 +527,7 @@ haxe_io_FPHelper.floatToI32 = function(f) {
 	if(f == 0) {
 		return 0;
 	}
-	var af = f < 0 ? -f : f;
+	var af = f < 0?-f:f;
 	var exp = Math.floor(Math.log(af) / 0.6931471805599453);
 	if(exp < -127) {
 		exp = -127;
@@ -420,7 +539,7 @@ haxe_io_FPHelper.floatToI32 = function(f) {
 		sig = 0;
 		++exp;
 	}
-	return (f < 0 ? -2147483648 : 0) | exp + 127 << 23 | sig;
+	return (f < 0?-2147483648:0) | exp + 127 << 23 | sig;
 };
 var js__$Boot_HaxeError = function(val) {
 	Error.call(this);
@@ -501,7 +620,7 @@ js_Boot.__string_rec = function(o,s) {
 			var _g2 = l;
 			while(_g11 < _g2) {
 				var i2 = _g11++;
-				str1 += (i2 > 0 ? "," : "") + js_Boot.__string_rec(o[i2],s);
+				str1 += (i2 > 0?",":"") + js_Boot.__string_rec(o[i2],s);
 			}
 			str1 += "]";
 			return str1;
@@ -607,10 +726,10 @@ js_Boot.__instanceof = function(o,cl) {
 		} else {
 			return false;
 		}
-		if(cl == Class ? o.__name__ != null : false) {
+		if(cl == Class?o.__name__ != null:false) {
 			return true;
 		}
-		if(cl == Enum ? o.__ename__ != null : false) {
+		if(cl == Enum?o.__ename__ != null:false) {
 			return true;
 		}
 		return o.__enum__ == cl;
@@ -644,7 +763,7 @@ var js_html_compat_ArrayBuffer = function(a) {
 };
 js_html_compat_ArrayBuffer.__name__ = true;
 js_html_compat_ArrayBuffer.sliceImpl = function(begin,end) {
-	var u = new Uint8Array(this,begin,end == null ? null : end - begin);
+	var u = new Uint8Array(this,begin,end == null?null:end - begin);
 	var result = new ArrayBuffer(u.byteLength);
 	new Uint8Array(result).set(u);
 	return result;
@@ -839,7 +958,7 @@ var Bool = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = { __name__ : ["Class"]};
 var Enum = { };
-haxe_Resource.content = [{ name : "empty.frag", data : "I3ZlcnNpb24gMzAwIGVzDQoNCnByZWNpc2lvbiBsb3dwIGZsb2F0Ow0Kb3V0IHZlYzQgY29sb3I7DQoNCnZvaWQgbWFpbigpIA0Kew0KCWNvbG9yID0gdmVjNCgxLjApOw0KfQ"},{ name : "calc.vert", data : "I3ZlcnNpb24gMzAwIGVzDQoNCmxheW91dChsb2NhdGlvbiA9IDApIGluIHZlYzQgYV9wb3NpdGlvbjsNCmxheW91dChsb2NhdGlvbiA9IDEpIGluIHZlYzIgYV92ZWxvY2l0eTsNCmxheW91dChsb2NhdGlvbiA9IDIpIGluIGZsb2F0IGFfaW5kOw0KbGF5b3V0KGxvY2F0aW9uID0gMykgaW4gdmVjMiBhX3Bvc2l0aW9uX21zZzE7DQpsYXlvdXQobG9jYXRpb24gPSA0KSBpbiB2ZWMyIGFfcG9zaXRpb25fbXNnMjsNCg0KZmxhdCBvdXQgdmVjMiB2X3Bvc2l0aW9uOw0KZmxhdCBvdXQgdmVjMiB2X3ZlbG9jaXR5Ow0KDQp1bmlmb3JtIHZlYzIgdV9tb3VzZTsNCnVuaWZvcm0gZmxvYXQgdGltZTsNCmZsb2F0IFBBUlRJQ0xFX01BU1MgPSAxMC4wOw0KZmxvYXQgR1JBVklUWV9DRU5URVJfTUFTUyA9IDEwMC4wOw0KZmxvYXQgREFNUElORyA9IDFlLTU7DQoNCmZsb2F0IHJhbmQodmVjMiBjbyl7DQogICAgcmV0dXJuIGZyYWN0KHNpbihkb3QoY28ueHkgLHZlYzIoMTIuOTg5OCw3OC4yMzMpKSkgKiA0Mzc1OC41NDUzKTsNCn0NCg0Kdm9pZCBtYWluKCkgew0KCXZlYzIgZ3Jhdml0eUNlbnRlciA9IHVfbW91c2U7DQoJDQoJZmxvYXQgciA9IGRpc3RhbmNlKGFfcG9zaXRpb24ueHksIGdyYXZpdHlDZW50ZXIpOw0KCXZlYzIgZGlyZWN0aW9uID0gZ3Jhdml0eUNlbnRlciAtIGFfcG9zaXRpb24ueHk7DQoJZmxvYXQgZm9yY2UgPXIqciowLjM7Ly8gUEFSVElDTEVfTUFTUyAqIEdSQVZJVFlfQ0VOVEVSX01BU1MgLyAociAqIHIpICogREFNUElORzsNCi8vCWZsb2F0IG1heEZvcmNlID0gbWluKGZvcmNlLCBEQU1QSU5HICogMTAuMCk7DQoJDQoJdmVjMiBhY2NlbGVyYXRpb24gPSBmb3JjZSAvIFBBUlRJQ0xFX01BU1MgKiBkaXJlY3Rpb247DQoJLy92X3ZlbG9jaXR5ID1hX3ZlbG9jaXR5KjAuOTggKyBhY2NlbGVyYXRpb24rdmVjMihzaW4oYV9pbmQqMC4xK3RpbWUqMC4wMSthX3Bvc2l0aW9uLngqNS4pLGNvcyhhX2luZCowLjA1K3RpbWUqMC4wNythX3Bvc2l0aW9uLnkqMy4pKSooMC4wMDUgKzAuMDAxKnNpbihhX2luZCowLjIpKSArIHJhbmQoYV9wb3NpdGlvbi54eSkqMC4wMDIqc2luKHRpbWUqMC4yK2FfaW5kKjAuMSk7DQoJdl92ZWxvY2l0eSA9IGFfdmVsb2NpdHkqMC45OCArIHZlYzIoKHNpbih0aW1lKjAuMSArIGFfaW5kKSksIChzaW4odGltZSowLjE1NiArIGFfaW5kKSkpKm1heCgwLiwgMC4xLWxlbmd0aCggYV9wb3NpdGlvbi54eSAtIGFfcG9zaXRpb25fbXNnMSkpOw0KCQ0KCS8vdl9wb3NpdGlvbiA9IGFfcG9zaXRpb24ueHk7DQoJLy92X3ZlbG9jaXR5PXZlYzIoMC4wKTsNCgl2X3Bvc2l0aW9uID0gbWl4KGFfcG9zaXRpb24ueHksIGFfcG9zaXRpb25fbXNnMSwgLjEpK3ZfdmVsb2NpdHkqMC4xOw0KfQ"},{ name : "display.frag", data : "I3ZlcnNpb24gMzAwIGVzDQoNCnByZWNpc2lvbiBsb3dwIGZsb2F0Ow0Kb3V0IHZlYzQgY29sb3I7DQoNCmluIGZsb2F0IHZTcGVlZDsNCg0Kdm9pZCBtYWluKCkgDQp7CQ0KCWNvbG9yID0gdmVjNCh2U3BlZWQqMy4sIDAuMSwgMC4xLCB2U3BlZWQpOw0KfQ"},{ name : "display.vert", data : "I3ZlcnNpb24gMzAwIGVzDQoNCmxheW91dChsb2NhdGlvbiA9IDApIGluIHZlYzQgYV9wb3NpdGlvbjsNCmxheW91dChsb2NhdGlvbiA9IDEpIGluIHZlYzIgYV92ZWxvY2l0eTsNCg0Kb3V0IGZsb2F0IHZTcGVlZDsNCg0Kdm9pZCBtYWluKCkgDQp7DQoJZ2xfUG9zaXRpb24gPSBhX3Bvc2l0aW9uOw0KCWdsX1BvaW50U2l6ZSA9IDAuMDU7DQoJdlNwZWVkID0gbGVuZ3RoKGFfdmVsb2NpdHkpOw0KfQ"}];
+haxe_Resource.content = [{ name : "empty.frag", data : "I3ZlcnNpb24gMzAwIGVzDQoNCnByZWNpc2lvbiBsb3dwIGZsb2F0Ow0Kb3V0IHZlYzQgY29sb3I7DQoNCnZvaWQgbWFpbigpIA0Kew0KCWNvbG9yID0gdmVjNCgxLjApOw0KfQ"},{ name : "calc.vert", data : "I3ZlcnNpb24gMzAwIGVzDQoNCmxheW91dChsb2NhdGlvbiA9IDApIGluIHZlYzQgYV9wb3NpdGlvbjsNCmxheW91dChsb2NhdGlvbiA9IDEpIGluIHZlYzIgYV92ZWxvY2l0eTsNCmxheW91dChsb2NhdGlvbiA9IDIpIGluIGZsb2F0IGFfaW5kOw0KbGF5b3V0KGxvY2F0aW9uID0gMykgaW4gdmVjMiBhX3Bvc2l0aW9uX21zZzE7DQpsYXlvdXQobG9jYXRpb24gPSA0KSBpbiB2ZWMyIGFfcG9zaXRpb25fbXNnMjsNCg0KZmxhdCBvdXQgdmVjMiB2X3Bvc2l0aW9uOw0KZmxhdCBvdXQgdmVjMiB2X3ZlbG9jaXR5Ow0KDQp1bmlmb3JtIHZlYzIgdV9tb3VzZTsNCnVuaWZvcm0gZmxvYXQgdGltZTsNCnVuaWZvcm0gZmxvYXQgbXNncG9zOw0KdW5pZm9ybSBmbG9hdCBtc2dhbW91bnQ7DQpmbG9hdCBQQVJUSUNMRV9NQVNTID0gMTAuMDsNCmZsb2F0IEdSQVZJVFlfQ0VOVEVSX01BU1MgPSAxMDAuMDsNCmZsb2F0IERBTVBJTkcgPSAxZS01Ow0KDQpmbG9hdCByYW5kKHZlYzIgY28pew0KICAgIHJldHVybiBmcmFjdChzaW4oZG90KGNvLnh5ICx2ZWMyKDEyLjk4OTgsNzguMjMzKSkpICogNDM3NTguNTQ1Myk7DQp9DQoNCnZvaWQgbWFpbigpIHsNCgl2ZWMyIGdyYXZpdHlDZW50ZXIgPSB1X21vdXNlOw0KCQ0KCWZsb2F0IHIgPSBkaXN0YW5jZShhX3Bvc2l0aW9uLnh5LCBncmF2aXR5Q2VudGVyKTsNCgl2ZWMyIGRpcmVjdGlvbiA9IGdyYXZpdHlDZW50ZXIgLSBhX3Bvc2l0aW9uLnh5Ow0KCWZsb2F0IGZvcmNlID1yKnIqMC4zOy8vIFBBUlRJQ0xFX01BU1MgKiBHUkFWSVRZX0NFTlRFUl9NQVNTIC8gKHIgKiByKSAqIERBTVBJTkc7DQovLwlmbG9hdCBtYXhGb3JjZSA9IG1pbihmb3JjZSwgREFNUElORyAqIDEwLjApOw0KCQ0KCXZlYzIgYWNjZWxlcmF0aW9uID0gZm9yY2UgLyBQQVJUSUNMRV9NQVNTICogZGlyZWN0aW9uOw0KCS8vdl92ZWxvY2l0eSA9YV92ZWxvY2l0eSowLjk3ICsgYWNjZWxlcmF0aW9uK3ZlYzIoc2luKGFfaW5kKjAuMSt0aW1lKjAuMDErYV9wb3NpdGlvbi54KjUuKSxjb3MoYV9pbmQqMC4wNSt0aW1lKjAuMDcrYV9wb3NpdGlvbi55KjMuKSkqKDAuMDA1ICswLjAwMSpzaW4oYV9pbmQqMC4yKSkgKyByYW5kKGFfcG9zaXRpb24ueHkpKjAuMDAyKnNpbih0aW1lKjAuMithX2luZCowLjEpOw0KCXZfdmVsb2NpdHkgPSBhX3ZlbG9jaXR5KjAuOTcgK2FjY2VsZXJhdGlvbg0KCSsodmVjMihzaW4oYV9pbmQqMC4xK3RpbWUqMC4wMSthX3Bvc2l0aW9uLngqNS4pLGNvcyhhX2luZCowLjA1K3RpbWUqMC4wNythX3Bvc2l0aW9uLnkqMy4pKSooMC4wMDUgKzAuMDAxKnNpbihhX2luZCowLjIpKSArIHJhbmQoYV9wb3NpdGlvbi54eSthX2luZCkqMC4wMDIqc2luKHRpbWUqMC4yK2FfaW5kKjAuMSkpDQoJKm1heCgtMC4zLCBzaW4odGltZSowLjIrYV9pbmQqMC4xK2FfcG9zaXRpb24ueCkpKjIuDQoJOw0KCQ0KCWZsb2F0IG0gPSBsZW5ndGgodl92ZWxvY2l0eSk7DQoJDQoJaWYobSA+IDAuMikNCgkJdl92ZWxvY2l0eSAqPTAuNDsNCgkNCgkvL3ZfdmVsb2NpdHkgLT0gc21vb3Roc3RlcCggMC4yNStmbG9hdChhX2luZCkvMjAwMDAwMC4sIDEuMjUsIDEuLW1zZ2Ftb3VudCk7DQoJDQoJLy92X3Bvc2l0aW9uID0gYV9wb3NpdGlvbi54eTsNCgkvL3ZfdmVsb2NpdHk9dmVjMigwLjApOw0KCXZfcG9zaXRpb24gPSBtaXgoYV9wb3NpdGlvbi54eSt2X3ZlbG9jaXR5LCBtaXgoYV9wb3NpdGlvbl9tc2cxLGFfcG9zaXRpb25fbXNnMiwgbXNncG9zKSt2X3ZlbG9jaXR5LCBtc2dhbW91bnQpOw0KfQ"},{ name : "display.frag", data : "I3ZlcnNpb24gMzAwIGVzDQoNCnByZWNpc2lvbiBsb3dwIGZsb2F0Ow0Kb3V0IHZlYzQgY29sb3I7DQoNCmluIGZsb2F0IHZTcGVlZDsNCmluIGZsb2F0IGlucGxhY2U7DQoNCnVuaWZvcm0gZmxvYXQgbXNnYW1vdW50Ow0KDQp2b2lkIG1haW4oKSANCnsNCgljb2xvciA9IHZlYzQoMC4yLXZTcGVlZCowLjUsIDAuMS12U3BlZWQqMS41LCAtMC4wK3ZTcGVlZCwgMC4xNSk7DQoJY29sb3IgPSBtaXgodmVjNCggMC41LCAwLjA1LCAwLjAsIDAuMTUpLCBtaXgodmVjNCgwLjA1LCAwLjI1LCAwLjAwLCAwLjE1KSwgdmVjNCgwLjE1LDAuMTUsMC4wNSwwLjE1KSwgbXNnYW1vdW50KSwgbWl4KHZTcGVlZCoxLjUsaW5wbGFjZSwgbXNnYW1vdW50KSoxMC4pOw0KCQ0KCWNvbG9yICo9ICgxLi1tc2dhbW91bnQgKyBtc2dhbW91bnQqaW5wbGFjZSk7DQoJDQoJLy9jb2xvciA9IHZlYzQoaW5wbGFjZSk7DQp9"},{ name : "display.vert", data : "I3ZlcnNpb24gMzAwIGVzDQoNCmxheW91dChsb2NhdGlvbiA9IDApIGluIHZlYzQgYV9wb3NpdGlvbjsNCmxheW91dChsb2NhdGlvbiA9IDEpIGluIHZlYzIgYV92ZWxvY2l0eTsNCmxheW91dChsb2NhdGlvbiA9IDIpIGluIHZlYzIgYV9tc2dfcG9zMTsNCmxheW91dChsb2NhdGlvbiA9IDMpIGluIHZlYzIgYV9tc2dfcG9zMjsNCg0Kb3V0IGZsb2F0IHZTcGVlZDsNCm91dCBmbG9hdCBpbnBsYWNlOw0KDQp1bmlmb3JtIGZsb2F0IG1zZ3BvczsNCg0Kdm9pZCBtYWluKCkgDQp7DQoJZ2xfUG9zaXRpb24gPSBhX3Bvc2l0aW9uOw0KCWdsX1BvaW50U2l6ZSA9IDAuNTsNCgl2U3BlZWQgPSBsZW5ndGgoYV92ZWxvY2l0eSk7DQoJaW5wbGFjZSA9IC4yLWxlbmd0aCggYV9wb3NpdGlvbi54eSAtIG1peChhX21zZ19wb3MxLCBhX21zZ19wb3MyLCBtc2dwb3MpKTsNCn0"}];
 var ArrayBuffer = $global.ArrayBuffer || js_html_compat_ArrayBuffer;
 if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_html_compat_ArrayBuffer.sliceImpl;

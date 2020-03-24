@@ -1,6 +1,10 @@
 package;
+import createjs.tweenjs.Ease;
+import createjs.tweenjs.Tween;
 import haxe.Resource;
+import haxe.Timer;
 import js.Browser;
+import js.RegExp;
 import js.html.CanvasElement;
 import js.html.Float32Array;
 import js.html.webgl.Buffer;
@@ -49,6 +53,17 @@ class Main
 	
 	private var mouseLocation:UniformLocation;
 	private var timeLocation:UniformLocation;
+	
+	private var msgpos:Float = 0;
+	private var msgamount:Float = 0;
+	private var msgposLocation:UniformLocation;
+	private var msgamountLocation:UniformLocation;
+	private var dispmsgposLocation:UniformLocation;
+	private var dispmsgamountLocation:UniformLocation;
+	
+	
+	private var msgTimer:Timer;
+	
 	
 	public function new() 
 	{
@@ -109,11 +124,26 @@ class Main
 		this.verticesMsg1 = new Float32Array(points * 2);
 		this.verticesMsg2 = new Float32Array(points * 2);
 		
+		
+		var ar:RegExp = new RegExp("a=([^,]*),?", "");
+		var match:RegExpMatch = ar.exec(Browser.location.hash); 
+		var as:String = "HYVÄÄ JOULUA";
+		if (match != null && match.length > 1)
+			as = StringTools.urlDecode( match[1]);
+		
+		var br:RegExp = new RegExp("b=(.*)", "");
+		var match:RegExpMatch = br.exec(Browser.location.hash); 
+		var bs:String = "ONNELLISTA\nUUTTA VUOTTA";
+		if (match != null && match.length > 1)
+			bs = StringTools.urlDecode( match[1]);
+		
+		var txt1:Array<Float> = TextGenerator.getPoints(as, vertices.length);
+		var txt2:Array<Float> = TextGenerator.getPoints(bs, vertices.length);
 		for ( i in 0...vertices.length)
 		{
 			vertices[i] = 0;// Math.random() * 2 - 1;
-			verticesMsg1[i] = Math.random() * 2 - 1;
-			verticesMsg2[i] = Math.random() * 2 - 1;
+			verticesMsg1[i] = txt1[i % txt1.length]+(canvas.width/256*(Math.random()-0.5))/128;// Math.random() * 2 - 1;
+			verticesMsg2[i] = txt2[i % txt2.length]+(canvas.width/256*(Math.random()-0.5))/128;// Math.random() * 2 - 1;
 			velocities[i] = 0;
 			indices[i] = i;
 		}
@@ -218,6 +248,16 @@ class Main
 				data:velocityBuffers[0],
 				location: 1,
 				elementSize:2
+			},
+			{
+				data:verticesMsg1Buffers[0],
+				location: 2,
+				elementSize:2
+			},
+			{
+				data:verticesMsg2Buffers[0],
+				location: 3,
+				elementSize:2
 			}
 		]));
 		
@@ -231,12 +271,41 @@ class Main
 				data:velocityBuffers[1],
 				location: 1,
 				elementSize:2
+			},
+			{
+				data:verticesMsg1Buffers[1],
+				location: 2,
+				elementSize:2
+			},
+			{
+				data:verticesMsg2Buffers[1],
+				location: 3,
+				elementSize:2
 			}
 		]));
 		
 		this.transformFeedback = untyped gl.createTransformFeedback();
 		this.mouseLocation = gl.getUniformLocation(feedbackProgram, "u_mouse");
 		this.timeLocation = gl.getUniformLocation(feedbackProgram, "time");
+		this.msgposLocation = gl.getUniformLocation(feedbackProgram, "msgpos");
+		this.msgamountLocation = gl.getUniformLocation(feedbackProgram, "msgamount");
+		
+		this.dispmsgposLocation = gl.getUniformLocation(displayProgram, "msgpos");
+		this.dispmsgamountLocation = gl.getUniformLocation(displayProgram, "msgamount");
+		
+		
+		this.msgTimer = new Timer(10000);
+		this.msgTimer.run = ontimer;
+	}
+	
+	private function ontimer():Void
+	{
+		this.msgTimer.stop();
+		Tween.get(this).to({msgamount: 1}, 3000, Ease.backOut).wait(3000, true).to({msgpos:1}, 3000, Ease.backInOut).wait(3000,true).to({msgamount:0}, 3000, Ease.quadInOut).call(function(){
+			msgpos = 0;
+			this.msgTimer = new Timer(10000);
+			msgTimer.run = ontimer;
+		});
 	}
 	
 	private function draw(vao:Dynamic):Void
@@ -255,6 +324,8 @@ class Main
 		gl.useProgram(feedbackProgram);
 		gl.uniform2fv(mouseLocation, [Math.sin(time*0.1)*0.2, Math.cos(time*0.1)*0.2]);
 		gl.uniform1f(timeLocation, time);
+		gl.uniform1f(msgposLocation, msgpos);
+		gl.uniform1f(msgamountLocation, msgamount);
 		untyped gl.beginTransformFeedback(RenderingContext.POINTS);
 		draw(feedbackVAO[currentIndex]);
 		untyped gl.endTransformFeedback();
@@ -277,6 +348,8 @@ class Main
 		calculateFeedback(currentIndex, t*0.01);
 		
 		gl.useProgram(displayProgram);
+		gl.uniform1f(dispmsgposLocation, msgpos);
+		gl.uniform1f(dispmsgamountLocation, msgamount);
 		draw(displayVAO[invertedIndex]);
 		
 		currentIndex = (currentIndex + 1) % 2;
