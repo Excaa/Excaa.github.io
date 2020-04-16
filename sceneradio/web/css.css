@@ -58,6 +58,7 @@
 
 #teaser
 {
+	display:none;
 	position:fixed;
 	left:50%;
 	bottom:15%;

@@ -4,6 +4,6 @@
 #demo{padding:0px;background:url('img/bg.png');}
 #demo{position:fixed;top:0px;bottom:0px;left:0px;right:0px;z-index:0;}
 #logo{margin-top:60px;margin-bottom:-50px;position:relative;z-index:1;margin-left:auto;margin-right:auto;text-align:center;}
-#teaser{position:fixed;left:50%;bottom:15%;background:url('img/csid_edge.png');width:422px;height:281px;margin-left:-211px;mix-blend-mode:color-dodge;transform-origin:211px 140px;animation-name:floating;animation-duration:4s;animation-iteration-count:infinite;animation-timing-function:linear;animation-direction:alternate;animation-timing-function:ease-in-out;}
+#teaser{display:none;position:fixed;left:50%;bottom:15%;background:url('img/csid_edge.png');width:422px;height:281px;margin-left:-211px;mix-blend-mode:color-dodge;transform-origin:211px 140px;animation-name:floating;animation-duration:4s;animation-iteration-count:infinite;animation-timing-function:linear;animation-direction:alternate;animation-timing-function:ease-in-out;}
 @keyframes floating{from{transform:translate3d(0,0px,0) rotate(-15deg);}
 to{transform:translate3d(0,50px,0) rotate(-15deg);}}

@@ -39,33 +39,79 @@
 				var shader = gl.createShader(type);
 				gl.shaderSource(shader, code);
 				gl.compileShader(shader);
+								
+				//var message = gl.getShaderInfoLog(shader);
+				//if (message.length > 0) {
+				  /* message may be an error or a warning */
+//				  console.logic(message);
+				//}
 				gl.attachShader(program, shader);
 			}
 			
 			
 			buildShader("attribute vec2 e;void main(){gl_Position=vec4(e,0,1);}",gl.VERTEX_SHADER);
-			buildShader([
-				"precision mediump float;",
-				"uniform float r;",
-				"uniform vec2 resolution;",
-				'float sind(vec2 p, float ph, float rad, float off, float tmp){',
-				'return smoothstep(0.,8.,1./abs(p.y*ph-sin(off+p.x+r*tmp*0.24)*rad))*8.;',
-				'}',
-				"void main(){",
-				'	vec2 uv = gl_FragCoord.xy/resolution-vec2(0.5);',
-				'	vec3 col = vec3(0.);',
-				'	vec3 b = 0.5 + 0.5*cos(r+uv.xyx+vec3(0,2,4));',
-				'	col+=sind(uv, 20., 5.,0.0,0.2)*b;',
-				'	col+=sind(uv, 40., 10.,1.0,0.4)*b;',
-				'	col+=sind(uv, 60., 20.,2.0,0.6)*b;',
-				'	col+=sind(uv, 80., 30.,3.0,0.8)*b;',
-				'	col+=sind(uv, 100., 40.,4.0,1.0)*b;',
-				'	col=clamp(vec3(0.), vec3(1.), col);',
-				'	col*=mod(gl_FragCoord.x*0.5, 1.5);',
-				'	col*=mod(gl_FragCoord.y*0.5, 1.5);',
-				"	gl_FragColor=vec4(col*.25,1.);",
-				"}"
-				].join("\n"), gl.FRAGMENT_SHADER) //FRAGMENT
+			buildShader(`precision mediump float;
+
+uniform float iTime;
+uniform vec2 iResolution;
+
+float hash21(vec2 p)
+{
+ 	return fract(sin(dot(p.xy ,vec2(1.9898,7.233))) * 4.5453);
+}
+vec3 palette( float t, vec3 a, vec3 b, vec3 c, vec3 d )
+{
+    return a + b*cos( 6.28318*(c*t+d) );
+}
+void main( )
+{
+    vec2 uv = gl_FragCoord.xy/iResolution.xy-0.5;
+    uv.y *= iResolution.y/iResolution.x;
+    
+    float gsize = 2.5+ cos(iTime*0.1)*1.5;
+    uv*=gsize;
+    
+    float a = sin(iTime*0.15)*0.2;
+    float dx = uv.x * cos(a) - sin(a)*uv.y;
+    float dy = uv.x * sin(a) + cos(a)*uv.y;
+    
+    uv=vec2(dx,dy);
+    uv+=iTime*0.1+vec2(sin(iTime*.2), cos(iTime*0.3))*0.005;
+    
+    vec2 gx = floor(uv);
+    vec2 guv = fract(uv)-0.5;
+    
+    float n = hash21(gx);
+    if(n<0.5) guv.x*=-1.;
+    
+    vec2 c1 =  guv -vec2(0.5)*sign(guv.x+guv.y+0.001);
+    
+    float a1 = length(c1) -0.5;
+    float d =  abs(a1);
+    float ang1 = atan( c1.y,c1.x)*2./3.14;
+    float off = sin(ang1*3.14+iTime);
+    float mp = 1.;
+    if(mod(gx.x+gx.y,2.)>0.5)
+    {
+        if(n>=0.5)
+        {
+            a1=-a1;
+        }
+		mp=-1.;
+      	off=sin(-ang1*3.14+iTime);   
+    }
+    else if(n<0.5)
+    {
+       a1=-a1;
+	   
+    }
+    
+    vec3 c = palette(mp*ang1+iTime , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) )*0.026/d*(0.75+0.0*off);
+    c = smoothstep(0.0, 0.5, c);
+    
+    gl_FragColor = vec4(c,1.0);
+}`
+				, gl.FRAGMENT_SHADER) //FRAGMENT
 			
 			gl.linkProgram(program);
 			gl.enableVertexAttribArray(0);
@@ -83,8 +129,8 @@
 		{
 			var raf=function(c) {
 			  //Update uniforms, do logic etc. Default just updates r (time) in shader.
-			  gl.uniform1f(gl.getUniformLocation(program, "r"), c*.001);
-			  gl.uniform2f(gl.getUniformLocation(program, "resolution"), canvas.width, canvas.height);
+			  gl.uniform1f(gl.getUniformLocation(program, "iTime"), c*.00015);
+			  gl.uniform2f(gl.getUniformLocation(program, "iResolution"), canvas.width, canvas.height);
 			  gl.vertexAttribPointer(0, 2, gl.FLOAT, 0,8,0);
 			  gl.drawArrays(4,0,3);
 			  self.requestAnimationFrame(raf);
