@@ -108,10 +108,10 @@ void main( )
        a1=-a1;
 	   
     }
-    float mpc = smoothstep(0., 0.9, 0.02/d);
+    float mpc = smoothstep(0.1, 0.25, 0.02/d);
     vec3 c = palette(mp*ang1-iTime*1.20 , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );
 	c+= vec3(0.2);
-	c*=mpc*(0.75+0.0*off);
+	c*=mpc*(0.9+0.1*off);
     
     gl_FragColor = vec4(c,1.0);
 }`
