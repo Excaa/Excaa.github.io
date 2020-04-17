@@ -65,10 +65,13 @@ vec3 palette( float t, vec3 a, vec3 b, vec3 c, vec3 d )
 }
 void main( )
 {
+	float aspect = iResolution.y/iResolution.x;
     vec2 uv = gl_FragCoord.xy/iResolution.xy-0.5;
-    uv.y *= iResolution.y/iResolution.x;
+    uv.y *= aspect;
     
-    float gsize = 2.5+ cos(iTime*0.1)*1.5;
+    float gsize = 1.5+ cos(iTime*0.1)*1.5;
+	if(iResolution.x < 750.)
+		gsize = 0.95+ cos(iTime*0.1)*0.50;
     uv*=gsize;
     
     float a = sin(iTime*0.15)*0.2;
@@ -125,13 +128,14 @@ void main( )
 		{
 			ok = false;
 		}
-		
+		var dpr = window.devicePixelRatio;
+		if(isNaN(dpr)) dpr = 1;
 		if(ok)
 		{
 			var raf=function(c) {
 			  //Update uniforms, do logic etc. Default just updates r (time) in shader.
 			  gl.uniform1f(gl.getUniformLocation(program, "iTime"), c*.00015);
-			  gl.uniform2f(gl.getUniformLocation(program, "iResolution"), canvas.width, canvas.height);
+			  gl.uniform2f(gl.getUniformLocation(program, "iResolution"), canvas.width/dpr, canvas.height/dpr);
 			  gl.vertexAttribPointer(0, 2, gl.FLOAT, 0,8,0);
 			  gl.drawArrays(4,0,3);
 			  self.requestAnimationFrame(raf);
