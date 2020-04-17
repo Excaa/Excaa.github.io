@@ -84,7 +84,7 @@ void main( )
     float n = hash21(gx);
     if(n<0.5) guv.x*=-1.;
     
-    vec2 c1 =  guv -vec2(0.5)*sign(guv.x+guv.y+0.001);
+    vec2 c1 =  guv -vec2(0.5)*sign(guv.x+guv.y+0.01);
     
     float a1 = length(c1) -0.5;
     float d =  abs(a1);
@@ -105,9 +105,10 @@ void main( )
        a1=-a1;
 	   
     }
-    
-    vec3 c = palette(mp*ang1+iTime , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) )*0.026/d*(0.75+0.0*off);
-    c = smoothstep(0.0, 0.5, c);
+    float mpc = smoothstep(0., 0.9, 0.02/d);
+    vec3 c = palette(mp*ang1-iTime*1.20 , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );
+	c+= vec3(0.2);
+	c*=mpc*(0.75+0.0*off);
     
     gl_FragColor = vec4(c,1.0);
 }`
