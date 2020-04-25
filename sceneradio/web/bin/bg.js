@@ -1,5 +1,5 @@
 /**
- * ...
+ * TOOD - Code the whole site again properly :D
  * @author Henri Sarasvirta
  */
 
@@ -24,6 +24,93 @@
 		$(window).resize(titleResize);
 		titleResize();
 		
+		//Player
+		const AudioContext = window.AudioContext || window.webkitAudioContext;
+		let audioCtx = null;
+		let analyzer = null;
+		let dataArray = null;
+		var initAudio = ()=>{
+			audioCtx = new AudioContext();
+			analyzer = audioCtx.createAnalyser();
+			analyzer.fftSize = 2048;
+			var bufferLength = analyzer.frequencyBinCount;
+			dataArray = new Uint8Array(bufferLength);
+			analyzer.connect(audioCtx.destination);
+		}
+		
+		
+		var active = null;
+		var clearTrack = ()=>{
+			if(active)
+			{
+				active.audio.pause();
+				active.track.disconnect(analyzer);
+				active.jq.find("img").attr("src","img/play.png");
+			}
+		}
+		
+		var playTrack = ( media )=>
+		{
+			if(!audioCtx) initAudio();
+			if(!media.track) media.track = audioCtx.createMediaElementSource(media.audio);
+			clearTrack();
+			if(media == active)
+			{
+				active = null;
+			}
+			else
+			{
+				active = media;
+				active.jq.find("img").attr("src","img/pause.png");
+				media.track.connect(analyzer);
+				media.audio.play();
+			}
+		}
+		
+		//Medias
+		var playerDiv = $("#player");
+		var players = [];
+		var generatePlayer = (url, name, hideNumber) => {
+			s  = document.createElement("ol");
+			s.className = "player";
+			s.dataset["url"] = url;
+			
+			s.innerHTML = "<img style='cursor:pointer' src='img/play.png' width='16' height='16'/>"+
+			"<span class='time' style='position:relative; margin-left:10px; margin-right:10px;width:200px;height:10px; display:inline-block; border-radius:10px; background:rgba(136,88,160,0.75)'><span class='head' style='position:absolute;top:0px;display:inline-block;width:4px; height:10px;background:#4E0;'></span></span>"+name;
+			
+			if(hideNumber)
+				s.style.listStyle = "none";
+			playerDiv.append(s);
+			
+			var audioEl = document.createElement("audio");
+			audioEl.src = url;
+			
+			var media ={
+				jq:$(s),
+				element: s,
+				audio: audioEl,
+				track: null
+			};
+			
+			$(s).find("img").click( () => {
+				playTrack(media);
+			});
+			
+			players.push( media );
+		};
+		//2020 players.
+		generatePlayer("2020compo/15.8_Wrenchotron-Bone_Chips.mp3", "1. Wrenchotron - Bone Chips");
+		generatePlayer("2020compo/15.4_Team_Roger-Firescape.mp3", "2. Team Roger - Firescape");
+		generatePlayer("2020compo/15.7_defilus-waiting_in_your_brains_(compo_edit).mp3", "3. Defilus - Waiting in your brains");
+		generatePlayer("2020compo/15.1_Jarsk1e-Return_to_the_Past.mp3", "4. Jarsk1e - Return to the Past");
+		generatePlayer("2020compo/15.6_dusthillguy-Special_Friends_Finale.mp3", "5. dusthillguy - Special Friends Finale");
+		generatePlayer("2020compo/15.5_KVR-Gimme_time.mp3", "6. KVR - Gimme Time");
+		generatePlayer("2020compo/15.2_proton-galwaymulation.mp3", "7. proton - Galwaymulation");
+		generatePlayer("2020compo/15.9_jvar-paper_panic.mp3", "8. jvar - paper panic");
+		generatePlayer("2020compo/15.3_MEGA-Erkki-sekoukko.mp3", "9. MEGA-Erkki - sekoukko");
+		generatePlayer("2020compo/15.99_Uniaika-Lageroosio.mp3", "Late entry: Uniaika - Lageroosio", true);
+		
+		//Background effect
 		var ok = true;
 		try
 		{
@@ -54,7 +141,7 @@
 
 uniform float iTime;
 uniform vec2 iResolution;
-
+uniform float size;
 float hash21(vec2 p)
 {
  	return fract(sin(dot(p.xy ,vec2(1.9898,7.233))) * 4.5453);
@@ -108,7 +195,7 @@ void main( )
        a1=-a1;
 	   
     }
-    float mpc = smoothstep(0.1, 0.25, 0.02/d);
+    float mpc = smoothstep(0.1, 0.3-size*0.15, 0.02/d);
     vec3 c = palette(mp*ang1-iTime*1.20 , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );
 	c+= vec3(0.2);
 	c*=mpc*(0.9+0.1*off);
@@ -132,9 +219,41 @@ void main( )
 		if(isNaN(dpr)) dpr = 1;
 		if(ok)
 		{
+			//Raf
+			var time = 0;
+			var tot = 0;
 			var raf=function(c) {
+				var delta = c-time;
+				time = c;
+				tot += delta;
+				//Audio sync
+				for(let i = 0; i < players.length; i++)
+				{
+					players[i].jq.find(".head").css("left","0px");
+				}
+				if(active != null)
+				{
+					var pos = active.audio.currentTime / active.audio.duration;
+					active.jq.find(".head").css("left" , Math.round(pos*200)+"px");
+				}
+				var all = 0;
+				if(analyzer)
+				{
+					analyzer.getByteFrequencyData(dataArray);
+					var sum = 0;
+					
+					for( let i = 0; i < 1024; i++)
+					{
+						if( i >= 100 && i < 150 && dataArray[i] > 100)
+							tot+=1.1;
+						all+=dataArray[i];
+					}
+					all/=(2048*128);
+					c+=sum;
+				}
 			  //Update uniforms, do logic etc. Default just updates r (time) in shader.
-			  gl.uniform1f(gl.getUniformLocation(program, "iTime"), c*.00015);
+			  gl.uniform1f(gl.getUniformLocation(program, "iTime"), tot*.00015);
+			  gl.uniform1f(gl.getUniformLocation(program, "size"), all);
 			  gl.uniform2f(gl.getUniformLocation(program, "iResolution"), canvas.width/dpr, canvas.height/dpr);
 			  gl.vertexAttribPointer(0, 2, gl.FLOAT, 0,8,0);
 			  gl.drawArrays(4,0,3);
@@ -142,6 +261,7 @@ void main( )
 			}
 			raf(0);
 			
+			//Resize
 			var resize = function(){
 				var iw = window.innerWidth;
 				var ih = window.innerHeight;
