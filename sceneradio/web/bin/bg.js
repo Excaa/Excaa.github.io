@@ -65,10 +65,13 @@ vec3 palette( float t, vec3 a, vec3 b, vec3 c, vec3 d )
 }
 void main( )
 {
+	float aspect = iResolution.y/iResolution.x;
     vec2 uv = gl_FragCoord.xy/iResolution.xy-0.5;
-    uv.y *= iResolution.y/iResolution.x;
+    uv.y *= aspect;
     
-    float gsize = 2.5+ cos(iTime*0.1)*1.5;
+    float gsize = 1.5+ cos(iTime*0.1)*1.5;
+	if(iResolution.x < 750.)
+		gsize = 0.95+ cos(iTime*0.1)*0.50;
     uv*=gsize;
     
     float a = sin(iTime*0.15)*0.2;
@@ -84,7 +87,7 @@ void main( )
     float n = hash21(gx);
     if(n<0.5) guv.x*=-1.;
     
-    vec2 c1 =  guv -vec2(0.5)*sign(guv.x+guv.y+0.001);
+    vec2 c1 =  guv -vec2(0.5)*sign(guv.x+guv.y+0.01);
     
     float a1 = length(c1) -0.5;
     float d =  abs(a1);
@@ -105,9 +108,10 @@ void main( )
        a1=-a1;
 	   
     }
-    
-    vec3 c = palette(mp*ang1+iTime , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) )*0.026/d*(0.75+0.0*off);
-    c = smoothstep(0.0, 0.5, c);
+    float mpc = smoothstep(0.1, 0.25, 0.02/d);
+    vec3 c = palette(mp*ang1-iTime*1.20 , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );
+	c+= vec3(0.2);
+	c*=mpc*(0.9+0.1*off);
     
     gl_FragColor = vec4(c,1.0);
 }`
@@ -124,13 +128,14 @@ void main( )
 		{
 			ok = false;
 		}
-		
+		var dpr = window.devicePixelRatio;
+		if(isNaN(dpr)) dpr = 1;
 		if(ok)
 		{
 			var raf=function(c) {
 			  //Update uniforms, do logic etc. Default just updates r (time) in shader.
 			  gl.uniform1f(gl.getUniformLocation(program, "iTime"), c*.00015);
-			  gl.uniform2f(gl.getUniformLocation(program, "iResolution"), canvas.width, canvas.height);
+			  gl.uniform2f(gl.getUniformLocation(program, "iResolution"), canvas.width/dpr, canvas.height/dpr);
 			  gl.vertexAttribPointer(0, 2, gl.FLOAT, 0,8,0);
 			  gl.drawArrays(4,0,3);
 			  self.requestAnimationFrame(raf);
