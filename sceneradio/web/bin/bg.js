@@ -142,6 +142,7 @@
 uniform float iTime;
 uniform vec2 iResolution;
 uniform float size;
+uniform float high;
 float hash21(vec2 p)
 {
  	return fract(sin(dot(p.xy ,vec2(1.9898,7.233))) * 4.5453);
@@ -156,7 +157,7 @@ void main( )
     vec2 uv = gl_FragCoord.xy/iResolution.xy-0.5;
     uv.y *= aspect;
     
-    float gsize = 1.5+ cos(iTime*0.1)*1.5;
+    float gsize = 1.7+ cos(iTime*0.1)*1.5;
 	if(iResolution.x < 750.)
 		gsize = 0.95+ cos(iTime*0.1)*0.50;
     uv*=gsize;
@@ -197,7 +198,7 @@ void main( )
     }
     float mpc = smoothstep(0.1, 0.3-size*0.15, 0.02/d);
     vec3 c = palette(mp*ang1-iTime*1.20 , vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );
-	c+= vec3(0.2);
+	c+= vec3(0.1+high*0.3);
 	c*=mpc*(0.9+0.1*off);
     
     gl_FragColor = vec4(c,1.0);
@@ -237,6 +238,7 @@ void main( )
 					active.jq.find(".head").css("left" , Math.round(pos*200)+"px");
 				}
 				var all = 0;
+				var high = 0;
 				if(analyzer)
 				{
 					analyzer.getByteFrequencyData(dataArray);
@@ -244,16 +246,20 @@ void main( )
 					
 					for( let i = 0; i < 1024; i++)
 					{
-						if( i >= 100 && i < 150 && dataArray[i] > 100)
-							tot+=1.1;
+						if( i >= 70 && i < 150 && dataArray[i] > 110)
+							tot+=dataArray[i]/255;
 						all+=dataArray[i];
+						if( i >700 && dataArray[i] > 20)
+							high += dataArray[i]/25;
 					}
 					all/=(2048*128);
+					high/=350;
 					c+=sum;
 				}
 			  //Update uniforms, do logic etc. Default just updates r (time) in shader.
 			  gl.uniform1f(gl.getUniformLocation(program, "iTime"), tot*.00015);
 			  gl.uniform1f(gl.getUniformLocation(program, "size"), all);
+			  gl.uniform1f(gl.getUniformLocation(program, "high"), high);
 			  gl.uniform2f(gl.getUniformLocation(program, "iResolution"), canvas.width/dpr, canvas.height/dpr);
 			  gl.vertexAttribPointer(0, 2, gl.FLOAT, 0,8,0);
 			  gl.drawArrays(4,0,3);
