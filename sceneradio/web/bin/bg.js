@@ -157,7 +157,7 @@ void main( )
     vec2 uv = gl_FragCoord.xy/iResolution.xy-0.5;
     uv.y *= aspect;
     
-    float gsize = 1.7+ cos(iTime*0.1)*1.5;
+    float gsize = 1.9+ cos(iTime*0.1)*1.5;
 	if(iResolution.x < 750.)
 		gsize = 0.95+ cos(iTime*0.1)*0.50;
     uv*=gsize;
