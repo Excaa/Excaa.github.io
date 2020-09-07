@@ -70,7 +70,7 @@
 		//Medias
 		var playerDiv = $("#player");
 		var players = [];
-		var generatePlayer = (url, name, hideNumber) => {
+		var generatePlayer = (url, name, hideNumber, year) => {
 			s  = document.createElement("ol");
 			s.className = "player";
 			s.dataset["url"] = url;
@@ -95,20 +95,46 @@
 			$(s).find("img").click( () => {
 				playTrack(media);
 			});
-			
+			media.year = year;
 			players.push( media );
 		};
+		
+		var changeYear = (to) => {
+			clearTrack();
+			players.forEach( p => p.element.style.display = "none");
+			var show = players.filter( p => p.year == to);
+			show.forEach( p => p.element.style.display = "block");
+		}
+		
 		//2020 players.
-		generatePlayer("2020compo/15.8_Wrenchotron-Bone_Chips.mp3", "1. Wrenchotron - Bone Chips");
-		generatePlayer("2020compo/15.4_Team_Roger-Firescape.mp3", "2. Team Roger - Firescape");
-		generatePlayer("2020compo/15.7_defilus-waiting_in_your_brains_(compo_edit).mp3", "3. Defilus - Waiting in your brains");
-		generatePlayer("2020compo/15.1_Jarsk1e-Return_to_the_Past.mp3", "4. Jarsk1e - Return to the Past");
-		generatePlayer("2020compo/15.6_dusthillguy-Special_Friends_Finale.mp3", "5. dusthillguy - Special Friends Finale");
-		generatePlayer("2020compo/15.5_KVR-Gimme_time.mp3", "6. KVR - Gimme Time");
-		generatePlayer("2020compo/15.2_proton-galwaymulation.mp3", "7. proton - Galwaymulation");
-		generatePlayer("2020compo/15.9_jvar-paper_panic.mp3", "8. jvar - paper panic");
-		generatePlayer("2020compo/15.3_MEGA-Erkki-sekoukko.mp3", "9. MEGA-Erkki - sekoukko");
-		generatePlayer("2020compo/15.99_Uniaika-Lageroosio.mp3", "Late entry: Uniaika - Lageroosio", true);
+		generatePlayer("2020compo/15.8_Wrenchotron-Bone_Chips.mp3", "1. Wrenchotron - Bone Chips", false, 2020);
+		generatePlayer("2020compo/15.4_Team_Roger-Firescape.mp3", "2. Team Roger - Firescape", false, 2020);
+		generatePlayer("2020compo/15.7_defilus-waiting_in_your_brains_(compo_edit).mp3", "3. Defilus - Waiting in your brains", false, 2020);
+		generatePlayer("2020compo/15.1_Jarsk1e-Return_to_the_Past.mp3", "4. Jarsk1e - Return to the Past", false, 2020);
+		generatePlayer("2020compo/15.6_dusthillguy-Special_Friends_Finale.mp3", "5. dusthillguy - Special Friends Finale", false, 2020);
+		generatePlayer("2020compo/15.5_KVR-Gimme_time.mp3", "6. KVR - Gimme Time", false, 2020);
+		generatePlayer("2020compo/15.2_proton-galwaymulation.mp3", "7. proton - Galwaymulation", false, 2020);
+		generatePlayer("2020compo/15.9_jvar-paper_panic.mp3", "8. jvar - paper panic", false, 2020);
+		generatePlayer("2020compo/15.3_MEGA-Erkki-sekoukko.mp3", "9. MEGA-Erkki - sekoukko", false, 2020);
+		generatePlayer("2020compo/15.99_Uniaika-Lageroosio.mp3", "Late entry: Uniaika - Lageroosio", true, 2020);
+		//2018
+		generatePlayer("2018compo/Panther - Keenin Humppa.mp3", "1. Panther - Keenin Humppa", false, 2018);
+		generatePlayer("2018compo/cos_-_radio_of_love_and_wappu.mp3", "2. cos - Radio of love and wappu", false, 2018);
+		generatePlayer("2018compo/pappatunkka-i_like_white_but_my_favourite_is_green.mp3", "3. Pappatunkka - I like white but my favourite is green", false, 2018);
+		generatePlayer("2018compo/onneks satuin olemaan bändikämpällä kun kuulin tästä.mp3", "4. Mergente - onneks satuin olemaan bändikämpällä kun kuulin tästä", false, 2018);
+		generatePlayer("2018compo/EpicAW_tupsulan_saunassa.mp3", "5. Epic AW - Tupsulan saunassa", false, 2018);
+		//2016
+		generatePlayer("2016compo/conffa_-_Ignis.mp3", "1. conffa - Ignis", false, 2016);
+		generatePlayer("2016compo/minomus_legend_glxblt_-_Batwalk_Diva.mp3", "2. minomus, legend & glxblt;  - Batwalk Diva", false, 2016);
+		generatePlayer("2016compo/Terwiz_-_WappuRide.mp3", "3. Terwiz - Wappuride", false, 2016);
+		generatePlayer("2016compo/Oksaperseessa2000_-_Mayra_jatkaa_elamaansa_rumpuna.mp3", "4. Oksaperseessä2000 - Mäyrä jatkaa elämäänsä rumpuna", false, 2016);
+		
+		changeYear(2020);
+		
+		document.getElementById("c2020").addEventListener("click", e => changeYear(2020));
+		document.getElementById("c2018").addEventListener("click", e => changeYear(2018));
+		document.getElementById("c2016").addEventListener("click", e => changeYear(2016));
+		
 		
 		//Background effect
 		var ok = true;
