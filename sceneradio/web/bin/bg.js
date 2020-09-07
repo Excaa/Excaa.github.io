@@ -46,6 +46,7 @@
 				active.audio.pause();
 				active.track.disconnect(analyzer);
 				active.jq.find("img").attr("src","img/play.png");
+				active = null;
 			}
 		}
 		
