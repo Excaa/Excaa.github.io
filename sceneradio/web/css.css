@@ -16,6 +16,11 @@
 	visibility: hidden;;
 }
 
+container a
+{
+	font-weight:bold;	
+}
+
 @media (max-width: 768px)
 {
 .linktarget:before

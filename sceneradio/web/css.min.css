@@ -1,5 +1,6 @@
 #mainContainer{position:relative;top:80px;background:rgba(0,0,0,0.8);padding:20px;margin-bottom:40px;border:2px solid rgba(255,255,255,0.75);}
 .linktarget:before{display:block;content:" ";margin-top:-60px;height:60px;visibility:hidden;;}
+container a{font-weight:bold;}
 @media (max-width:768px){.linktarget:before{display:block;content:" ";margin-top:-270px;height:270px;visibility:hidden;;}}
 ol{margin-left:0px;padding-left:5px;}
 #demo{padding:0px;background:url('img/bg.png');}
