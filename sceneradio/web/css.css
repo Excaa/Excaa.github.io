@@ -16,6 +16,11 @@
 	visibility: hidden;;
 }
 
+.container a
+{
+	font-weight:bold;	
+}
+
 @media (max-width: 768px)
 {
 .linktarget:before
@@ -27,6 +32,13 @@
 	visibility: hidden;;
 }
 
+}
+
+ol
+{
+	
+	margin-left:0px;
+	padding-left:5px;
 }
 
 #demo
