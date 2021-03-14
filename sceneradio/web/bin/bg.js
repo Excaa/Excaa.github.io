@@ -18,7 +18,7 @@
 			}
 			else
 			{
-				title.text("Sceneradio @ Wappuradio - 25.4.2020 21:00-00:00");
+				title.text("Sceneradio @ Wappuradio "/*- 24.4.2020 21:00-00:00"*/);
 			}
 		}
 		$(window).resize(titleResize);
