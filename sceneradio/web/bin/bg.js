@@ -108,6 +108,14 @@
 			show.forEach( p => p.element.style.display = "block");
 		}
 		
+		//2021 players.
+		generatePlayer("2021compo/13_4_Defilus_once you pop.mp3", "1. Defilus - Once you pop", false, 2021);
+		generatePlayer("2021compo/13_2_Leposyke_Sulatettu Järjestelmä.mp3", "2. Leposyke - Sulautettu Järjestelmä", false, 2021);
+		generatePlayer("2021compo/13_1_eimink_-_Mike_from_Deep_House.mp3", "3. eimink - Mike from Deep House", false, 2021);
+		generatePlayer("2021compo/13_0_kvr-tieteista_ihmeellisin.mp3", "4. KVR - Tieteistä Ihmeellisin", false, 2021);
+		generatePlayer("2021compo/13_3_dusthillresident_John Roddy was the best scanlator ever, better than Meiru.mp3", "5. dusthillresident - John Roddy was the best scanlator ever, better than Meiru", false, 2021);
+		generatePlayer("2021compo/13-5_MagnetismOrkesteriKerho - Kebab(cauha)TuleeOletkoValmis.mp3", "6. MagnetismOrkesteriKerho - Kebab(cauha)TuleeOletkoValmis", false, 2021);
+		
 		//2020 players.
 		generatePlayer("2020compo/15.8_Wrenchotron-Bone_Chips.mp3", "1. Wrenchotron - Bone Chips", false, 2020);
 		generatePlayer("2020compo/15.4_Team_Roger-Firescape.mp3", "2. Team Roger - Firescape", false, 2020);
@@ -131,8 +139,9 @@
 		generatePlayer("2016compo/Terwiz_-_WappuRide.mp3", "3. Terwiz - Wappuride", false, 2016);
 		generatePlayer("2016compo/Oksaperseessa2000_-_Mayra_jatkaa_elamaansa_rumpuna.mp3", "4. Oksaperseessä2000 - Mäyrä jatkaa elämäänsä rumpuna", false, 2016);
 		
-		changeYear(2020);
+		changeYear(2021);
 		
+		document.getElementById("c2021").addEventListener("click", e => changeYear(2021));
 		document.getElementById("c2020").addEventListener("click", e => changeYear(2020));
 		document.getElementById("c2018").addEventListener("click", e => changeYear(2018));
 		document.getElementById("c2016").addEventListener("click", e => changeYear(2016));
