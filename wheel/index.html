@@ -15,8 +15,19 @@
   <link rel="stylesheet" href="fonts/stylesheet.css">
   
   <script src="tweenjs.min.js"></script>
+  <script src="soundjs.min.js"></script>
   <script src="wheel.min.js"></script>
 
+  <style>
+    #setup
+    {
+      transition: 0.5s ease-in-out; position: fixed; left: 0px; top: 0px; width: 200px; height: 550px; background: lightsteelblue; transform: translate(-200px); overflow: visible;
+    }
+    #setup.show{
+      transform: translate(0,0);
+    }
+  </style>
+  
 </head>
 
 <body style="background: black;">
@@ -26,6 +37,85 @@
   </div>
   
   <div id="main-container">
+    
+  </div>
+  
+  <div id="setup">
+    
+    <div id='setup-toggle' style="position: absolute; left: 200px;">
+      <img src='img/ticker.png' style="max-width: 30px; max-height: 30px;"/>
+    </div>
+    
+    <div>
+      <label>
+        Use bg
+        <input id='setup-use-bg' type="checkbox" checked/>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        Use sounds
+        <input id='setup-use-sounds' type="checkbox" checked/>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        Use fireworks
+        <input id='setup-use-fireworks' type="checkbox" checked/>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        Spin wheel bg
+        <input id='setup-spin-wheel-bg' type="checkbox" checked/>
+      </label>
+    </div>
+    <div>
+      <label>
+        Use blank wheel
+        <input id='setup-use-blank-wheel' type="checkbox"/>
+      </label>
+    </div>
+    
+    <div>
+      <label>
+        Bg color
+        <input id='setup-bg-color' type="text" value="0x000000"/>
+      </label>
+    </div>
+    
+    
+    <div>
+      <label>
+        Colors
+        <textarea id='setup-colors'>0xff9090,0x90ff90,0x9090ff,0xffff90,0x90ffff,0xff90ff</textarea>
+      </label>
+    </div>
+    
+    <div>
+      <label>
+        Names, separate with line break
+        <textarea cols="20" rows="20" id='setup-names'>User 1#1234
+Testaaja#2131
+Foobar#1512
+example of a User
+uhprwih grijh
+pwjirgwiregji
+owjekhgoe
+okåegpå
+peklgk
+koe
+wpirbhpjwijhbpwrmj
+wionrpbwibp</textarea>
+<br/>
+<button id='setup-apply-names'>Update names</button>
+      </label>
+    </div>
+    
+    
     
   </div>
   
