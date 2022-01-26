@@ -11,17 +11,25 @@
   <meta name="description" content="Metropolis AI">
   <meta name="author" content="Moido Games">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid&display=swap" rel="stylesheet"> 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="fonts/stylesheet.css">
+  
+  
   
   <script src="tweenjs.min.js"></script>
   <script src="soundjs.min.js"></script>
   <script src="wheel.min.js"></script>
 
   <style>
+    body{
+      font-family: 'Londrina Solid', cursive;
+    }
     #setup
     {
-      transition: 0.5s ease-in-out; position: fixed; left: 0px; top: 0px; width: 200px; height: 550px; background: lightsteelblue; transform: translate(-200px); overflow: visible;
+      transition: 0.5s ease-in-out; position: fixed; left: 0px; top: 0px; width: 200px; background: lightsteelblue; transform: translate(-200px); overflow: visible;
     }
     #setup.show{
       transform: translate(0,0);
@@ -49,10 +57,36 @@
     <div>
       <label>
         Use bg
-        <input id='setup-use-bg' type="checkbox" checked/>
+        <br/>
+        <select id='setup-use-bg'>
+          <option value='none'>Off</option>
+          <option value='img/background.png' selected="selected">Pizza</option>
+          <option value='img/background_midcheck.png'>Mid check</option>
+          <option value='img/background_alea.png'>Alea</option>
+          <option value='img/background_alea_subtext.png'>Alea subtext</option>
+          <option value='img/background_plain.png'>Gradient - recolor</option>
+          
+        </select>
+        
       </label>
     </div>
 
+    
+    <div>
+      <label>
+        Bg message title
+        <textarea id='setup-bg-title'>FGJ Tampere!</textarea>
+      </label>
+    </div>
+    <div>
+      <label>
+        Bg message subtext
+        <textarea id='setup-bg-subtitle'>Lorem ipsum dolor sit amet\nAlea jacta est. Dore mi fa so la!</textarea>
+      </label>
+    </div>
+    
+    
+    
     <div>
       <label>
         Use sounds
