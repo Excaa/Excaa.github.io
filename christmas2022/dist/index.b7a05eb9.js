@@ -1006,313 +1006,35 @@ const filters = {
     NoiseFilter: (0, _filterNoise.NoiseFilter)
 };
 
-},{"pixijs/accessibility":"7Ofc0","pixijs/app":"c5KlX","pixijs/assets":"l5zUJ","pixijs/compressed-textures":"7pPIa","pixijs/core":"5Xie9","pixijs/display":"5dBvH","pixijs/events":"kme5E","pixijs/extract":"7TOGG","pixijs/graphics":"8zi8y","pixijs/mesh":"bxy0X","pixijs/particle-container":"77ULc","pixijs/prepare":"2mbXH","pixijs/sprite":"5cfR2","pixijs/spritesheet":"1yyKg","pixijs/sprite-animated":"8ZH1W","pixijs/sprite-tiling":"kODA2","pixijs/text":"kGXi9","pixijs/text-bitmap":"7gsN4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixijs/filter-alpha":"c1hVR","pixijs/filter-blur":"cbkwW","pixijs/filter-color-matrix":"2L9ZL","pixijs/filter-displacement":"Hl9xP","pixijs/filter-fxaa":"lPdWj","pixijs/filter-noise":"iKqmh","pixijs/display-cache-as-bitmap":"227zZ","pixijs/display-get-child-by-name":"faizK","pixijs/display-get-global-position":"3sRUh","pixijs/mesh-extras":"d0TrC"}],"7Ofc0":[function(require,module,exports) {
+},{"pixijs/filter-alpha":"c1hVR","pixijs/filter-blur":"cbkwW","pixijs/filter-color-matrix":"2L9ZL","pixijs/filter-displacement":"Hl9xP","pixijs/filter-fxaa":"lPdWj","pixijs/filter-noise":"iKqmh","pixijs/display-cache-as-bitmap":"227zZ","pixijs/display-get-child-by-name":"faizK","pixijs/display-get-global-position":"3sRUh","pixijs/accessibility":"7Ofc0","pixijs/app":"c5KlX","pixijs/assets":"l5zUJ","pixijs/compressed-textures":"7pPIa","pixijs/core":"5Xie9","pixijs/display":"5dBvH","pixijs/events":"kme5E","pixijs/extract":"7TOGG","pixijs/graphics":"8zi8y","pixijs/mesh":"bxy0X","pixijs/mesh-extras":"d0TrC","pixijs/particle-container":"77ULc","pixijs/prepare":"2mbXH","pixijs/sprite":"5cfR2","pixijs/spritesheet":"1yyKg","pixijs/sprite-animated":"8ZH1W","pixijs/sprite-tiling":"kODA2","pixijs/text":"kGXi9","pixijs/text-bitmap":"7gsN4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c1hVR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "accessibleTarget", ()=>(0, _accessibleTargetMjs.accessibleTarget));
-parcelHelpers.export(exports, "AccessibilityManager", ()=>(0, _accessibilityManagerMjs.AccessibilityManager));
-var _accessibleTargetMjs = require("./accessibleTarget.mjs");
-var _accessibilityManagerMjs = require("./AccessibilityManager.mjs");
+parcelHelpers.export(exports, "AlphaFilter", ()=>(0, _alphaFilterMjs.AlphaFilter));
+var _alphaFilterMjs = require("./AlphaFilter.mjs");
 
-},{"./accessibleTarget.mjs":"deXnU","./AccessibilityManager.mjs":"5Coml","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"deXnU":[function(require,module,exports) {
+},{"./AlphaFilter.mjs":"aaokk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aaokk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "accessibleTarget", ()=>accessibleTarget);
-const accessibleTarget = {
-    accessible: false,
-    accessibleTitle: null,
-    accessibleHint: null,
-    tabIndex: 0,
-    _accessibleActive: false,
-    _accessibleDiv: null,
-    accessibleType: "button",
-    accessiblePointerEvents: "auto",
-    accessibleChildren: true,
-    renderId: -1
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"5Coml":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AccessibilityManager", ()=>AccessibilityManager);
+parcelHelpers.export(exports, "AlphaFilter", ()=>AlphaFilter);
 var _core = require("pixijs/core");
-var _display = require("pixijs/display");
-var _events = require("pixijs/events");
-var _accessibleTargetMjs = require("./accessibleTarget.mjs");
-(0, _display.DisplayObject).mixin((0, _accessibleTargetMjs.accessibleTarget));
-const KEY_CODE_TAB = 9;
-const DIV_TOUCH_SIZE = 100;
-const DIV_TOUCH_POS_X = 0;
-const DIV_TOUCH_POS_Y = 0;
-const DIV_TOUCH_ZINDEX = 2;
-const DIV_HOOK_SIZE = 1;
-const DIV_HOOK_POS_X = -1000;
-const DIV_HOOK_POS_Y = -1000;
-const DIV_HOOK_ZINDEX = 2;
-class AccessibilityManager {
-    constructor(renderer){
-        this.debug = false;
-        this._isActive = false;
-        this._isMobileAccessibility = false;
-        this.pool = [];
-        this.renderId = 0;
-        this.children = [];
-        this.androidUpdateCount = 0;
-        this.androidUpdateFrequency = 500;
-        this._hookDiv = null;
-        if ((0, _core.utils).isMobile.tablet || (0, _core.utils).isMobile.phone) this.createTouchHook();
-        const div = document.createElement("div");
-        div.style.width = `${DIV_TOUCH_SIZE}px`;
-        div.style.height = `${DIV_TOUCH_SIZE}px`;
-        div.style.position = "absolute";
-        div.style.top = `${DIV_TOUCH_POS_X}px`;
-        div.style.left = `${DIV_TOUCH_POS_Y}px`;
-        div.style.zIndex = DIV_TOUCH_ZINDEX.toString();
-        this.div = div;
-        this.renderer = renderer;
-        this._onKeyDown = this._onKeyDown.bind(this);
-        this._onMouseMove = this._onMouseMove.bind(this);
-        globalThis.addEventListener("keydown", this._onKeyDown, false);
-    }
-    get isActive() {
-        return this._isActive;
-    }
-    get isMobileAccessibility() {
-        return this._isMobileAccessibility;
-    }
-    createTouchHook() {
-        const hookDiv = document.createElement("button");
-        hookDiv.style.width = `${DIV_HOOK_SIZE}px`;
-        hookDiv.style.height = `${DIV_HOOK_SIZE}px`;
-        hookDiv.style.position = "absolute";
-        hookDiv.style.top = `${DIV_HOOK_POS_X}px`;
-        hookDiv.style.left = `${DIV_HOOK_POS_Y}px`;
-        hookDiv.style.zIndex = DIV_HOOK_ZINDEX.toString();
-        hookDiv.style.backgroundColor = "#FF0000";
-        hookDiv.title = "select to enable accessibility for this content";
-        hookDiv.addEventListener("focus", ()=>{
-            this._isMobileAccessibility = true;
-            this.activate();
-            this.destroyTouchHook();
+var _alphaMjs = require("./alpha.mjs");
+var _alphaMjsDefault = parcelHelpers.interopDefault(_alphaMjs);
+class AlphaFilter extends (0, _core.Filter) {
+    constructor(alpha = 1){
+        super((0, _core.defaultVertex), (0, _alphaMjsDefault.default), {
+            uAlpha: 1
         });
-        document.body.appendChild(hookDiv);
-        this._hookDiv = hookDiv;
+        this.alpha = alpha;
     }
-    destroyTouchHook() {
-        if (!this._hookDiv) return;
-        document.body.removeChild(this._hookDiv);
-        this._hookDiv = null;
+    get alpha() {
+        return this.uniforms.uAlpha;
     }
-    activate() {
-        if (this._isActive) return;
-        this._isActive = true;
-        globalThis.document.addEventListener("mousemove", this._onMouseMove, true);
-        globalThis.removeEventListener("keydown", this._onKeyDown, false);
-        this.renderer.on("postrender", this.update, this);
-        this.renderer.view.parentNode?.appendChild(this.div);
-    }
-    deactivate() {
-        if (!this._isActive || this._isMobileAccessibility) return;
-        this._isActive = false;
-        globalThis.document.removeEventListener("mousemove", this._onMouseMove, true);
-        globalThis.addEventListener("keydown", this._onKeyDown, false);
-        this.renderer.off("postrender", this.update);
-        this.div.parentNode?.removeChild(this.div);
-    }
-    updateAccessibleObjects(displayObject) {
-        if (!displayObject.visible || !displayObject.accessibleChildren) return;
-        if (displayObject.accessible && displayObject.interactive) {
-            if (!displayObject._accessibleActive) this.addChild(displayObject);
-            displayObject.renderId = this.renderId;
-        }
-        const children = displayObject.children;
-        if (children) for(let i = 0; i < children.length; i++)this.updateAccessibleObjects(children[i]);
-    }
-    update() {
-        const now = performance.now();
-        if ((0, _core.utils).isMobile.android.device && now < this.androidUpdateCount) return;
-        this.androidUpdateCount = now + this.androidUpdateFrequency;
-        if (!this.renderer.renderingToScreen) return;
-        if (this.renderer.lastObjectRendered) this.updateAccessibleObjects(this.renderer.lastObjectRendered);
-        const { x , y , width , height  } = this.renderer.view.getBoundingClientRect();
-        const { width: viewWidth , height: viewHeight , resolution  } = this.renderer;
-        const sx = width / viewWidth * resolution;
-        const sy = height / viewHeight * resolution;
-        let div = this.div;
-        div.style.left = `${x}px`;
-        div.style.top = `${y}px`;
-        div.style.width = `${viewWidth}px`;
-        div.style.height = `${viewHeight}px`;
-        for(let i = 0; i < this.children.length; i++){
-            const child = this.children[i];
-            if (child.renderId !== this.renderId) {
-                child._accessibleActive = false;
-                (0, _core.utils).removeItems(this.children, i, 1);
-                this.div.removeChild(child._accessibleDiv);
-                this.pool.push(child._accessibleDiv);
-                child._accessibleDiv = null;
-                i--;
-            } else {
-                div = child._accessibleDiv;
-                let hitArea = child.hitArea;
-                const wt = child.worldTransform;
-                if (child.hitArea) {
-                    div.style.left = `${(wt.tx + hitArea.x * wt.a) * sx}px`;
-                    div.style.top = `${(wt.ty + hitArea.y * wt.d) * sy}px`;
-                    div.style.width = `${hitArea.width * wt.a * sx}px`;
-                    div.style.height = `${hitArea.height * wt.d * sy}px`;
-                } else {
-                    hitArea = child.getBounds();
-                    this.capHitArea(hitArea);
-                    div.style.left = `${hitArea.x * sx}px`;
-                    div.style.top = `${hitArea.y * sy}px`;
-                    div.style.width = `${hitArea.width * sx}px`;
-                    div.style.height = `${hitArea.height * sy}px`;
-                    if (div.title !== child.accessibleTitle && child.accessibleTitle !== null) div.title = child.accessibleTitle;
-                    if (div.getAttribute("aria-label") !== child.accessibleHint && child.accessibleHint !== null) div.setAttribute("aria-label", child.accessibleHint);
-                }
-                if (child.accessibleTitle !== div.title || child.tabIndex !== div.tabIndex) {
-                    div.title = child.accessibleTitle;
-                    div.tabIndex = child.tabIndex;
-                    if (this.debug) this.updateDebugHTML(div);
-                }
-            }
-        }
-        this.renderId++;
-    }
-    updateDebugHTML(div) {
-        div.innerHTML = `type: ${div.type}</br> title : ${div.title}</br> tabIndex: ${div.tabIndex}`;
-    }
-    capHitArea(hitArea) {
-        if (hitArea.x < 0) {
-            hitArea.width += hitArea.x;
-            hitArea.x = 0;
-        }
-        if (hitArea.y < 0) {
-            hitArea.height += hitArea.y;
-            hitArea.y = 0;
-        }
-        const { width: viewWidth , height: viewHeight  } = this.renderer;
-        if (hitArea.x + hitArea.width > viewWidth) hitArea.width = viewWidth - hitArea.x;
-        if (hitArea.y + hitArea.height > viewHeight) hitArea.height = viewHeight - hitArea.y;
-    }
-    addChild(displayObject) {
-        let div = this.pool.pop();
-        if (!div) {
-            div = document.createElement("button");
-            div.style.width = `${DIV_TOUCH_SIZE}px`;
-            div.style.height = `${DIV_TOUCH_SIZE}px`;
-            div.style.backgroundColor = this.debug ? "rgba(255,255,255,0.5)" : "transparent";
-            div.style.position = "absolute";
-            div.style.zIndex = DIV_TOUCH_ZINDEX.toString();
-            div.style.borderStyle = "none";
-            if (navigator.userAgent.toLowerCase().includes("chrome")) div.setAttribute("aria-live", "off");
-            else div.setAttribute("aria-live", "polite");
-            if (navigator.userAgent.match(/rv:.*Gecko\//)) div.setAttribute("aria-relevant", "additions");
-            else div.setAttribute("aria-relevant", "text");
-            div.addEventListener("click", this._onClick.bind(this));
-            div.addEventListener("focus", this._onFocus.bind(this));
-            div.addEventListener("focusout", this._onFocusOut.bind(this));
-        }
-        div.style.pointerEvents = displayObject.accessiblePointerEvents;
-        div.type = displayObject.accessibleType;
-        if (displayObject.accessibleTitle && displayObject.accessibleTitle !== null) div.title = displayObject.accessibleTitle;
-        else if (!displayObject.accessibleHint || displayObject.accessibleHint === null) div.title = `displayObject ${displayObject.tabIndex}`;
-        if (displayObject.accessibleHint && displayObject.accessibleHint !== null) div.setAttribute("aria-label", displayObject.accessibleHint);
-        if (this.debug) this.updateDebugHTML(div);
-        displayObject._accessibleActive = true;
-        displayObject._accessibleDiv = div;
-        div.displayObject = displayObject;
-        this.children.push(displayObject);
-        this.div.appendChild(displayObject._accessibleDiv);
-        displayObject._accessibleDiv.tabIndex = displayObject.tabIndex;
-    }
-    _dispatchEvent(e, type) {
-        const { displayObject: target  } = e.target;
-        const boundry = this.renderer.events.rootBoundary;
-        const event = Object.assign(new (0, _events.FederatedEvent)(boundry), {
-            target
-        });
-        boundry.rootTarget = this.renderer.lastObjectRendered;
-        type.forEach((type2)=>boundry.dispatchEvent(event, type2));
-    }
-    _onClick(e) {
-        this._dispatchEvent(e, [
-            "click",
-            "pointertap",
-            "tap"
-        ]);
-    }
-    _onFocus(e) {
-        if (!e.target.getAttribute("aria-live")) e.target.setAttribute("aria-live", "assertive");
-        this._dispatchEvent(e, [
-            "mouseover"
-        ]);
-    }
-    _onFocusOut(e) {
-        if (!e.target.getAttribute("aria-live")) e.target.setAttribute("aria-live", "polite");
-        this._dispatchEvent(e, [
-            "mouseout"
-        ]);
-    }
-    _onKeyDown(e) {
-        if (e.keyCode !== KEY_CODE_TAB) return;
-        this.activate();
-    }
-    _onMouseMove(e) {
-        if (e.movementX === 0 && e.movementY === 0) return;
-        this.deactivate();
-    }
-    destroy() {
-        this.destroyTouchHook();
-        this.div = null;
-        globalThis.document.removeEventListener("mousemove", this._onMouseMove, true);
-        globalThis.removeEventListener("keydown", this._onKeyDown);
-        this.pool = null;
-        this.children = null;
-        this.renderer = null;
+    set alpha(value) {
+        this.uniforms.uAlpha = value;
     }
 }
-AccessibilityManager.extension = {
-    name: "accessibility",
-    type: [
-        (0, _core.ExtensionType).RendererPlugin,
-        (0, _core.ExtensionType).CanvasRendererPlugin
-    ]
-};
-(0, _core.extensions).add(AccessibilityManager);
 
-},{"pixijs/core":"5Xie9","pixijs/display":"5dBvH","pixijs/events":"kme5E","./accessibleTarget.mjs":"deXnU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Xie9":[function(require,module,exports) {
+},{"pixijs/core":"5Xie9","./alpha.mjs":"4D7F4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Xie9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "autoDetectRenderer", ()=>(0, _autoDetectRendererMjs.autoDetectRenderer));
@@ -1775,7 +1497,37 @@ var BUFFER_TYPE = /* @__PURE__ */ ((BUFFER_TYPE2)=>{
     return BUFFER_TYPE2;
 })(BUFFER_TYPE || {});
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cTqOQ":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"cTqOQ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BrowserAdapter", ()=>BrowserAdapter);
@@ -13657,7 +13409,1557 @@ ObjectRendererSystem.extension = {
 };
 (0, _extensions.extensions).add(ObjectRendererSystem);
 
-},{"pixijs/extensions":"gVkQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5dBvH":[function(require,module,exports) {
+},{"pixijs/extensions":"gVkQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4D7F4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>fragment);
+var fragment = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform float uAlpha;\n\nvoid main(void)\n{\n   gl_FragColor = texture2D(uSampler, vTextureCoord) * uAlpha;\n}\n";
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cbkwW":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BlurFilter", ()=>(0, _blurFilterMjs.BlurFilter));
+parcelHelpers.export(exports, "BlurFilterPass", ()=>(0, _blurFilterPassMjs.BlurFilterPass));
+var _blurFilterMjs = require("./BlurFilter.mjs");
+var _blurFilterPassMjs = require("./BlurFilterPass.mjs");
+
+},{"./BlurFilter.mjs":"iqRk3","./BlurFilterPass.mjs":"lqAZI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iqRk3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BlurFilter", ()=>BlurFilter);
+var _core = require("pixijs/core");
+var _blurFilterPassMjs = require("./BlurFilterPass.mjs");
+class BlurFilter extends (0, _core.Filter) {
+    constructor(strength = 8, quality = 4, resolution = (0, _core.settings).FILTER_RESOLUTION, kernelSize = 5){
+        super();
+        this.blurXFilter = new (0, _blurFilterPassMjs.BlurFilterPass)(true, strength, quality, resolution, kernelSize);
+        this.blurYFilter = new (0, _blurFilterPassMjs.BlurFilterPass)(false, strength, quality, resolution, kernelSize);
+        this.resolution = resolution;
+        this.quality = quality;
+        this.blur = strength;
+        this.repeatEdgePixels = false;
+    }
+    apply(filterManager, input, output, clearMode) {
+        const xStrength = Math.abs(this.blurXFilter.strength);
+        const yStrength = Math.abs(this.blurYFilter.strength);
+        if (xStrength && yStrength) {
+            const renderTarget = filterManager.getFilterTexture();
+            this.blurXFilter.apply(filterManager, input, renderTarget, (0, _core.CLEAR_MODES).CLEAR);
+            this.blurYFilter.apply(filterManager, renderTarget, output, clearMode);
+            filterManager.returnFilterTexture(renderTarget);
+        } else if (yStrength) this.blurYFilter.apply(filterManager, input, output, clearMode);
+        else this.blurXFilter.apply(filterManager, input, output, clearMode);
+    }
+    updatePadding() {
+        if (this._repeatEdgePixels) this.padding = 0;
+        else this.padding = Math.max(Math.abs(this.blurXFilter.strength), Math.abs(this.blurYFilter.strength)) * 2;
+    }
+    get blur() {
+        return this.blurXFilter.blur;
+    }
+    set blur(value) {
+        this.blurXFilter.blur = this.blurYFilter.blur = value;
+        this.updatePadding();
+    }
+    get quality() {
+        return this.blurXFilter.quality;
+    }
+    set quality(value) {
+        this.blurXFilter.quality = this.blurYFilter.quality = value;
+    }
+    get blurX() {
+        return this.blurXFilter.blur;
+    }
+    set blurX(value) {
+        this.blurXFilter.blur = value;
+        this.updatePadding();
+    }
+    get blurY() {
+        return this.blurYFilter.blur;
+    }
+    set blurY(value) {
+        this.blurYFilter.blur = value;
+        this.updatePadding();
+    }
+    get blendMode() {
+        return this.blurYFilter.blendMode;
+    }
+    set blendMode(value) {
+        this.blurYFilter.blendMode = value;
+    }
+    get repeatEdgePixels() {
+        return this._repeatEdgePixels;
+    }
+    set repeatEdgePixels(value) {
+        this._repeatEdgePixels = value;
+        this.updatePadding();
+    }
+}
+
+},{"pixijs/core":"5Xie9","./BlurFilterPass.mjs":"lqAZI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lqAZI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BlurFilterPass", ()=>BlurFilterPass);
+var _core = require("pixijs/core");
+var _generateBlurVertSourceMjs = require("./generateBlurVertSource.mjs");
+var _generateBlurFragSourceMjs = require("./generateBlurFragSource.mjs");
+class BlurFilterPass extends (0, _core.Filter) {
+    constructor(horizontal, strength = 8, quality = 4, resolution = (0, _core.settings).FILTER_RESOLUTION, kernelSize = 5){
+        const vertSrc = (0, _generateBlurVertSourceMjs.generateBlurVertSource)(kernelSize, horizontal);
+        const fragSrc = (0, _generateBlurFragSourceMjs.generateBlurFragSource)(kernelSize);
+        super(vertSrc, fragSrc);
+        this.horizontal = horizontal;
+        this.resolution = resolution;
+        this._quality = 0;
+        this.quality = quality;
+        this.blur = strength;
+    }
+    apply(filterManager, input, output, clearMode) {
+        if (output) {
+            if (this.horizontal) this.uniforms.strength = 1 / output.width * (output.width / input.width);
+            else this.uniforms.strength = 1 / output.height * (output.height / input.height);
+        } else if (this.horizontal) this.uniforms.strength = 1 / filterManager.renderer.width * (filterManager.renderer.width / input.width);
+        else this.uniforms.strength = 1 / filterManager.renderer.height * (filterManager.renderer.height / input.height);
+        this.uniforms.strength *= this.strength;
+        this.uniforms.strength /= this.passes;
+        if (this.passes === 1) filterManager.applyFilter(this, input, output, clearMode);
+        else {
+            const renderTarget = filterManager.getFilterTexture();
+            const renderer = filterManager.renderer;
+            let flip = input;
+            let flop = renderTarget;
+            this.state.blend = false;
+            filterManager.applyFilter(this, flip, flop, (0, _core.CLEAR_MODES).CLEAR);
+            for(let i = 1; i < this.passes - 1; i++){
+                filterManager.bindAndClear(flip, (0, _core.CLEAR_MODES).BLIT);
+                this.uniforms.uSampler = flop;
+                const temp = flop;
+                flop = flip;
+                flip = temp;
+                renderer.shader.bind(this);
+                renderer.geometry.draw(5);
+            }
+            this.state.blend = true;
+            filterManager.applyFilter(this, flop, output, clearMode);
+            filterManager.returnFilterTexture(renderTarget);
+        }
+    }
+    get blur() {
+        return this.strength;
+    }
+    set blur(value) {
+        this.padding = 1 + Math.abs(value) * 2;
+        this.strength = value;
+    }
+    get quality() {
+        return this._quality;
+    }
+    set quality(value) {
+        this._quality = value;
+        this.passes = value;
+    }
+}
+
+},{"pixijs/core":"5Xie9","./generateBlurVertSource.mjs":"3ipTj","./generateBlurFragSource.mjs":"6ZaXy","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3ipTj":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "generateBlurVertSource", ()=>generateBlurVertSource);
+const vertTemplate = `
+    attribute vec2 aVertexPosition;
+
+    uniform mat3 projectionMatrix;
+
+    uniform float strength;
+
+    varying vec2 vBlurTexCoords[%size%];
+
+    uniform vec4 inputSize;
+    uniform vec4 outputFrame;
+
+    vec4 filterVertexPosition( void )
+    {
+        vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;
+
+        return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);
+    }
+
+    vec2 filterTextureCoord( void )
+    {
+        return aVertexPosition * (outputFrame.zw * inputSize.zw);
+    }
+
+    void main(void)
+    {
+        gl_Position = filterVertexPosition();
+
+        vec2 textureCoord = filterTextureCoord();
+        %blur%
+    }`;
+function generateBlurVertSource(kernelSize, x) {
+    const halfLength = Math.ceil(kernelSize / 2);
+    let vertSource = vertTemplate;
+    let blurLoop = "";
+    let template;
+    if (x) template = "vBlurTexCoords[%index%] =  textureCoord + vec2(%sampleIndex% * strength, 0.0);";
+    else template = "vBlurTexCoords[%index%] =  textureCoord + vec2(0.0, %sampleIndex% * strength);";
+    for(let i = 0; i < kernelSize; i++){
+        let blur = template.replace("%index%", i.toString());
+        blur = blur.replace("%sampleIndex%", `${i - (halfLength - 1)}.0`);
+        blurLoop += blur;
+        blurLoop += "\n";
+    }
+    vertSource = vertSource.replace("%blur%", blurLoop);
+    vertSource = vertSource.replace("%size%", kernelSize.toString());
+    return vertSource;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6ZaXy":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "generateBlurFragSource", ()=>generateBlurFragSource);
+const GAUSSIAN_VALUES = {
+    5: [
+        0.153388,
+        0.221461,
+        0.250301
+    ],
+    7: [
+        0.071303,
+        0.131514,
+        0.189879,
+        0.214607
+    ],
+    9: [
+        0.028532,
+        0.067234,
+        0.124009,
+        0.179044,
+        0.20236
+    ],
+    11: [
+        93e-4,
+        0.028002,
+        0.065984,
+        0.121703,
+        0.175713,
+        0.198596
+    ],
+    13: [
+        2406e-6,
+        9255e-6,
+        0.027867,
+        0.065666,
+        0.121117,
+        0.174868,
+        0.197641
+    ],
+    15: [
+        489e-6,
+        2403e-6,
+        9246e-6,
+        0.02784,
+        0.065602,
+        0.120999,
+        0.174697,
+        0.197448
+    ]
+};
+const fragTemplate = [
+    "varying vec2 vBlurTexCoords[%size%];",
+    "uniform sampler2D uSampler;",
+    "void main(void)",
+    "{",
+    "    gl_FragColor = vec4(0.0);",
+    "    %blur%",
+    "}"
+].join("\n");
+function generateBlurFragSource(kernelSize) {
+    const kernel = GAUSSIAN_VALUES[kernelSize];
+    const halfLength = kernel.length;
+    let fragSource = fragTemplate;
+    let blurLoop = "";
+    const template = "gl_FragColor += texture2D(uSampler, vBlurTexCoords[%index%]) * %value%;";
+    let value;
+    for(let i = 0; i < kernelSize; i++){
+        let blur = template.replace("%index%", i.toString());
+        value = i;
+        if (i >= halfLength) value = kernelSize - i - 1;
+        blur = blur.replace("%value%", kernel[value].toString());
+        blurLoop += blur;
+        blurLoop += "\n";
+    }
+    fragSource = fragSource.replace("%blur%", blurLoop);
+    fragSource = fragSource.replace("%size%", kernelSize.toString());
+    return fragSource;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2L9ZL":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ColorMatrixFilter", ()=>(0, _colorMatrixFilterMjs.ColorMatrixFilter));
+var _colorMatrixFilterMjs = require("./ColorMatrixFilter.mjs");
+
+},{"./ColorMatrixFilter.mjs":"e0AQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"e0AQt":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ColorMatrixFilter", ()=>ColorMatrixFilter);
+var _core = require("pixijs/core");
+var _colorMatrixMjs = require("./colorMatrix.mjs");
+var _colorMatrixMjsDefault = parcelHelpers.interopDefault(_colorMatrixMjs);
+class ColorMatrixFilter extends (0, _core.Filter) {
+    constructor(){
+        const uniforms = {
+            m: new Float32Array([
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0
+            ]),
+            uAlpha: 1
+        };
+        super((0, _core.defaultFilterVertex), (0, _colorMatrixMjsDefault.default), uniforms);
+        this.alpha = 1;
+    }
+    _loadMatrix(matrix, multiply = false) {
+        let newMatrix = matrix;
+        if (multiply) {
+            this._multiply(newMatrix, this.uniforms.m, matrix);
+            newMatrix = this._colorMatrix(newMatrix);
+        }
+        this.uniforms.m = newMatrix;
+    }
+    _multiply(out, a, b) {
+        out[0] = a[0] * b[0] + a[1] * b[5] + a[2] * b[10] + a[3] * b[15];
+        out[1] = a[0] * b[1] + a[1] * b[6] + a[2] * b[11] + a[3] * b[16];
+        out[2] = a[0] * b[2] + a[1] * b[7] + a[2] * b[12] + a[3] * b[17];
+        out[3] = a[0] * b[3] + a[1] * b[8] + a[2] * b[13] + a[3] * b[18];
+        out[4] = a[0] * b[4] + a[1] * b[9] + a[2] * b[14] + a[3] * b[19] + a[4];
+        out[5] = a[5] * b[0] + a[6] * b[5] + a[7] * b[10] + a[8] * b[15];
+        out[6] = a[5] * b[1] + a[6] * b[6] + a[7] * b[11] + a[8] * b[16];
+        out[7] = a[5] * b[2] + a[6] * b[7] + a[7] * b[12] + a[8] * b[17];
+        out[8] = a[5] * b[3] + a[6] * b[8] + a[7] * b[13] + a[8] * b[18];
+        out[9] = a[5] * b[4] + a[6] * b[9] + a[7] * b[14] + a[8] * b[19] + a[9];
+        out[10] = a[10] * b[0] + a[11] * b[5] + a[12] * b[10] + a[13] * b[15];
+        out[11] = a[10] * b[1] + a[11] * b[6] + a[12] * b[11] + a[13] * b[16];
+        out[12] = a[10] * b[2] + a[11] * b[7] + a[12] * b[12] + a[13] * b[17];
+        out[13] = a[10] * b[3] + a[11] * b[8] + a[12] * b[13] + a[13] * b[18];
+        out[14] = a[10] * b[4] + a[11] * b[9] + a[12] * b[14] + a[13] * b[19] + a[14];
+        out[15] = a[15] * b[0] + a[16] * b[5] + a[17] * b[10] + a[18] * b[15];
+        out[16] = a[15] * b[1] + a[16] * b[6] + a[17] * b[11] + a[18] * b[16];
+        out[17] = a[15] * b[2] + a[16] * b[7] + a[17] * b[12] + a[18] * b[17];
+        out[18] = a[15] * b[3] + a[16] * b[8] + a[17] * b[13] + a[18] * b[18];
+        out[19] = a[15] * b[4] + a[16] * b[9] + a[17] * b[14] + a[18] * b[19] + a[19];
+        return out;
+    }
+    _colorMatrix(matrix) {
+        const m = new Float32Array(matrix);
+        m[4] /= 255;
+        m[9] /= 255;
+        m[14] /= 255;
+        m[19] /= 255;
+        return m;
+    }
+    brightness(b, multiply) {
+        const matrix = [
+            b,
+            0,
+            0,
+            0,
+            0,
+            0,
+            b,
+            0,
+            0,
+            0,
+            0,
+            0,
+            b,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    tint(color, multiply) {
+        const r = color >> 16 & 255;
+        const g = color >> 8 & 255;
+        const b = color & 255;
+        const matrix = [
+            r / 255,
+            0,
+            0,
+            0,
+            0,
+            0,
+            g / 255,
+            0,
+            0,
+            0,
+            0,
+            0,
+            b / 255,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    greyscale(scale, multiply) {
+        const matrix = [
+            scale,
+            scale,
+            scale,
+            0,
+            0,
+            scale,
+            scale,
+            scale,
+            0,
+            0,
+            scale,
+            scale,
+            scale,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    blackAndWhite(multiply) {
+        const matrix = [
+            0.3,
+            0.6,
+            0.1,
+            0,
+            0,
+            0.3,
+            0.6,
+            0.1,
+            0,
+            0,
+            0.3,
+            0.6,
+            0.1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    hue(rotation, multiply) {
+        rotation = (rotation || 0) / 180 * Math.PI;
+        const cosR = Math.cos(rotation);
+        const sinR = Math.sin(rotation);
+        const sqrt = Math.sqrt;
+        const w = 1 / 3;
+        const sqrW = sqrt(w);
+        const a00 = cosR + (1 - cosR) * w;
+        const a01 = w * (1 - cosR) - sqrW * sinR;
+        const a02 = w * (1 - cosR) + sqrW * sinR;
+        const a10 = w * (1 - cosR) + sqrW * sinR;
+        const a11 = cosR + w * (1 - cosR);
+        const a12 = w * (1 - cosR) - sqrW * sinR;
+        const a20 = w * (1 - cosR) - sqrW * sinR;
+        const a21 = w * (1 - cosR) + sqrW * sinR;
+        const a22 = cosR + w * (1 - cosR);
+        const matrix = [
+            a00,
+            a01,
+            a02,
+            0,
+            0,
+            a10,
+            a11,
+            a12,
+            0,
+            0,
+            a20,
+            a21,
+            a22,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    contrast(amount, multiply) {
+        const v = (amount || 0) + 1;
+        const o = -0.5 * (v - 1);
+        const matrix = [
+            v,
+            0,
+            0,
+            0,
+            o,
+            0,
+            v,
+            0,
+            0,
+            o,
+            0,
+            0,
+            v,
+            0,
+            o,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    saturate(amount = 0, multiply) {
+        const x = amount * 2 / 3 + 1;
+        const y = (x - 1) * -0.5;
+        const matrix = [
+            x,
+            y,
+            y,
+            0,
+            0,
+            y,
+            x,
+            y,
+            0,
+            0,
+            y,
+            y,
+            x,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    desaturate() {
+        this.saturate(-1);
+    }
+    negative(multiply) {
+        const matrix = [
+            -1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            -1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    sepia(multiply) {
+        const matrix = [
+            0.393,
+            0.7689999,
+            0.18899999,
+            0,
+            0,
+            0.349,
+            0.6859999,
+            0.16799999,
+            0,
+            0,
+            0.272,
+            0.5339999,
+            0.13099999,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    technicolor(multiply) {
+        const matrix = [
+            1.9125277891456083,
+            -0.8545344976951645,
+            -0.09155508482755585,
+            0,
+            11.793603434377337,
+            -0.3087833385928097,
+            1.7658908555458428,
+            -0.10601743074722245,
+            0,
+            -70.35205161461398,
+            -0.231103377548616,
+            -0.7501899197440212,
+            1.847597816108189,
+            0,
+            30.950940869491138,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    polaroid(multiply) {
+        const matrix = [
+            1.438,
+            -0.062,
+            -0.062,
+            0,
+            0,
+            -0.122,
+            1.378,
+            -0.122,
+            0,
+            0,
+            -0.016,
+            -0.016,
+            1.483,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    toBGR(multiply) {
+        const matrix = [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    kodachrome(multiply) {
+        const matrix = [
+            1.1285582396593525,
+            -0.3967382283601348,
+            -0.03992559172921793,
+            0,
+            63.72958762196502,
+            -0.16404339962244616,
+            1.0835251566291304,
+            -0.05498805115633132,
+            0,
+            24.732407896706203,
+            -0.16786010706155763,
+            -0.5603416277695248,
+            1.6014850761964943,
+            0,
+            35.62982807460946,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    browni(multiply) {
+        const matrix = [
+            0.5997023498159715,
+            0.34553243048391263,
+            -0.2708298674538042,
+            0,
+            47.43192855600873,
+            -0.037703249837783157,
+            0.8609577587992641,
+            0.15059552388459913,
+            0,
+            -36.96841498319127,
+            0.24113635128153335,
+            -0.07441037908422492,
+            0.44972182064877153,
+            0,
+            -7.562075277591283,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    vintage(multiply) {
+        const matrix = [
+            0.6279345635605994,
+            0.3202183420819367,
+            -0.03965408211312453,
+            0,
+            9.651285835294123,
+            0.02578397704808868,
+            0.6441188644374771,
+            0.03259127616149294,
+            0,
+            7.462829176470591,
+            0.0466055556782719,
+            -0.0851232987247891,
+            0.5241648018700465,
+            0,
+            5.159190588235296,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    colorTone(desaturation, toned, lightColor, darkColor, multiply) {
+        desaturation = desaturation || 0.2;
+        toned = toned || 0.15;
+        lightColor = lightColor || 16770432;
+        darkColor = darkColor || 3375104;
+        const lR = (lightColor >> 16 & 255) / 255;
+        const lG = (lightColor >> 8 & 255) / 255;
+        const lB = (lightColor & 255) / 255;
+        const dR = (darkColor >> 16 & 255) / 255;
+        const dG = (darkColor >> 8 & 255) / 255;
+        const dB = (darkColor & 255) / 255;
+        const matrix = [
+            0.3,
+            0.59,
+            0.11,
+            0,
+            0,
+            lR,
+            lG,
+            lB,
+            desaturation,
+            0,
+            dR,
+            dG,
+            dB,
+            toned,
+            0,
+            lR - dR,
+            lG - dG,
+            lB - dB,
+            0,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    night(intensity, multiply) {
+        intensity = intensity || 0.1;
+        const matrix = [
+            intensity * -2,
+            -intensity,
+            0,
+            0,
+            0,
+            -intensity,
+            0,
+            intensity,
+            0,
+            0,
+            0,
+            intensity,
+            intensity * 2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    predator(amount, multiply) {
+        const matrix = [
+            11.224130630493164 * amount,
+            -4.794486999511719 * amount,
+            -2.8746118545532227 * amount,
+            0 * amount,
+            0.40342438220977783 * amount,
+            -3.6330697536468506 * amount,
+            9.193157196044922 * amount,
+            -2.951810836791992 * amount,
+            0 * amount,
+            -1.316135048866272 * amount,
+            -3.2184197902679443 * amount,
+            -4.2375030517578125 * amount,
+            7.476448059082031 * amount,
+            0 * amount,
+            0.8044459223747253 * amount,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    lsd(multiply) {
+        const matrix = [
+            2,
+            -0.4,
+            0.5,
+            0,
+            0,
+            -0.5,
+            2,
+            -0.4,
+            0,
+            0,
+            -0.4,
+            -0.5,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, multiply);
+    }
+    reset() {
+        const matrix = [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        ];
+        this._loadMatrix(matrix, false);
+    }
+    get matrix() {
+        return this.uniforms.m;
+    }
+    set matrix(value) {
+        this.uniforms.m = value;
+    }
+    get alpha() {
+        return this.uniforms.uAlpha;
+    }
+    set alpha(value) {
+        this.uniforms.uAlpha = value;
+    }
+}
+ColorMatrixFilter.prototype.grayscale = ColorMatrixFilter.prototype.greyscale;
+
+},{"pixijs/core":"5Xie9","./colorMatrix.mjs":"bevBO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bevBO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>fragment);
+var fragment = "varying vec2 vTextureCoord;\nuniform sampler2D uSampler;\nuniform float m[20];\nuniform float uAlpha;\n\nvoid main(void)\n{\n    vec4 c = texture2D(uSampler, vTextureCoord);\n\n    if (uAlpha == 0.0) {\n        gl_FragColor = c;\n        return;\n    }\n\n    // Un-premultiply alpha before applying the color matrix. See issue #3539.\n    if (c.a > 0.0) {\n      c.rgb /= c.a;\n    }\n\n    vec4 result;\n\n    result.r = (m[0] * c.r);\n        result.r += (m[1] * c.g);\n        result.r += (m[2] * c.b);\n        result.r += (m[3] * c.a);\n        result.r += m[4];\n\n    result.g = (m[5] * c.r);\n        result.g += (m[6] * c.g);\n        result.g += (m[7] * c.b);\n        result.g += (m[8] * c.a);\n        result.g += m[9];\n\n    result.b = (m[10] * c.r);\n       result.b += (m[11] * c.g);\n       result.b += (m[12] * c.b);\n       result.b += (m[13] * c.a);\n       result.b += m[14];\n\n    result.a = (m[15] * c.r);\n       result.a += (m[16] * c.g);\n       result.a += (m[17] * c.b);\n       result.a += (m[18] * c.a);\n       result.a += m[19];\n\n    vec3 rgb = mix(c.rgb, result.rgb, uAlpha);\n\n    // Premultiply alpha again.\n    rgb *= result.a;\n\n    gl_FragColor = vec4(rgb, result.a);\n}\n";
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Hl9xP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "DisplacementFilter", ()=>(0, _displacementFilterMjs.DisplacementFilter));
+var _displacementFilterMjs = require("./DisplacementFilter.mjs");
+
+},{"./DisplacementFilter.mjs":"miiR8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"miiR8":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "DisplacementFilter", ()=>DisplacementFilter);
+var _core = require("pixijs/core");
+var _displacementMjs = require("./displacement.mjs");
+var _displacementMjsDefault = parcelHelpers.interopDefault(_displacementMjs);
+var _displacement2Mjs = require("./displacement2.mjs");
+var _displacement2MjsDefault = parcelHelpers.interopDefault(_displacement2Mjs);
+class DisplacementFilter extends (0, _core.Filter) {
+    constructor(sprite, scale){
+        const maskMatrix = new (0, _core.Matrix)();
+        sprite.renderable = false;
+        super((0, _displacement2MjsDefault.default), (0, _displacementMjsDefault.default), {
+            mapSampler: sprite._texture,
+            filterMatrix: maskMatrix,
+            scale: {
+                x: 1,
+                y: 1
+            },
+            rotation: new Float32Array([
+                1,
+                0,
+                0,
+                1
+            ])
+        });
+        this.maskSprite = sprite;
+        this.maskMatrix = maskMatrix;
+        if (scale === null || scale === void 0) scale = 20;
+        this.scale = new (0, _core.Point)(scale, scale);
+    }
+    apply(filterManager, input, output, clearMode) {
+        this.uniforms.filterMatrix = filterManager.calculateSpriteMatrix(this.maskMatrix, this.maskSprite);
+        this.uniforms.scale.x = this.scale.x;
+        this.uniforms.scale.y = this.scale.y;
+        const wt = this.maskSprite.worldTransform;
+        const lenX = Math.sqrt(wt.a * wt.a + wt.b * wt.b);
+        const lenY = Math.sqrt(wt.c * wt.c + wt.d * wt.d);
+        if (lenX !== 0 && lenY !== 0) {
+            this.uniforms.rotation[0] = wt.a / lenX;
+            this.uniforms.rotation[1] = wt.b / lenX;
+            this.uniforms.rotation[2] = wt.c / lenY;
+            this.uniforms.rotation[3] = wt.d / lenY;
+        }
+        filterManager.applyFilter(this, input, output, clearMode);
+    }
+    get map() {
+        return this.uniforms.mapSampler;
+    }
+    set map(value) {
+        this.uniforms.mapSampler = value;
+    }
+}
+
+},{"pixijs/core":"5Xie9","./displacement.mjs":"hrM9v","./displacement2.mjs":"6rT1X","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hrM9v":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>fragment);
+var fragment = "varying vec2 vFilterCoord;\nvarying vec2 vTextureCoord;\n\nuniform vec2 scale;\nuniform mat2 rotation;\nuniform sampler2D uSampler;\nuniform sampler2D mapSampler;\n\nuniform highp vec4 inputSize;\nuniform vec4 inputClamp;\n\nvoid main(void)\n{\n  vec4 map =  texture2D(mapSampler, vFilterCoord);\n\n  map -= 0.5;\n  map.xy = scale * inputSize.zw * (rotation * map.xy);\n\n  gl_FragColor = texture2D(uSampler, clamp(vec2(vTextureCoord.x + map.x, vTextureCoord.y + map.y), inputClamp.xy, inputClamp.zw));\n}\n";
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6rT1X":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>vertex);
+var vertex = "attribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix;\nuniform mat3 filterMatrix;\n\nvarying vec2 vTextureCoord;\nvarying vec2 vFilterCoord;\n\nuniform vec4 inputSize;\nuniform vec4 outputFrame;\n\nvec4 filterVertexPosition( void )\n{\n    vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n\n    return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n}\n\nvec2 filterTextureCoord( void )\n{\n    return aVertexPosition * (outputFrame.zw * inputSize.zw);\n}\n\nvoid main(void)\n{\n	gl_Position = filterVertexPosition();\n	vTextureCoord = filterTextureCoord();\n	vFilterCoord = ( filterMatrix * vec3( vTextureCoord, 1.0)  ).xy;\n}\n";
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lPdWj":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "FXAAFilter", ()=>(0, _fxaafilterMjs.FXAAFilter));
+var _fxaafilterMjs = require("./FXAAFilter.mjs");
+
+},{"./FXAAFilter.mjs":"jD1Im","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jD1Im":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "FXAAFilter", ()=>FXAAFilter);
+var _core = require("pixijs/core");
+var _fxaaMjs = require("./fxaa.mjs");
+var _fxaaMjsDefault = parcelHelpers.interopDefault(_fxaaMjs);
+var _fxaa2Mjs = require("./fxaa2.mjs");
+var _fxaa2MjsDefault = parcelHelpers.interopDefault(_fxaa2Mjs);
+class FXAAFilter extends (0, _core.Filter) {
+    constructor(){
+        super((0, _fxaaMjsDefault.default), (0, _fxaa2MjsDefault.default));
+    }
+}
+
+},{"pixijs/core":"5Xie9","./fxaa.mjs":"8fXfm","./fxaa2.mjs":"ibzmf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8fXfm":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>vertex);
+var vertex = "\nattribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix;\n\nvarying vec2 v_rgbNW;\nvarying vec2 v_rgbNE;\nvarying vec2 v_rgbSW;\nvarying vec2 v_rgbSE;\nvarying vec2 v_rgbM;\n\nvarying vec2 vFragCoord;\n\nuniform vec4 inputSize;\nuniform vec4 outputFrame;\n\nvec4 filterVertexPosition( void )\n{\n    vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n\n    return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n}\n\nvoid texcoords(vec2 fragCoord, vec2 inverseVP,\n               out vec2 v_rgbNW, out vec2 v_rgbNE,\n               out vec2 v_rgbSW, out vec2 v_rgbSE,\n               out vec2 v_rgbM) {\n    v_rgbNW = (fragCoord + vec2(-1.0, -1.0)) * inverseVP;\n    v_rgbNE = (fragCoord + vec2(1.0, -1.0)) * inverseVP;\n    v_rgbSW = (fragCoord + vec2(-1.0, 1.0)) * inverseVP;\n    v_rgbSE = (fragCoord + vec2(1.0, 1.0)) * inverseVP;\n    v_rgbM = vec2(fragCoord * inverseVP);\n}\n\nvoid main(void) {\n\n   gl_Position = filterVertexPosition();\n\n   vFragCoord = aVertexPosition * outputFrame.zw;\n\n   texcoords(vFragCoord, inputSize.zw, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);\n}\n";
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ibzmf":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>fragment);
+var fragment = 'varying vec2 v_rgbNW;\nvarying vec2 v_rgbNE;\nvarying vec2 v_rgbSW;\nvarying vec2 v_rgbSE;\nvarying vec2 v_rgbM;\n\nvarying vec2 vFragCoord;\nuniform sampler2D uSampler;\nuniform highp vec4 inputSize;\n\n\n/**\n Basic FXAA implementation based on the code on geeks3d.com with the\n modification that the texture2DLod stuff was removed since it\'s\n unsupported by WebGL.\n\n --\n\n From:\n https://github.com/mitsuhiko/webgl-meincraft\n\n Copyright (c) 2011 by Armin Ronacher.\n\n Some rights reserved.\n\n Redistribution and use in source and binary forms, with or without\n modification, are permitted provided that the following conditions are\n met:\n\n * Redistributions of source code must retain the above copyright\n notice, this list of conditions and the following disclaimer.\n\n * Redistributions in binary form must reproduce the above\n copyright notice, this list of conditions and the following\n disclaimer in the documentation and/or other materials provided\n with the distribution.\n\n * The names of the contributors may not be used to endorse or\n promote products derived from this software without specific\n prior written permission.\n\n THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\n OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n */\n\n#ifndef FXAA_REDUCE_MIN\n#define FXAA_REDUCE_MIN   (1.0/ 128.0)\n#endif\n#ifndef FXAA_REDUCE_MUL\n#define FXAA_REDUCE_MUL   (1.0 / 8.0)\n#endif\n#ifndef FXAA_SPAN_MAX\n#define FXAA_SPAN_MAX     8.0\n#endif\n\n//optimized version for mobile, where dependent\n//texture reads can be a bottleneck\nvec4 fxaa(sampler2D tex, vec2 fragCoord, vec2 inverseVP,\n          vec2 v_rgbNW, vec2 v_rgbNE,\n          vec2 v_rgbSW, vec2 v_rgbSE,\n          vec2 v_rgbM) {\n    vec4 color;\n    vec3 rgbNW = texture2D(tex, v_rgbNW).xyz;\n    vec3 rgbNE = texture2D(tex, v_rgbNE).xyz;\n    vec3 rgbSW = texture2D(tex, v_rgbSW).xyz;\n    vec3 rgbSE = texture2D(tex, v_rgbSE).xyz;\n    vec4 texColor = texture2D(tex, v_rgbM);\n    vec3 rgbM  = texColor.xyz;\n    vec3 luma = vec3(0.299, 0.587, 0.114);\n    float lumaNW = dot(rgbNW, luma);\n    float lumaNE = dot(rgbNE, luma);\n    float lumaSW = dot(rgbSW, luma);\n    float lumaSE = dot(rgbSE, luma);\n    float lumaM  = dot(rgbM,  luma);\n    float lumaMin = min(lumaM, min(min(lumaNW, lumaNE), min(lumaSW, lumaSE)));\n    float lumaMax = max(lumaM, max(max(lumaNW, lumaNE), max(lumaSW, lumaSE)));\n\n    mediump vec2 dir;\n    dir.x = -((lumaNW + lumaNE) - (lumaSW + lumaSE));\n    dir.y =  ((lumaNW + lumaSW) - (lumaNE + lumaSE));\n\n    float dirReduce = max((lumaNW + lumaNE + lumaSW + lumaSE) *\n                          (0.25 * FXAA_REDUCE_MUL), FXAA_REDUCE_MIN);\n\n    float rcpDirMin = 1.0 / (min(abs(dir.x), abs(dir.y)) + dirReduce);\n    dir = min(vec2(FXAA_SPAN_MAX, FXAA_SPAN_MAX),\n              max(vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX),\n                  dir * rcpDirMin)) * inverseVP;\n\n    vec3 rgbA = 0.5 * (\n                       texture2D(tex, fragCoord * inverseVP + dir * (1.0 / 3.0 - 0.5)).xyz +\n                       texture2D(tex, fragCoord * inverseVP + dir * (2.0 / 3.0 - 0.5)).xyz);\n    vec3 rgbB = rgbA * 0.5 + 0.25 * (\n                                     texture2D(tex, fragCoord * inverseVP + dir * -0.5).xyz +\n                                     texture2D(tex, fragCoord * inverseVP + dir * 0.5).xyz);\n\n    float lumaB = dot(rgbB, luma);\n    if ((lumaB < lumaMin) || (lumaB > lumaMax))\n        color = vec4(rgbA, texColor.a);\n    else\n        color = vec4(rgbB, texColor.a);\n    return color;\n}\n\nvoid main() {\n\n      vec4 color;\n\n      color = fxaa(uSampler, vFragCoord, inputSize.zw, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);\n\n      gl_FragColor = color;\n}\n';
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iKqmh":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "NoiseFilter", ()=>(0, _noiseFilterMjs.NoiseFilter));
+var _noiseFilterMjs = require("./NoiseFilter.mjs");
+
+},{"./NoiseFilter.mjs":"kHJ0L","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kHJ0L":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "NoiseFilter", ()=>NoiseFilter);
+var _core = require("pixijs/core");
+var _noiseMjs = require("./noise.mjs");
+var _noiseMjsDefault = parcelHelpers.interopDefault(_noiseMjs);
+class NoiseFilter extends (0, _core.Filter) {
+    constructor(noise = 0.5, seed = Math.random()){
+        super((0, _core.defaultFilterVertex), (0, _noiseMjsDefault.default), {
+            uNoise: 0,
+            uSeed: 0
+        });
+        this.noise = noise;
+        this.seed = seed;
+    }
+    get noise() {
+        return this.uniforms.uNoise;
+    }
+    set noise(value) {
+        this.uniforms.uNoise = value;
+    }
+    get seed() {
+        return this.uniforms.uSeed;
+    }
+    set seed(value) {
+        this.uniforms.uSeed = value;
+    }
+}
+
+},{"pixijs/core":"5Xie9","./noise.mjs":"9GBE5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9GBE5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>fragment);
+var fragment = "precision highp float;\n\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\n\nuniform float uNoise;\nuniform float uSeed;\nuniform sampler2D uSampler;\n\nfloat rand(vec2 co)\n{\n    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n}\n\nvoid main()\n{\n    vec4 color = texture2D(uSampler, vTextureCoord);\n    float randomValue = rand(gl_FragCoord.xy * uSeed);\n    float diff = (randomValue - 0.5) * uNoise;\n\n    // Un-premultiply alpha before applying the color matrix. See issue #3539.\n    if (color.a > 0.0) {\n        color.rgb /= color.a;\n    }\n\n    color.r += diff;\n    color.g += diff;\n    color.b += diff;\n\n    // Premultiply alpha again.\n    color.rgb *= color.a;\n\n    gl_FragColor = color;\n}\n";
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"227zZ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "CacheData", ()=>CacheData);
+var _core = require("pixijs/core");
+var _sprite = require("pixijs/sprite");
+var _display = require("pixijs/display");
+const _tempMatrix = new (0, _core.Matrix)();
+(0, _display.DisplayObject).prototype._cacheAsBitmap = false;
+(0, _display.DisplayObject).prototype._cacheData = null;
+(0, _display.DisplayObject).prototype._cacheAsBitmapResolution = null;
+(0, _display.DisplayObject).prototype._cacheAsBitmapMultisample = null;
+class CacheData {
+    constructor(){
+        this.textureCacheId = null;
+        this.originalRender = null;
+        this.originalRenderCanvas = null;
+        this.originalCalculateBounds = null;
+        this.originalGetLocalBounds = null;
+        this.originalUpdateTransform = null;
+        this.originalDestroy = null;
+        this.originalMask = null;
+        this.originalFilterArea = null;
+        this.originalContainsPoint = null;
+        this.sprite = null;
+    }
+}
+Object.defineProperties((0, _display.DisplayObject).prototype, {
+    cacheAsBitmapResolution: {
+        get () {
+            return this._cacheAsBitmapResolution;
+        },
+        set (resolution) {
+            if (resolution === this._cacheAsBitmapResolution) return;
+            this._cacheAsBitmapResolution = resolution;
+            if (this.cacheAsBitmap) {
+                this.cacheAsBitmap = false;
+                this.cacheAsBitmap = true;
+            }
+        }
+    },
+    cacheAsBitmapMultisample: {
+        get () {
+            return this._cacheAsBitmapMultisample;
+        },
+        set (multisample) {
+            if (multisample === this._cacheAsBitmapMultisample) return;
+            this._cacheAsBitmapMultisample = multisample;
+            if (this.cacheAsBitmap) {
+                this.cacheAsBitmap = false;
+                this.cacheAsBitmap = true;
+            }
+        }
+    },
+    cacheAsBitmap: {
+        get () {
+            return this._cacheAsBitmap;
+        },
+        set (value) {
+            if (this._cacheAsBitmap === value) return;
+            this._cacheAsBitmap = value;
+            let data;
+            if (value) {
+                if (!this._cacheData) this._cacheData = new CacheData();
+                data = this._cacheData;
+                data.originalRender = this.render;
+                data.originalRenderCanvas = this.renderCanvas;
+                data.originalUpdateTransform = this.updateTransform;
+                data.originalCalculateBounds = this.calculateBounds;
+                data.originalGetLocalBounds = this.getLocalBounds;
+                data.originalDestroy = this.destroy;
+                data.originalContainsPoint = this.containsPoint;
+                data.originalMask = this._mask;
+                data.originalFilterArea = this.filterArea;
+                this.render = this._renderCached;
+                this.renderCanvas = this._renderCachedCanvas;
+                this.destroy = this._cacheAsBitmapDestroy;
+            } else {
+                data = this._cacheData;
+                if (data.sprite) this._destroyCachedDisplayObject();
+                this.render = data.originalRender;
+                this.renderCanvas = data.originalRenderCanvas;
+                this.calculateBounds = data.originalCalculateBounds;
+                this.getLocalBounds = data.originalGetLocalBounds;
+                this.destroy = data.originalDestroy;
+                this.updateTransform = data.originalUpdateTransform;
+                this.containsPoint = data.originalContainsPoint;
+                this._mask = data.originalMask;
+                this.filterArea = data.originalFilterArea;
+            }
+        }
+    }
+});
+(0, _display.DisplayObject).prototype._renderCached = function _renderCached(renderer) {
+    if (!this.visible || this.worldAlpha <= 0 || !this.renderable) return;
+    this._initCachedDisplayObject(renderer);
+    this._cacheData.sprite.transform._worldID = this.transform._worldID;
+    this._cacheData.sprite.worldAlpha = this.worldAlpha;
+    this._cacheData.sprite._render(renderer);
+};
+(0, _display.DisplayObject).prototype._initCachedDisplayObject = function _initCachedDisplayObject(renderer) {
+    if (this._cacheData?.sprite) return;
+    const cacheAlpha = this.alpha;
+    this.alpha = 1;
+    renderer.batch.flush();
+    const bounds = this.getLocalBounds(null, true).clone();
+    if (this.filters?.length) {
+        const padding = this.filters[0].padding;
+        bounds.pad(padding);
+    }
+    bounds.ceil((0, _core.settings).RESOLUTION);
+    const cachedRenderTexture = renderer.renderTexture.current;
+    const cachedSourceFrame = renderer.renderTexture.sourceFrame.clone();
+    const cachedDestinationFrame = renderer.renderTexture.destinationFrame.clone();
+    const cachedProjectionTransform = renderer.projection.transform;
+    const renderTexture = (0, _core.RenderTexture).create({
+        width: bounds.width,
+        height: bounds.height,
+        resolution: this.cacheAsBitmapResolution || renderer.resolution,
+        multisample: this.cacheAsBitmapMultisample ?? renderer.multisample
+    });
+    const textureCacheId = `cacheAsBitmap_${(0, _core.utils).uid()}`;
+    this._cacheData.textureCacheId = textureCacheId;
+    (0, _core.BaseTexture).addToCache(renderTexture.baseTexture, textureCacheId);
+    (0, _core.Texture).addToCache(renderTexture, textureCacheId);
+    const m = this.transform.localTransform.copyTo(_tempMatrix).invert().translate(-bounds.x, -bounds.y);
+    this.render = this._cacheData.originalRender;
+    renderer.render(this, {
+        renderTexture,
+        clear: true,
+        transform: m,
+        skipUpdateTransform: false
+    });
+    renderer.framebuffer.blit();
+    renderer.projection.transform = cachedProjectionTransform;
+    renderer.renderTexture.bind(cachedRenderTexture, cachedSourceFrame, cachedDestinationFrame);
+    this.render = this._renderCached;
+    this.updateTransform = this.displayObjectUpdateTransform;
+    this.calculateBounds = this._calculateCachedBounds;
+    this.getLocalBounds = this._getCachedLocalBounds;
+    this._mask = null;
+    this.filterArea = null;
+    this.alpha = cacheAlpha;
+    const cachedSprite = new (0, _sprite.Sprite)(renderTexture);
+    cachedSprite.transform.worldTransform = this.transform.worldTransform;
+    cachedSprite.anchor.x = -(bounds.x / bounds.width);
+    cachedSprite.anchor.y = -(bounds.y / bounds.height);
+    cachedSprite.alpha = cacheAlpha;
+    cachedSprite._bounds = this._bounds;
+    this._cacheData.sprite = cachedSprite;
+    this.transform._parentID = -1;
+    if (!this.parent) {
+        this.enableTempParent();
+        this.updateTransform();
+        this.disableTempParent(null);
+    } else this.updateTransform();
+    this.containsPoint = cachedSprite.containsPoint.bind(cachedSprite);
+};
+(0, _display.DisplayObject).prototype._renderCachedCanvas = function _renderCachedCanvas(renderer) {
+    if (!this.visible || this.worldAlpha <= 0 || !this.renderable) return;
+    this._initCachedDisplayObjectCanvas(renderer);
+    this._cacheData.sprite.worldAlpha = this.worldAlpha;
+    this._cacheData.sprite._renderCanvas(renderer);
+};
+(0, _display.DisplayObject).prototype._initCachedDisplayObjectCanvas = function _initCachedDisplayObjectCanvas(renderer) {
+    if (this._cacheData?.sprite) return;
+    const bounds = this.getLocalBounds(null, true);
+    const cacheAlpha = this.alpha;
+    this.alpha = 1;
+    const cachedRenderTarget = renderer.canvasContext.activeContext;
+    const cachedProjectionTransform = renderer._projTransform;
+    bounds.ceil((0, _core.settings).RESOLUTION);
+    const renderTexture = (0, _core.RenderTexture).create({
+        width: bounds.width,
+        height: bounds.height
+    });
+    const textureCacheId = `cacheAsBitmap_${(0, _core.utils).uid()}`;
+    this._cacheData.textureCacheId = textureCacheId;
+    (0, _core.BaseTexture).addToCache(renderTexture.baseTexture, textureCacheId);
+    (0, _core.Texture).addToCache(renderTexture, textureCacheId);
+    const m = _tempMatrix;
+    this.transform.localTransform.copyTo(m);
+    m.invert();
+    m.tx -= bounds.x;
+    m.ty -= bounds.y;
+    this.renderCanvas = this._cacheData.originalRenderCanvas;
+    renderer.render(this, {
+        renderTexture,
+        clear: true,
+        transform: m,
+        skipUpdateTransform: false
+    });
+    renderer.canvasContext.activeContext = cachedRenderTarget;
+    renderer._projTransform = cachedProjectionTransform;
+    this.renderCanvas = this._renderCachedCanvas;
+    this.updateTransform = this.displayObjectUpdateTransform;
+    this.calculateBounds = this._calculateCachedBounds;
+    this.getLocalBounds = this._getCachedLocalBounds;
+    this._mask = null;
+    this.filterArea = null;
+    this.alpha = cacheAlpha;
+    const cachedSprite = new (0, _sprite.Sprite)(renderTexture);
+    cachedSprite.transform.worldTransform = this.transform.worldTransform;
+    cachedSprite.anchor.x = -(bounds.x / bounds.width);
+    cachedSprite.anchor.y = -(bounds.y / bounds.height);
+    cachedSprite.alpha = cacheAlpha;
+    cachedSprite._bounds = this._bounds;
+    this._cacheData.sprite = cachedSprite;
+    this.transform._parentID = -1;
+    if (!this.parent) {
+        this.parent = renderer._tempDisplayObjectParent;
+        this.updateTransform();
+        this.parent = null;
+    } else this.updateTransform();
+    this.containsPoint = cachedSprite.containsPoint.bind(cachedSprite);
+};
+(0, _display.DisplayObject).prototype._calculateCachedBounds = function _calculateCachedBounds() {
+    this._bounds.clear();
+    this._cacheData.sprite.transform._worldID = this.transform._worldID;
+    this._cacheData.sprite._calculateBounds();
+    this._bounds.updateID = this._boundsID;
+};
+(0, _display.DisplayObject).prototype._getCachedLocalBounds = function _getCachedLocalBounds() {
+    return this._cacheData.sprite.getLocalBounds(null);
+};
+(0, _display.DisplayObject).prototype._destroyCachedDisplayObject = function _destroyCachedDisplayObject() {
+    this._cacheData.sprite._texture.destroy(true);
+    this._cacheData.sprite = null;
+    (0, _core.BaseTexture).removeFromCache(this._cacheData.textureCacheId);
+    (0, _core.Texture).removeFromCache(this._cacheData.textureCacheId);
+    this._cacheData.textureCacheId = null;
+};
+(0, _display.DisplayObject).prototype._cacheAsBitmapDestroy = function _cacheAsBitmapDestroy(options) {
+    this.cacheAsBitmap = false;
+    this.destroy(options);
+};
+
+},{"pixijs/core":"5Xie9","pixijs/sprite":"5cfR2","pixijs/display":"5dBvH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5cfR2":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Sprite", ()=>(0, _spriteMjs.Sprite));
+var _spriteMjs = require("./Sprite.mjs");
+
+},{"./Sprite.mjs":"5GXga","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5GXga":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Sprite", ()=>Sprite);
+var _core = require("pixijs/core");
+var _display = require("pixijs/display");
+const tempPoint = new (0, _core.Point)();
+const indices = new Uint16Array([
+    0,
+    1,
+    2,
+    0,
+    2,
+    3
+]);
+class Sprite extends (0, _display.Container) {
+    constructor(texture){
+        super();
+        this._anchor = new (0, _core.ObservablePoint)(this._onAnchorUpdate, this, texture ? texture.defaultAnchor.x : 0, texture ? texture.defaultAnchor.y : 0);
+        this._texture = null;
+        this._width = 0;
+        this._height = 0;
+        this._tint = null;
+        this._tintRGB = null;
+        this.tint = 16777215;
+        this.blendMode = (0, _core.BLEND_MODES).NORMAL;
+        this._cachedTint = 16777215;
+        this.uvs = null;
+        this.texture = texture || (0, _core.Texture).EMPTY;
+        this.vertexData = new Float32Array(8);
+        this.vertexTrimmedData = null;
+        this._transformID = -1;
+        this._textureID = -1;
+        this._transformTrimmedID = -1;
+        this._textureTrimmedID = -1;
+        this.indices = indices;
+        this.pluginName = "batch";
+        this.isSprite = true;
+        this._roundPixels = (0, _core.settings).ROUND_PIXELS;
+    }
+    _onTextureUpdate() {
+        this._textureID = -1;
+        this._textureTrimmedID = -1;
+        this._cachedTint = 16777215;
+        if (this._width) this.scale.x = (0, _core.utils).sign(this.scale.x) * this._width / this._texture.orig.width;
+        if (this._height) this.scale.y = (0, _core.utils).sign(this.scale.y) * this._height / this._texture.orig.height;
+    }
+    _onAnchorUpdate() {
+        this._transformID = -1;
+        this._transformTrimmedID = -1;
+    }
+    calculateVertices() {
+        const texture = this._texture;
+        if (this._transformID === this.transform._worldID && this._textureID === texture._updateID) return;
+        if (this._textureID !== texture._updateID) this.uvs = this._texture._uvs.uvsFloat32;
+        this._transformID = this.transform._worldID;
+        this._textureID = texture._updateID;
+        const wt = this.transform.worldTransform;
+        const a = wt.a;
+        const b = wt.b;
+        const c = wt.c;
+        const d = wt.d;
+        const tx = wt.tx;
+        const ty = wt.ty;
+        const vertexData = this.vertexData;
+        const trim = texture.trim;
+        const orig = texture.orig;
+        const anchor = this._anchor;
+        let w0 = 0;
+        let w1 = 0;
+        let h0 = 0;
+        let h1 = 0;
+        if (trim) {
+            w1 = trim.x - anchor._x * orig.width;
+            w0 = w1 + trim.width;
+            h1 = trim.y - anchor._y * orig.height;
+            h0 = h1 + trim.height;
+        } else {
+            w1 = -anchor._x * orig.width;
+            w0 = w1 + orig.width;
+            h1 = -anchor._y * orig.height;
+            h0 = h1 + orig.height;
+        }
+        vertexData[0] = a * w1 + c * h1 + tx;
+        vertexData[1] = d * h1 + b * w1 + ty;
+        vertexData[2] = a * w0 + c * h1 + tx;
+        vertexData[3] = d * h1 + b * w0 + ty;
+        vertexData[4] = a * w0 + c * h0 + tx;
+        vertexData[5] = d * h0 + b * w0 + ty;
+        vertexData[6] = a * w1 + c * h0 + tx;
+        vertexData[7] = d * h0 + b * w1 + ty;
+        if (this._roundPixels) {
+            const resolution = (0, _core.settings).RESOLUTION;
+            for(let i = 0; i < vertexData.length; ++i)vertexData[i] = Math.round(vertexData[i] * resolution) / resolution;
+        }
+    }
+    calculateTrimmedVertices() {
+        if (!this.vertexTrimmedData) this.vertexTrimmedData = new Float32Array(8);
+        else if (this._transformTrimmedID === this.transform._worldID && this._textureTrimmedID === this._texture._updateID) return;
+        this._transformTrimmedID = this.transform._worldID;
+        this._textureTrimmedID = this._texture._updateID;
+        const texture = this._texture;
+        const vertexData = this.vertexTrimmedData;
+        const orig = texture.orig;
+        const anchor = this._anchor;
+        const wt = this.transform.worldTransform;
+        const a = wt.a;
+        const b = wt.b;
+        const c = wt.c;
+        const d = wt.d;
+        const tx = wt.tx;
+        const ty = wt.ty;
+        const w1 = -anchor._x * orig.width;
+        const w0 = w1 + orig.width;
+        const h1 = -anchor._y * orig.height;
+        const h0 = h1 + orig.height;
+        vertexData[0] = a * w1 + c * h1 + tx;
+        vertexData[1] = d * h1 + b * w1 + ty;
+        vertexData[2] = a * w0 + c * h1 + tx;
+        vertexData[3] = d * h1 + b * w0 + ty;
+        vertexData[4] = a * w0 + c * h0 + tx;
+        vertexData[5] = d * h0 + b * w0 + ty;
+        vertexData[6] = a * w1 + c * h0 + tx;
+        vertexData[7] = d * h0 + b * w1 + ty;
+    }
+    _render(renderer) {
+        this.calculateVertices();
+        renderer.batch.setObjectRenderer(renderer.plugins[this.pluginName]);
+        renderer.plugins[this.pluginName].render(this);
+    }
+    _calculateBounds() {
+        const trim = this._texture.trim;
+        const orig = this._texture.orig;
+        if (!trim || trim.width === orig.width && trim.height === orig.height) {
+            this.calculateVertices();
+            this._bounds.addQuad(this.vertexData);
+        } else {
+            this.calculateTrimmedVertices();
+            this._bounds.addQuad(this.vertexTrimmedData);
+        }
+    }
+    getLocalBounds(rect) {
+        if (this.children.length === 0) {
+            if (!this._localBounds) this._localBounds = new (0, _display.Bounds)();
+            this._localBounds.minX = this._texture.orig.width * -this._anchor._x;
+            this._localBounds.minY = this._texture.orig.height * -this._anchor._y;
+            this._localBounds.maxX = this._texture.orig.width * (1 - this._anchor._x);
+            this._localBounds.maxY = this._texture.orig.height * (1 - this._anchor._y);
+            if (!rect) {
+                if (!this._localBoundsRect) this._localBoundsRect = new (0, _core.Rectangle)();
+                rect = this._localBoundsRect;
+            }
+            return this._localBounds.getRectangle(rect);
+        }
+        return super.getLocalBounds.call(this, rect);
+    }
+    containsPoint(point) {
+        this.worldTransform.applyInverse(point, tempPoint);
+        const width = this._texture.orig.width;
+        const height = this._texture.orig.height;
+        const x1 = -width * this.anchor.x;
+        let y1 = 0;
+        if (tempPoint.x >= x1 && tempPoint.x < x1 + width) {
+            y1 = -height * this.anchor.y;
+            if (tempPoint.y >= y1 && tempPoint.y < y1 + height) return true;
+        }
+        return false;
+    }
+    destroy(options) {
+        super.destroy(options);
+        this._texture.off("update", this._onTextureUpdate, this);
+        this._anchor = null;
+        const destroyTexture = typeof options === "boolean" ? options : options?.texture;
+        if (destroyTexture) {
+            const destroyBaseTexture = typeof options === "boolean" ? options : options?.baseTexture;
+            this._texture.destroy(!!destroyBaseTexture);
+        }
+        this._texture = null;
+    }
+    static from(source, options) {
+        const texture = source instanceof (0, _core.Texture) ? source : (0, _core.Texture).from(source, options);
+        return new Sprite(texture);
+    }
+    set roundPixels(value) {
+        if (this._roundPixels !== value) this._transformID = -1;
+        this._roundPixels = value;
+    }
+    get roundPixels() {
+        return this._roundPixels;
+    }
+    get width() {
+        return Math.abs(this.scale.x) * this._texture.orig.width;
+    }
+    set width(value) {
+        const s = (0, _core.utils).sign(this.scale.x) || 1;
+        this.scale.x = s * value / this._texture.orig.width;
+        this._width = value;
+    }
+    get height() {
+        return Math.abs(this.scale.y) * this._texture.orig.height;
+    }
+    set height(value) {
+        const s = (0, _core.utils).sign(this.scale.y) || 1;
+        this.scale.y = s * value / this._texture.orig.height;
+        this._height = value;
+    }
+    get anchor() {
+        return this._anchor;
+    }
+    set anchor(value) {
+        this._anchor.copyFrom(value);
+    }
+    get tint() {
+        return this._tint;
+    }
+    set tint(value) {
+        this._tint = value;
+        this._tintRGB = (value >> 16) + (value & 65280) + ((value & 255) << 16);
+    }
+    get texture() {
+        return this._texture;
+    }
+    set texture(value) {
+        if (this._texture === value) return;
+        if (this._texture) this._texture.off("update", this._onTextureUpdate, this);
+        this._texture = value || (0, _core.Texture).EMPTY;
+        this._cachedTint = 16777215;
+        this._textureID = -1;
+        this._textureTrimmedID = -1;
+        if (value) {
+            if (value.baseTexture.valid) this._onTextureUpdate();
+            else value.once("update", this._onTextureUpdate, this);
+        }
+    }
+}
+
+},{"pixijs/core":"5Xie9","pixijs/display":"5dBvH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5dBvH":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Bounds", ()=>(0, _boundsMjs.Bounds));
@@ -14437,7 +15739,311 @@ class Container extends (0, _displayObjectMjs.DisplayObject) {
 }
 Container.prototype.containerUpdateTransform = Container.prototype.updateTransform;
 
-},{"pixijs/core":"5Xie9","./DisplayObject.mjs":"1GpiB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kme5E":[function(require,module,exports) {
+},{"pixijs/core":"5Xie9","./DisplayObject.mjs":"1GpiB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"faizK":[function(require,module,exports) {
+var _display = require("pixijs/display");
+(0, _display.DisplayObject).prototype.name = null;
+(0, _display.Container).prototype.getChildByName = function getChildByName(name, deep) {
+    for(let i = 0, j = this.children.length; i < j; i++){
+        if (this.children[i].name === name) return this.children[i];
+    }
+    if (deep) for(let i1 = 0, j1 = this.children.length; i1 < j1; i1++){
+        const child = this.children[i1];
+        if (!child.getChildByName) continue;
+        const target = child.getChildByName(name, true);
+        if (target) return target;
+    }
+    return null;
+};
+
+},{"pixijs/display":"5dBvH"}],"3sRUh":[function(require,module,exports) {
+var _display = require("pixijs/display");
+var _core = require("pixijs/core");
+(0, _display.DisplayObject).prototype.getGlobalPosition = function getGlobalPosition(point = new (0, _core.Point)(), skipUpdate = false) {
+    if (this.parent) this.parent.toGlobal(this.position, point, skipUpdate);
+    else {
+        point.x = this.position.x;
+        point.y = this.position.y;
+    }
+    return point;
+};
+
+},{"pixijs/display":"5dBvH","pixijs/core":"5Xie9"}],"7Ofc0":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "accessibleTarget", ()=>(0, _accessibleTargetMjs.accessibleTarget));
+parcelHelpers.export(exports, "AccessibilityManager", ()=>(0, _accessibilityManagerMjs.AccessibilityManager));
+var _accessibleTargetMjs = require("./accessibleTarget.mjs");
+var _accessibilityManagerMjs = require("./AccessibilityManager.mjs");
+
+},{"./accessibleTarget.mjs":"deXnU","./AccessibilityManager.mjs":"5Coml","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"deXnU":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "accessibleTarget", ()=>accessibleTarget);
+const accessibleTarget = {
+    accessible: false,
+    accessibleTitle: null,
+    accessibleHint: null,
+    tabIndex: 0,
+    _accessibleActive: false,
+    _accessibleDiv: null,
+    accessibleType: "button",
+    accessiblePointerEvents: "auto",
+    accessibleChildren: true,
+    renderId: -1
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Coml":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AccessibilityManager", ()=>AccessibilityManager);
+var _core = require("pixijs/core");
+var _display = require("pixijs/display");
+var _events = require("pixijs/events");
+var _accessibleTargetMjs = require("./accessibleTarget.mjs");
+(0, _display.DisplayObject).mixin((0, _accessibleTargetMjs.accessibleTarget));
+const KEY_CODE_TAB = 9;
+const DIV_TOUCH_SIZE = 100;
+const DIV_TOUCH_POS_X = 0;
+const DIV_TOUCH_POS_Y = 0;
+const DIV_TOUCH_ZINDEX = 2;
+const DIV_HOOK_SIZE = 1;
+const DIV_HOOK_POS_X = -1000;
+const DIV_HOOK_POS_Y = -1000;
+const DIV_HOOK_ZINDEX = 2;
+class AccessibilityManager {
+    constructor(renderer){
+        this.debug = false;
+        this._isActive = false;
+        this._isMobileAccessibility = false;
+        this.pool = [];
+        this.renderId = 0;
+        this.children = [];
+        this.androidUpdateCount = 0;
+        this.androidUpdateFrequency = 500;
+        this._hookDiv = null;
+        if ((0, _core.utils).isMobile.tablet || (0, _core.utils).isMobile.phone) this.createTouchHook();
+        const div = document.createElement("div");
+        div.style.width = `${DIV_TOUCH_SIZE}px`;
+        div.style.height = `${DIV_TOUCH_SIZE}px`;
+        div.style.position = "absolute";
+        div.style.top = `${DIV_TOUCH_POS_X}px`;
+        div.style.left = `${DIV_TOUCH_POS_Y}px`;
+        div.style.zIndex = DIV_TOUCH_ZINDEX.toString();
+        this.div = div;
+        this.renderer = renderer;
+        this._onKeyDown = this._onKeyDown.bind(this);
+        this._onMouseMove = this._onMouseMove.bind(this);
+        globalThis.addEventListener("keydown", this._onKeyDown, false);
+    }
+    get isActive() {
+        return this._isActive;
+    }
+    get isMobileAccessibility() {
+        return this._isMobileAccessibility;
+    }
+    createTouchHook() {
+        const hookDiv = document.createElement("button");
+        hookDiv.style.width = `${DIV_HOOK_SIZE}px`;
+        hookDiv.style.height = `${DIV_HOOK_SIZE}px`;
+        hookDiv.style.position = "absolute";
+        hookDiv.style.top = `${DIV_HOOK_POS_X}px`;
+        hookDiv.style.left = `${DIV_HOOK_POS_Y}px`;
+        hookDiv.style.zIndex = DIV_HOOK_ZINDEX.toString();
+        hookDiv.style.backgroundColor = "#FF0000";
+        hookDiv.title = "select to enable accessibility for this content";
+        hookDiv.addEventListener("focus", ()=>{
+            this._isMobileAccessibility = true;
+            this.activate();
+            this.destroyTouchHook();
+        });
+        document.body.appendChild(hookDiv);
+        this._hookDiv = hookDiv;
+    }
+    destroyTouchHook() {
+        if (!this._hookDiv) return;
+        document.body.removeChild(this._hookDiv);
+        this._hookDiv = null;
+    }
+    activate() {
+        if (this._isActive) return;
+        this._isActive = true;
+        globalThis.document.addEventListener("mousemove", this._onMouseMove, true);
+        globalThis.removeEventListener("keydown", this._onKeyDown, false);
+        this.renderer.on("postrender", this.update, this);
+        this.renderer.view.parentNode?.appendChild(this.div);
+    }
+    deactivate() {
+        if (!this._isActive || this._isMobileAccessibility) return;
+        this._isActive = false;
+        globalThis.document.removeEventListener("mousemove", this._onMouseMove, true);
+        globalThis.addEventListener("keydown", this._onKeyDown, false);
+        this.renderer.off("postrender", this.update);
+        this.div.parentNode?.removeChild(this.div);
+    }
+    updateAccessibleObjects(displayObject) {
+        if (!displayObject.visible || !displayObject.accessibleChildren) return;
+        if (displayObject.accessible && displayObject.interactive) {
+            if (!displayObject._accessibleActive) this.addChild(displayObject);
+            displayObject.renderId = this.renderId;
+        }
+        const children = displayObject.children;
+        if (children) for(let i = 0; i < children.length; i++)this.updateAccessibleObjects(children[i]);
+    }
+    update() {
+        const now = performance.now();
+        if ((0, _core.utils).isMobile.android.device && now < this.androidUpdateCount) return;
+        this.androidUpdateCount = now + this.androidUpdateFrequency;
+        if (!this.renderer.renderingToScreen) return;
+        if (this.renderer.lastObjectRendered) this.updateAccessibleObjects(this.renderer.lastObjectRendered);
+        const { x , y , width , height  } = this.renderer.view.getBoundingClientRect();
+        const { width: viewWidth , height: viewHeight , resolution  } = this.renderer;
+        const sx = width / viewWidth * resolution;
+        const sy = height / viewHeight * resolution;
+        let div = this.div;
+        div.style.left = `${x}px`;
+        div.style.top = `${y}px`;
+        div.style.width = `${viewWidth}px`;
+        div.style.height = `${viewHeight}px`;
+        for(let i = 0; i < this.children.length; i++){
+            const child = this.children[i];
+            if (child.renderId !== this.renderId) {
+                child._accessibleActive = false;
+                (0, _core.utils).removeItems(this.children, i, 1);
+                this.div.removeChild(child._accessibleDiv);
+                this.pool.push(child._accessibleDiv);
+                child._accessibleDiv = null;
+                i--;
+            } else {
+                div = child._accessibleDiv;
+                let hitArea = child.hitArea;
+                const wt = child.worldTransform;
+                if (child.hitArea) {
+                    div.style.left = `${(wt.tx + hitArea.x * wt.a) * sx}px`;
+                    div.style.top = `${(wt.ty + hitArea.y * wt.d) * sy}px`;
+                    div.style.width = `${hitArea.width * wt.a * sx}px`;
+                    div.style.height = `${hitArea.height * wt.d * sy}px`;
+                } else {
+                    hitArea = child.getBounds();
+                    this.capHitArea(hitArea);
+                    div.style.left = `${hitArea.x * sx}px`;
+                    div.style.top = `${hitArea.y * sy}px`;
+                    div.style.width = `${hitArea.width * sx}px`;
+                    div.style.height = `${hitArea.height * sy}px`;
+                    if (div.title !== child.accessibleTitle && child.accessibleTitle !== null) div.title = child.accessibleTitle;
+                    if (div.getAttribute("aria-label") !== child.accessibleHint && child.accessibleHint !== null) div.setAttribute("aria-label", child.accessibleHint);
+                }
+                if (child.accessibleTitle !== div.title || child.tabIndex !== div.tabIndex) {
+                    div.title = child.accessibleTitle;
+                    div.tabIndex = child.tabIndex;
+                    if (this.debug) this.updateDebugHTML(div);
+                }
+            }
+        }
+        this.renderId++;
+    }
+    updateDebugHTML(div) {
+        div.innerHTML = `type: ${div.type}</br> title : ${div.title}</br> tabIndex: ${div.tabIndex}`;
+    }
+    capHitArea(hitArea) {
+        if (hitArea.x < 0) {
+            hitArea.width += hitArea.x;
+            hitArea.x = 0;
+        }
+        if (hitArea.y < 0) {
+            hitArea.height += hitArea.y;
+            hitArea.y = 0;
+        }
+        const { width: viewWidth , height: viewHeight  } = this.renderer;
+        if (hitArea.x + hitArea.width > viewWidth) hitArea.width = viewWidth - hitArea.x;
+        if (hitArea.y + hitArea.height > viewHeight) hitArea.height = viewHeight - hitArea.y;
+    }
+    addChild(displayObject) {
+        let div = this.pool.pop();
+        if (!div) {
+            div = document.createElement("button");
+            div.style.width = `${DIV_TOUCH_SIZE}px`;
+            div.style.height = `${DIV_TOUCH_SIZE}px`;
+            div.style.backgroundColor = this.debug ? "rgba(255,255,255,0.5)" : "transparent";
+            div.style.position = "absolute";
+            div.style.zIndex = DIV_TOUCH_ZINDEX.toString();
+            div.style.borderStyle = "none";
+            if (navigator.userAgent.toLowerCase().includes("chrome")) div.setAttribute("aria-live", "off");
+            else div.setAttribute("aria-live", "polite");
+            if (navigator.userAgent.match(/rv:.*Gecko\//)) div.setAttribute("aria-relevant", "additions");
+            else div.setAttribute("aria-relevant", "text");
+            div.addEventListener("click", this._onClick.bind(this));
+            div.addEventListener("focus", this._onFocus.bind(this));
+            div.addEventListener("focusout", this._onFocusOut.bind(this));
+        }
+        div.style.pointerEvents = displayObject.accessiblePointerEvents;
+        div.type = displayObject.accessibleType;
+        if (displayObject.accessibleTitle && displayObject.accessibleTitle !== null) div.title = displayObject.accessibleTitle;
+        else if (!displayObject.accessibleHint || displayObject.accessibleHint === null) div.title = `displayObject ${displayObject.tabIndex}`;
+        if (displayObject.accessibleHint && displayObject.accessibleHint !== null) div.setAttribute("aria-label", displayObject.accessibleHint);
+        if (this.debug) this.updateDebugHTML(div);
+        displayObject._accessibleActive = true;
+        displayObject._accessibleDiv = div;
+        div.displayObject = displayObject;
+        this.children.push(displayObject);
+        this.div.appendChild(displayObject._accessibleDiv);
+        displayObject._accessibleDiv.tabIndex = displayObject.tabIndex;
+    }
+    _dispatchEvent(e, type) {
+        const { displayObject: target  } = e.target;
+        const boundry = this.renderer.events.rootBoundary;
+        const event = Object.assign(new (0, _events.FederatedEvent)(boundry), {
+            target
+        });
+        boundry.rootTarget = this.renderer.lastObjectRendered;
+        type.forEach((type2)=>boundry.dispatchEvent(event, type2));
+    }
+    _onClick(e) {
+        this._dispatchEvent(e, [
+            "click",
+            "pointertap",
+            "tap"
+        ]);
+    }
+    _onFocus(e) {
+        if (!e.target.getAttribute("aria-live")) e.target.setAttribute("aria-live", "assertive");
+        this._dispatchEvent(e, [
+            "mouseover"
+        ]);
+    }
+    _onFocusOut(e) {
+        if (!e.target.getAttribute("aria-live")) e.target.setAttribute("aria-live", "polite");
+        this._dispatchEvent(e, [
+            "mouseout"
+        ]);
+    }
+    _onKeyDown(e) {
+        if (e.keyCode !== KEY_CODE_TAB) return;
+        this.activate();
+    }
+    _onMouseMove(e) {
+        if (e.movementX === 0 && e.movementY === 0) return;
+        this.deactivate();
+    }
+    destroy() {
+        this.destroyTouchHook();
+        this.div = null;
+        globalThis.document.removeEventListener("mousemove", this._onMouseMove, true);
+        globalThis.removeEventListener("keydown", this._onKeyDown);
+        this.pool = null;
+        this.children = null;
+        this.renderer = null;
+    }
+}
+AccessibilityManager.extension = {
+    name: "accessibility",
+    type: [
+        (0, _core.ExtensionType).RendererPlugin,
+        (0, _core.ExtensionType).CanvasRendererPlugin
+    ]
+};
+(0, _core.extensions).add(AccessibilityManager);
+
+},{"pixijs/core":"5Xie9","pixijs/display":"5dBvH","pixijs/events":"kme5E","./accessibleTarget.mjs":"deXnU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kme5E":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EventBoundary", ()=>(0, _eventBoundaryMjs.EventBoundary));
@@ -20014,7 +21620,387 @@ class MeshGeometry extends (0, _core.Geometry) {
     }
 }
 
-},{"pixijs/core":"5Xie9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"77ULc":[function(require,module,exports) {
+},{"pixijs/core":"5Xie9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d0TrC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "PlaneGeometry", ()=>(0, _planeGeometryMjs.PlaneGeometry));
+parcelHelpers.export(exports, "RopeGeometry", ()=>(0, _ropeGeometryMjs.RopeGeometry));
+parcelHelpers.export(exports, "SimpleRope", ()=>(0, _simpleRopeMjs.SimpleRope));
+parcelHelpers.export(exports, "SimplePlane", ()=>(0, _simplePlaneMjs.SimplePlane));
+parcelHelpers.export(exports, "SimpleMesh", ()=>(0, _simpleMeshMjs.SimpleMesh));
+parcelHelpers.export(exports, "NineSlicePlane", ()=>(0, _nineSlicePlaneMjs.NineSlicePlane));
+var _planeGeometryMjs = require("./geometry/PlaneGeometry.mjs");
+var _ropeGeometryMjs = require("./geometry/RopeGeometry.mjs");
+var _simpleRopeMjs = require("./SimpleRope.mjs");
+var _simplePlaneMjs = require("./SimplePlane.mjs");
+var _simpleMeshMjs = require("./SimpleMesh.mjs");
+var _nineSlicePlaneMjs = require("./NineSlicePlane.mjs");
+
+},{"./geometry/PlaneGeometry.mjs":"8Saw0","./geometry/RopeGeometry.mjs":"bTiDD","./SimpleRope.mjs":"4TbY2","./SimplePlane.mjs":"jJ725","./SimpleMesh.mjs":"2lT7Y","./NineSlicePlane.mjs":"84efU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Saw0":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "PlaneGeometry", ()=>PlaneGeometry);
+var _mesh = require("pixijs/mesh");
+class PlaneGeometry extends (0, _mesh.MeshGeometry) {
+    constructor(width = 100, height = 100, segWidth = 10, segHeight = 10){
+        super();
+        this.segWidth = segWidth;
+        this.segHeight = segHeight;
+        this.width = width;
+        this.height = height;
+        this.build();
+    }
+    build() {
+        const total = this.segWidth * this.segHeight;
+        const verts = [];
+        const uvs = [];
+        const indices = [];
+        const segmentsX = this.segWidth - 1;
+        const segmentsY = this.segHeight - 1;
+        const sizeX = this.width / segmentsX;
+        const sizeY = this.height / segmentsY;
+        for(let i = 0; i < total; i++){
+            const x = i % this.segWidth;
+            const y = i / this.segWidth | 0;
+            verts.push(x * sizeX, y * sizeY);
+            uvs.push(x / segmentsX, y / segmentsY);
+        }
+        const totalSub = segmentsX * segmentsY;
+        for(let i1 = 0; i1 < totalSub; i1++){
+            const xpos = i1 % segmentsX;
+            const ypos = i1 / segmentsX | 0;
+            const value = ypos * this.segWidth + xpos;
+            const value2 = ypos * this.segWidth + xpos + 1;
+            const value3 = (ypos + 1) * this.segWidth + xpos;
+            const value4 = (ypos + 1) * this.segWidth + xpos + 1;
+            indices.push(value, value2, value3, value2, value4, value3);
+        }
+        this.buffers[0].data = new Float32Array(verts);
+        this.buffers[1].data = new Float32Array(uvs);
+        this.indexBuffer.data = new Uint16Array(indices);
+        this.buffers[0].update();
+        this.buffers[1].update();
+        this.indexBuffer.update();
+    }
+}
+
+},{"pixijs/mesh":"bxy0X","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bTiDD":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "RopeGeometry", ()=>RopeGeometry);
+var _mesh = require("pixijs/mesh");
+class RopeGeometry extends (0, _mesh.MeshGeometry) {
+    constructor(width = 200, points, textureScale = 0){
+        super(new Float32Array(points.length * 4), new Float32Array(points.length * 4), new Uint16Array((points.length - 1) * 6));
+        this.points = points;
+        this._width = width;
+        this.textureScale = textureScale;
+        this.build();
+    }
+    get width() {
+        return this._width;
+    }
+    build() {
+        const points = this.points;
+        if (!points) return;
+        const vertexBuffer = this.getBuffer("aVertexPosition");
+        const uvBuffer = this.getBuffer("aTextureCoord");
+        const indexBuffer = this.getIndex();
+        if (points.length < 1) return;
+        if (vertexBuffer.data.length / 4 !== points.length) {
+            vertexBuffer.data = new Float32Array(points.length * 4);
+            uvBuffer.data = new Float32Array(points.length * 4);
+            indexBuffer.data = new Uint16Array((points.length - 1) * 6);
+        }
+        const uvs = uvBuffer.data;
+        const indices = indexBuffer.data;
+        uvs[0] = 0;
+        uvs[1] = 0;
+        uvs[2] = 0;
+        uvs[3] = 1;
+        let amount = 0;
+        let prev = points[0];
+        const textureWidth = this._width * this.textureScale;
+        const total = points.length;
+        for(let i = 0; i < total; i++){
+            const index = i * 4;
+            if (this.textureScale > 0) {
+                const dx = prev.x - points[i].x;
+                const dy = prev.y - points[i].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                prev = points[i];
+                amount += distance / textureWidth;
+            } else amount = i / (total - 1);
+            uvs[index] = amount;
+            uvs[index + 1] = 0;
+            uvs[index + 2] = amount;
+            uvs[index + 3] = 1;
+        }
+        let indexCount = 0;
+        for(let i1 = 0; i1 < total - 1; i1++){
+            const index1 = i1 * 2;
+            indices[indexCount++] = index1;
+            indices[indexCount++] = index1 + 1;
+            indices[indexCount++] = index1 + 2;
+            indices[indexCount++] = index1 + 2;
+            indices[indexCount++] = index1 + 1;
+            indices[indexCount++] = index1 + 3;
+        }
+        uvBuffer.update();
+        indexBuffer.update();
+        this.updateVertices();
+    }
+    updateVertices() {
+        const points = this.points;
+        if (points.length < 1) return;
+        let lastPoint = points[0];
+        let nextPoint;
+        let perpX = 0;
+        let perpY = 0;
+        const vertices = this.buffers[0].data;
+        const total = points.length;
+        for(let i = 0; i < total; i++){
+            const point = points[i];
+            const index = i * 4;
+            if (i < points.length - 1) nextPoint = points[i + 1];
+            else nextPoint = point;
+            perpY = -(nextPoint.x - lastPoint.x);
+            perpX = nextPoint.y - lastPoint.y;
+            let ratio = (1 - i / (total - 1)) * 10;
+            if (ratio > 1) ratio = 1;
+            const perpLength = Math.sqrt(perpX * perpX + perpY * perpY);
+            const num = this.textureScale > 0 ? this.textureScale * this._width / 2 : this._width / 2;
+            perpX /= perpLength;
+            perpY /= perpLength;
+            perpX *= num;
+            perpY *= num;
+            vertices[index] = point.x + perpX;
+            vertices[index + 1] = point.y + perpY;
+            vertices[index + 2] = point.x - perpX;
+            vertices[index + 3] = point.y - perpY;
+            lastPoint = point;
+        }
+        this.buffers[0].update();
+    }
+    update() {
+        if (this.textureScale > 0) this.build();
+        else this.updateVertices();
+    }
+}
+
+},{"pixijs/mesh":"bxy0X","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4TbY2":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SimpleRope", ()=>SimpleRope);
+var _mesh = require("pixijs/mesh");
+var _core = require("pixijs/core");
+var _ropeGeometryMjs = require("./geometry/RopeGeometry.mjs");
+class SimpleRope extends (0, _mesh.Mesh) {
+    constructor(texture, points, textureScale = 0){
+        const ropeGeometry = new (0, _ropeGeometryMjs.RopeGeometry)(texture.height, points, textureScale);
+        const meshMaterial = new (0, _mesh.MeshMaterial)(texture);
+        if (textureScale > 0) texture.baseTexture.wrapMode = (0, _core.WRAP_MODES).REPEAT;
+        super(ropeGeometry, meshMaterial);
+        this.autoUpdate = true;
+    }
+    _render(renderer) {
+        const geometry = this.geometry;
+        if (this.autoUpdate || geometry._width !== this.shader.texture.height) {
+            geometry._width = this.shader.texture.height;
+            geometry.update();
+        }
+        super._render(renderer);
+    }
+}
+
+},{"pixijs/mesh":"bxy0X","pixijs/core":"5Xie9","./geometry/RopeGeometry.mjs":"bTiDD","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jJ725":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SimplePlane", ()=>SimplePlane);
+var _core = require("pixijs/core");
+var _mesh = require("pixijs/mesh");
+var _planeGeometryMjs = require("./geometry/PlaneGeometry.mjs");
+class SimplePlane extends (0, _mesh.Mesh) {
+    constructor(texture, verticesX, verticesY){
+        const planeGeometry = new (0, _planeGeometryMjs.PlaneGeometry)(texture.width, texture.height, verticesX, verticesY);
+        const meshMaterial = new (0, _mesh.MeshMaterial)((0, _core.Texture).WHITE);
+        super(planeGeometry, meshMaterial);
+        this.texture = texture;
+        this.autoResize = true;
+    }
+    textureUpdated() {
+        this._textureID = this.shader.texture._updateID;
+        const geometry = this.geometry;
+        const { width , height  } = this.shader.texture;
+        if (this.autoResize && (geometry.width !== width || geometry.height !== height)) {
+            geometry.width = this.shader.texture.width;
+            geometry.height = this.shader.texture.height;
+            geometry.build();
+        }
+    }
+    set texture(value) {
+        if (this.shader.texture === value) return;
+        this.shader.texture = value;
+        this._textureID = -1;
+        if (value.baseTexture.valid) this.textureUpdated();
+        else value.once("update", this.textureUpdated, this);
+    }
+    get texture() {
+        return this.shader.texture;
+    }
+    _render(renderer) {
+        if (this._textureID !== this.shader.texture._updateID) this.textureUpdated();
+        super._render(renderer);
+    }
+    destroy(options) {
+        this.shader.texture.off("update", this.textureUpdated, this);
+        super.destroy(options);
+    }
+}
+
+},{"pixijs/core":"5Xie9","pixijs/mesh":"bxy0X","./geometry/PlaneGeometry.mjs":"8Saw0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2lT7Y":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SimpleMesh", ()=>SimpleMesh);
+var _mesh = require("pixijs/mesh");
+var _core = require("pixijs/core");
+class SimpleMesh extends (0, _mesh.Mesh) {
+    constructor(texture = (0, _core.Texture).EMPTY, vertices, uvs, indices, drawMode){
+        const geometry = new (0, _mesh.MeshGeometry)(vertices, uvs, indices);
+        geometry.getBuffer("aVertexPosition").static = false;
+        const meshMaterial = new (0, _mesh.MeshMaterial)(texture);
+        super(geometry, meshMaterial, null, drawMode);
+        this.autoUpdate = true;
+    }
+    get vertices() {
+        return this.geometry.getBuffer("aVertexPosition").data;
+    }
+    set vertices(value) {
+        this.geometry.getBuffer("aVertexPosition").data = value;
+    }
+    _render(renderer) {
+        if (this.autoUpdate) this.geometry.getBuffer("aVertexPosition").update();
+        super._render(renderer);
+    }
+}
+
+},{"pixijs/mesh":"bxy0X","pixijs/core":"5Xie9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"84efU":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "NineSlicePlane", ()=>NineSlicePlane);
+var _core = require("pixijs/core");
+var _simplePlaneMjs = require("./SimplePlane.mjs");
+const DEFAULT_BORDER_SIZE = 10;
+class NineSlicePlane extends (0, _simplePlaneMjs.SimplePlane) {
+    constructor(texture, leftWidth = DEFAULT_BORDER_SIZE, topHeight = DEFAULT_BORDER_SIZE, rightWidth = DEFAULT_BORDER_SIZE, bottomHeight = DEFAULT_BORDER_SIZE){
+        super((0, _core.Texture).WHITE, 4, 4);
+        this._origWidth = texture.orig.width;
+        this._origHeight = texture.orig.height;
+        this._width = this._origWidth;
+        this._height = this._origHeight;
+        this._leftWidth = leftWidth;
+        this._rightWidth = rightWidth;
+        this._topHeight = topHeight;
+        this._bottomHeight = bottomHeight;
+        this.texture = texture;
+    }
+    textureUpdated() {
+        this._textureID = this.shader.texture._updateID;
+        this._refresh();
+    }
+    get vertices() {
+        return this.geometry.getBuffer("aVertexPosition").data;
+    }
+    set vertices(value) {
+        this.geometry.getBuffer("aVertexPosition").data = value;
+    }
+    updateHorizontalVertices() {
+        const vertices = this.vertices;
+        const scale = this._getMinScale();
+        vertices[9] = vertices[11] = vertices[13] = vertices[15] = this._topHeight * scale;
+        vertices[17] = vertices[19] = vertices[21] = vertices[23] = this._height - this._bottomHeight * scale;
+        vertices[25] = vertices[27] = vertices[29] = vertices[31] = this._height;
+    }
+    updateVerticalVertices() {
+        const vertices = this.vertices;
+        const scale = this._getMinScale();
+        vertices[2] = vertices[10] = vertices[18] = vertices[26] = this._leftWidth * scale;
+        vertices[4] = vertices[12] = vertices[20] = vertices[28] = this._width - this._rightWidth * scale;
+        vertices[6] = vertices[14] = vertices[22] = vertices[30] = this._width;
+    }
+    _getMinScale() {
+        const w = this._leftWidth + this._rightWidth;
+        const scaleW = this._width > w ? 1 : this._width / w;
+        const h = this._topHeight + this._bottomHeight;
+        const scaleH = this._height > h ? 1 : this._height / h;
+        const scale = Math.min(scaleW, scaleH);
+        return scale;
+    }
+    get width() {
+        return this._width;
+    }
+    set width(value) {
+        this._width = value;
+        this._refresh();
+    }
+    get height() {
+        return this._height;
+    }
+    set height(value) {
+        this._height = value;
+        this._refresh();
+    }
+    get leftWidth() {
+        return this._leftWidth;
+    }
+    set leftWidth(value) {
+        this._leftWidth = value;
+        this._refresh();
+    }
+    get rightWidth() {
+        return this._rightWidth;
+    }
+    set rightWidth(value) {
+        this._rightWidth = value;
+        this._refresh();
+    }
+    get topHeight() {
+        return this._topHeight;
+    }
+    set topHeight(value) {
+        this._topHeight = value;
+        this._refresh();
+    }
+    get bottomHeight() {
+        return this._bottomHeight;
+    }
+    set bottomHeight(value) {
+        this._bottomHeight = value;
+        this._refresh();
+    }
+    _refresh() {
+        const texture = this.texture;
+        const uvs = this.geometry.buffers[1].data;
+        this._origWidth = texture.orig.width;
+        this._origHeight = texture.orig.height;
+        const _uvw = 1 / this._origWidth;
+        const _uvh = 1 / this._origHeight;
+        uvs[0] = uvs[8] = uvs[16] = uvs[24] = 0;
+        uvs[1] = uvs[3] = uvs[5] = uvs[7] = 0;
+        uvs[6] = uvs[14] = uvs[22] = uvs[30] = 1;
+        uvs[25] = uvs[27] = uvs[29] = uvs[31] = 1;
+        uvs[2] = uvs[10] = uvs[18] = uvs[26] = _uvw * this._leftWidth;
+        uvs[4] = uvs[12] = uvs[20] = uvs[28] = 1 - _uvw * this._rightWidth;
+        uvs[9] = uvs[11] = uvs[13] = uvs[15] = _uvh * this._topHeight;
+        uvs[17] = uvs[19] = uvs[21] = uvs[23] = 1 - _uvh * this._bottomHeight;
+        this.updateHorizontalVertices();
+        this.updateVerticalVertices();
+        this.geometry.buffers[0].update();
+        this.geometry.buffers[1].update();
+    }
+}
+
+},{"pixijs/core":"5Xie9","./SimplePlane.mjs":"jJ725","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"77ULc":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ParticleContainer", ()=>(0, _particleContainerMjs.ParticleContainer));
@@ -20969,249 +22955,7 @@ const _Text = class extends (0, _sprite.Sprite) {
 let Text = _Text;
 Text.experimentalLetterSpacing = false;
 
-},{"pixijs/sprite":"5cfR2","pixijs/core":"5Xie9","./const.mjs":"ek6qd","./TextStyle.mjs":"1cPDp","./TextMetrics.mjs":"jIAln","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5cfR2":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Sprite", ()=>(0, _spriteMjs.Sprite));
-var _spriteMjs = require("./Sprite.mjs");
-
-},{"./Sprite.mjs":"5GXga","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5GXga":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Sprite", ()=>Sprite);
-var _core = require("pixijs/core");
-var _display = require("pixijs/display");
-const tempPoint = new (0, _core.Point)();
-const indices = new Uint16Array([
-    0,
-    1,
-    2,
-    0,
-    2,
-    3
-]);
-class Sprite extends (0, _display.Container) {
-    constructor(texture){
-        super();
-        this._anchor = new (0, _core.ObservablePoint)(this._onAnchorUpdate, this, texture ? texture.defaultAnchor.x : 0, texture ? texture.defaultAnchor.y : 0);
-        this._texture = null;
-        this._width = 0;
-        this._height = 0;
-        this._tint = null;
-        this._tintRGB = null;
-        this.tint = 16777215;
-        this.blendMode = (0, _core.BLEND_MODES).NORMAL;
-        this._cachedTint = 16777215;
-        this.uvs = null;
-        this.texture = texture || (0, _core.Texture).EMPTY;
-        this.vertexData = new Float32Array(8);
-        this.vertexTrimmedData = null;
-        this._transformID = -1;
-        this._textureID = -1;
-        this._transformTrimmedID = -1;
-        this._textureTrimmedID = -1;
-        this.indices = indices;
-        this.pluginName = "batch";
-        this.isSprite = true;
-        this._roundPixels = (0, _core.settings).ROUND_PIXELS;
-    }
-    _onTextureUpdate() {
-        this._textureID = -1;
-        this._textureTrimmedID = -1;
-        this._cachedTint = 16777215;
-        if (this._width) this.scale.x = (0, _core.utils).sign(this.scale.x) * this._width / this._texture.orig.width;
-        if (this._height) this.scale.y = (0, _core.utils).sign(this.scale.y) * this._height / this._texture.orig.height;
-    }
-    _onAnchorUpdate() {
-        this._transformID = -1;
-        this._transformTrimmedID = -1;
-    }
-    calculateVertices() {
-        const texture = this._texture;
-        if (this._transformID === this.transform._worldID && this._textureID === texture._updateID) return;
-        if (this._textureID !== texture._updateID) this.uvs = this._texture._uvs.uvsFloat32;
-        this._transformID = this.transform._worldID;
-        this._textureID = texture._updateID;
-        const wt = this.transform.worldTransform;
-        const a = wt.a;
-        const b = wt.b;
-        const c = wt.c;
-        const d = wt.d;
-        const tx = wt.tx;
-        const ty = wt.ty;
-        const vertexData = this.vertexData;
-        const trim = texture.trim;
-        const orig = texture.orig;
-        const anchor = this._anchor;
-        let w0 = 0;
-        let w1 = 0;
-        let h0 = 0;
-        let h1 = 0;
-        if (trim) {
-            w1 = trim.x - anchor._x * orig.width;
-            w0 = w1 + trim.width;
-            h1 = trim.y - anchor._y * orig.height;
-            h0 = h1 + trim.height;
-        } else {
-            w1 = -anchor._x * orig.width;
-            w0 = w1 + orig.width;
-            h1 = -anchor._y * orig.height;
-            h0 = h1 + orig.height;
-        }
-        vertexData[0] = a * w1 + c * h1 + tx;
-        vertexData[1] = d * h1 + b * w1 + ty;
-        vertexData[2] = a * w0 + c * h1 + tx;
-        vertexData[3] = d * h1 + b * w0 + ty;
-        vertexData[4] = a * w0 + c * h0 + tx;
-        vertexData[5] = d * h0 + b * w0 + ty;
-        vertexData[6] = a * w1 + c * h0 + tx;
-        vertexData[7] = d * h0 + b * w1 + ty;
-        if (this._roundPixels) {
-            const resolution = (0, _core.settings).RESOLUTION;
-            for(let i = 0; i < vertexData.length; ++i)vertexData[i] = Math.round(vertexData[i] * resolution) / resolution;
-        }
-    }
-    calculateTrimmedVertices() {
-        if (!this.vertexTrimmedData) this.vertexTrimmedData = new Float32Array(8);
-        else if (this._transformTrimmedID === this.transform._worldID && this._textureTrimmedID === this._texture._updateID) return;
-        this._transformTrimmedID = this.transform._worldID;
-        this._textureTrimmedID = this._texture._updateID;
-        const texture = this._texture;
-        const vertexData = this.vertexTrimmedData;
-        const orig = texture.orig;
-        const anchor = this._anchor;
-        const wt = this.transform.worldTransform;
-        const a = wt.a;
-        const b = wt.b;
-        const c = wt.c;
-        const d = wt.d;
-        const tx = wt.tx;
-        const ty = wt.ty;
-        const w1 = -anchor._x * orig.width;
-        const w0 = w1 + orig.width;
-        const h1 = -anchor._y * orig.height;
-        const h0 = h1 + orig.height;
-        vertexData[0] = a * w1 + c * h1 + tx;
-        vertexData[1] = d * h1 + b * w1 + ty;
-        vertexData[2] = a * w0 + c * h1 + tx;
-        vertexData[3] = d * h1 + b * w0 + ty;
-        vertexData[4] = a * w0 + c * h0 + tx;
-        vertexData[5] = d * h0 + b * w0 + ty;
-        vertexData[6] = a * w1 + c * h0 + tx;
-        vertexData[7] = d * h0 + b * w1 + ty;
-    }
-    _render(renderer) {
-        this.calculateVertices();
-        renderer.batch.setObjectRenderer(renderer.plugins[this.pluginName]);
-        renderer.plugins[this.pluginName].render(this);
-    }
-    _calculateBounds() {
-        const trim = this._texture.trim;
-        const orig = this._texture.orig;
-        if (!trim || trim.width === orig.width && trim.height === orig.height) {
-            this.calculateVertices();
-            this._bounds.addQuad(this.vertexData);
-        } else {
-            this.calculateTrimmedVertices();
-            this._bounds.addQuad(this.vertexTrimmedData);
-        }
-    }
-    getLocalBounds(rect) {
-        if (this.children.length === 0) {
-            if (!this._localBounds) this._localBounds = new (0, _display.Bounds)();
-            this._localBounds.minX = this._texture.orig.width * -this._anchor._x;
-            this._localBounds.minY = this._texture.orig.height * -this._anchor._y;
-            this._localBounds.maxX = this._texture.orig.width * (1 - this._anchor._x);
-            this._localBounds.maxY = this._texture.orig.height * (1 - this._anchor._y);
-            if (!rect) {
-                if (!this._localBoundsRect) this._localBoundsRect = new (0, _core.Rectangle)();
-                rect = this._localBoundsRect;
-            }
-            return this._localBounds.getRectangle(rect);
-        }
-        return super.getLocalBounds.call(this, rect);
-    }
-    containsPoint(point) {
-        this.worldTransform.applyInverse(point, tempPoint);
-        const width = this._texture.orig.width;
-        const height = this._texture.orig.height;
-        const x1 = -width * this.anchor.x;
-        let y1 = 0;
-        if (tempPoint.x >= x1 && tempPoint.x < x1 + width) {
-            y1 = -height * this.anchor.y;
-            if (tempPoint.y >= y1 && tempPoint.y < y1 + height) return true;
-        }
-        return false;
-    }
-    destroy(options) {
-        super.destroy(options);
-        this._texture.off("update", this._onTextureUpdate, this);
-        this._anchor = null;
-        const destroyTexture = typeof options === "boolean" ? options : options?.texture;
-        if (destroyTexture) {
-            const destroyBaseTexture = typeof options === "boolean" ? options : options?.baseTexture;
-            this._texture.destroy(!!destroyBaseTexture);
-        }
-        this._texture = null;
-    }
-    static from(source, options) {
-        const texture = source instanceof (0, _core.Texture) ? source : (0, _core.Texture).from(source, options);
-        return new Sprite(texture);
-    }
-    set roundPixels(value) {
-        if (this._roundPixels !== value) this._transformID = -1;
-        this._roundPixels = value;
-    }
-    get roundPixels() {
-        return this._roundPixels;
-    }
-    get width() {
-        return Math.abs(this.scale.x) * this._texture.orig.width;
-    }
-    set width(value) {
-        const s = (0, _core.utils).sign(this.scale.x) || 1;
-        this.scale.x = s * value / this._texture.orig.width;
-        this._width = value;
-    }
-    get height() {
-        return Math.abs(this.scale.y) * this._texture.orig.height;
-    }
-    set height(value) {
-        const s = (0, _core.utils).sign(this.scale.y) || 1;
-        this.scale.y = s * value / this._texture.orig.height;
-        this._height = value;
-    }
-    get anchor() {
-        return this._anchor;
-    }
-    set anchor(value) {
-        this._anchor.copyFrom(value);
-    }
-    get tint() {
-        return this._tint;
-    }
-    set tint(value) {
-        this._tint = value;
-        this._tintRGB = (value >> 16) + (value & 65280) + ((value & 255) << 16);
-    }
-    get texture() {
-        return this._texture;
-    }
-    set texture(value) {
-        if (this._texture === value) return;
-        if (this._texture) this._texture.off("update", this._onTextureUpdate, this);
-        this._texture = value || (0, _core.Texture).EMPTY;
-        this._cachedTint = 16777215;
-        this._textureID = -1;
-        this._textureTrimmedID = -1;
-        if (value) {
-            if (value.baseTexture.valid) this._onTextureUpdate();
-            else value.once("update", this._onTextureUpdate, this);
-        }
-    }
-}
-
-},{"pixijs/core":"5Xie9","pixijs/display":"5dBvH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ek6qd":[function(require,module,exports) {
+},{"pixijs/sprite":"5cfR2","pixijs/core":"5Xie9","./const.mjs":"ek6qd","./TextStyle.mjs":"1cPDp","./TextMetrics.mjs":"jIAln","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ek6qd":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "TEXT_GRADIENT", ()=>TEXT_GRADIENT);
@@ -23638,1751 +25382,7 @@ const loadBitmapFont = {
 };
 (0, _core.extensions).add(loadBitmapFont);
 
-},{"pixijs/core":"5Xie9","pixijs/assets":"l5zUJ","./BitmapFont.mjs":"1NVee","./formats/index.mjs":"28ovf","./formats/TextFormat.mjs":"fWKNp","./formats/XMLStringFormat.mjs":"fcLF6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c1hVR":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AlphaFilter", ()=>(0, _alphaFilterMjs.AlphaFilter));
-var _alphaFilterMjs = require("./AlphaFilter.mjs");
-
-},{"./AlphaFilter.mjs":"aaokk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aaokk":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AlphaFilter", ()=>AlphaFilter);
-var _core = require("pixijs/core");
-var _alphaMjs = require("./alpha.mjs");
-var _alphaMjsDefault = parcelHelpers.interopDefault(_alphaMjs);
-class AlphaFilter extends (0, _core.Filter) {
-    constructor(alpha = 1){
-        super((0, _core.defaultVertex), (0, _alphaMjsDefault.default), {
-            uAlpha: 1
-        });
-        this.alpha = alpha;
-    }
-    get alpha() {
-        return this.uniforms.uAlpha;
-    }
-    set alpha(value) {
-        this.uniforms.uAlpha = value;
-    }
-}
-
-},{"pixijs/core":"5Xie9","./alpha.mjs":"4D7F4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4D7F4":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>fragment);
-var fragment = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform float uAlpha;\n\nvoid main(void)\n{\n   gl_FragColor = texture2D(uSampler, vTextureCoord) * uAlpha;\n}\n";
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cbkwW":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BlurFilter", ()=>(0, _blurFilterMjs.BlurFilter));
-parcelHelpers.export(exports, "BlurFilterPass", ()=>(0, _blurFilterPassMjs.BlurFilterPass));
-var _blurFilterMjs = require("./BlurFilter.mjs");
-var _blurFilterPassMjs = require("./BlurFilterPass.mjs");
-
-},{"./BlurFilter.mjs":"iqRk3","./BlurFilterPass.mjs":"lqAZI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iqRk3":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BlurFilter", ()=>BlurFilter);
-var _core = require("pixijs/core");
-var _blurFilterPassMjs = require("./BlurFilterPass.mjs");
-class BlurFilter extends (0, _core.Filter) {
-    constructor(strength = 8, quality = 4, resolution = (0, _core.settings).FILTER_RESOLUTION, kernelSize = 5){
-        super();
-        this.blurXFilter = new (0, _blurFilterPassMjs.BlurFilterPass)(true, strength, quality, resolution, kernelSize);
-        this.blurYFilter = new (0, _blurFilterPassMjs.BlurFilterPass)(false, strength, quality, resolution, kernelSize);
-        this.resolution = resolution;
-        this.quality = quality;
-        this.blur = strength;
-        this.repeatEdgePixels = false;
-    }
-    apply(filterManager, input, output, clearMode) {
-        const xStrength = Math.abs(this.blurXFilter.strength);
-        const yStrength = Math.abs(this.blurYFilter.strength);
-        if (xStrength && yStrength) {
-            const renderTarget = filterManager.getFilterTexture();
-            this.blurXFilter.apply(filterManager, input, renderTarget, (0, _core.CLEAR_MODES).CLEAR);
-            this.blurYFilter.apply(filterManager, renderTarget, output, clearMode);
-            filterManager.returnFilterTexture(renderTarget);
-        } else if (yStrength) this.blurYFilter.apply(filterManager, input, output, clearMode);
-        else this.blurXFilter.apply(filterManager, input, output, clearMode);
-    }
-    updatePadding() {
-        if (this._repeatEdgePixels) this.padding = 0;
-        else this.padding = Math.max(Math.abs(this.blurXFilter.strength), Math.abs(this.blurYFilter.strength)) * 2;
-    }
-    get blur() {
-        return this.blurXFilter.blur;
-    }
-    set blur(value) {
-        this.blurXFilter.blur = this.blurYFilter.blur = value;
-        this.updatePadding();
-    }
-    get quality() {
-        return this.blurXFilter.quality;
-    }
-    set quality(value) {
-        this.blurXFilter.quality = this.blurYFilter.quality = value;
-    }
-    get blurX() {
-        return this.blurXFilter.blur;
-    }
-    set blurX(value) {
-        this.blurXFilter.blur = value;
-        this.updatePadding();
-    }
-    get blurY() {
-        return this.blurYFilter.blur;
-    }
-    set blurY(value) {
-        this.blurYFilter.blur = value;
-        this.updatePadding();
-    }
-    get blendMode() {
-        return this.blurYFilter.blendMode;
-    }
-    set blendMode(value) {
-        this.blurYFilter.blendMode = value;
-    }
-    get repeatEdgePixels() {
-        return this._repeatEdgePixels;
-    }
-    set repeatEdgePixels(value) {
-        this._repeatEdgePixels = value;
-        this.updatePadding();
-    }
-}
-
-},{"pixijs/core":"5Xie9","./BlurFilterPass.mjs":"lqAZI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lqAZI":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BlurFilterPass", ()=>BlurFilterPass);
-var _core = require("pixijs/core");
-var _generateBlurVertSourceMjs = require("./generateBlurVertSource.mjs");
-var _generateBlurFragSourceMjs = require("./generateBlurFragSource.mjs");
-class BlurFilterPass extends (0, _core.Filter) {
-    constructor(horizontal, strength = 8, quality = 4, resolution = (0, _core.settings).FILTER_RESOLUTION, kernelSize = 5){
-        const vertSrc = (0, _generateBlurVertSourceMjs.generateBlurVertSource)(kernelSize, horizontal);
-        const fragSrc = (0, _generateBlurFragSourceMjs.generateBlurFragSource)(kernelSize);
-        super(vertSrc, fragSrc);
-        this.horizontal = horizontal;
-        this.resolution = resolution;
-        this._quality = 0;
-        this.quality = quality;
-        this.blur = strength;
-    }
-    apply(filterManager, input, output, clearMode) {
-        if (output) {
-            if (this.horizontal) this.uniforms.strength = 1 / output.width * (output.width / input.width);
-            else this.uniforms.strength = 1 / output.height * (output.height / input.height);
-        } else if (this.horizontal) this.uniforms.strength = 1 / filterManager.renderer.width * (filterManager.renderer.width / input.width);
-        else this.uniforms.strength = 1 / filterManager.renderer.height * (filterManager.renderer.height / input.height);
-        this.uniforms.strength *= this.strength;
-        this.uniforms.strength /= this.passes;
-        if (this.passes === 1) filterManager.applyFilter(this, input, output, clearMode);
-        else {
-            const renderTarget = filterManager.getFilterTexture();
-            const renderer = filterManager.renderer;
-            let flip = input;
-            let flop = renderTarget;
-            this.state.blend = false;
-            filterManager.applyFilter(this, flip, flop, (0, _core.CLEAR_MODES).CLEAR);
-            for(let i = 1; i < this.passes - 1; i++){
-                filterManager.bindAndClear(flip, (0, _core.CLEAR_MODES).BLIT);
-                this.uniforms.uSampler = flop;
-                const temp = flop;
-                flop = flip;
-                flip = temp;
-                renderer.shader.bind(this);
-                renderer.geometry.draw(5);
-            }
-            this.state.blend = true;
-            filterManager.applyFilter(this, flop, output, clearMode);
-            filterManager.returnFilterTexture(renderTarget);
-        }
-    }
-    get blur() {
-        return this.strength;
-    }
-    set blur(value) {
-        this.padding = 1 + Math.abs(value) * 2;
-        this.strength = value;
-    }
-    get quality() {
-        return this._quality;
-    }
-    set quality(value) {
-        this._quality = value;
-        this.passes = value;
-    }
-}
-
-},{"pixijs/core":"5Xie9","./generateBlurVertSource.mjs":"3ipTj","./generateBlurFragSource.mjs":"6ZaXy","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3ipTj":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "generateBlurVertSource", ()=>generateBlurVertSource);
-const vertTemplate = `
-    attribute vec2 aVertexPosition;
-
-    uniform mat3 projectionMatrix;
-
-    uniform float strength;
-
-    varying vec2 vBlurTexCoords[%size%];
-
-    uniform vec4 inputSize;
-    uniform vec4 outputFrame;
-
-    vec4 filterVertexPosition( void )
-    {
-        vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;
-
-        return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);
-    }
-
-    vec2 filterTextureCoord( void )
-    {
-        return aVertexPosition * (outputFrame.zw * inputSize.zw);
-    }
-
-    void main(void)
-    {
-        gl_Position = filterVertexPosition();
-
-        vec2 textureCoord = filterTextureCoord();
-        %blur%
-    }`;
-function generateBlurVertSource(kernelSize, x) {
-    const halfLength = Math.ceil(kernelSize / 2);
-    let vertSource = vertTemplate;
-    let blurLoop = "";
-    let template;
-    if (x) template = "vBlurTexCoords[%index%] =  textureCoord + vec2(%sampleIndex% * strength, 0.0);";
-    else template = "vBlurTexCoords[%index%] =  textureCoord + vec2(0.0, %sampleIndex% * strength);";
-    for(let i = 0; i < kernelSize; i++){
-        let blur = template.replace("%index%", i.toString());
-        blur = blur.replace("%sampleIndex%", `${i - (halfLength - 1)}.0`);
-        blurLoop += blur;
-        blurLoop += "\n";
-    }
-    vertSource = vertSource.replace("%blur%", blurLoop);
-    vertSource = vertSource.replace("%size%", kernelSize.toString());
-    return vertSource;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6ZaXy":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "generateBlurFragSource", ()=>generateBlurFragSource);
-const GAUSSIAN_VALUES = {
-    5: [
-        0.153388,
-        0.221461,
-        0.250301
-    ],
-    7: [
-        0.071303,
-        0.131514,
-        0.189879,
-        0.214607
-    ],
-    9: [
-        0.028532,
-        0.067234,
-        0.124009,
-        0.179044,
-        0.20236
-    ],
-    11: [
-        93e-4,
-        0.028002,
-        0.065984,
-        0.121703,
-        0.175713,
-        0.198596
-    ],
-    13: [
-        2406e-6,
-        9255e-6,
-        0.027867,
-        0.065666,
-        0.121117,
-        0.174868,
-        0.197641
-    ],
-    15: [
-        489e-6,
-        2403e-6,
-        9246e-6,
-        0.02784,
-        0.065602,
-        0.120999,
-        0.174697,
-        0.197448
-    ]
-};
-const fragTemplate = [
-    "varying vec2 vBlurTexCoords[%size%];",
-    "uniform sampler2D uSampler;",
-    "void main(void)",
-    "{",
-    "    gl_FragColor = vec4(0.0);",
-    "    %blur%",
-    "}"
-].join("\n");
-function generateBlurFragSource(kernelSize) {
-    const kernel = GAUSSIAN_VALUES[kernelSize];
-    const halfLength = kernel.length;
-    let fragSource = fragTemplate;
-    let blurLoop = "";
-    const template = "gl_FragColor += texture2D(uSampler, vBlurTexCoords[%index%]) * %value%;";
-    let value;
-    for(let i = 0; i < kernelSize; i++){
-        let blur = template.replace("%index%", i.toString());
-        value = i;
-        if (i >= halfLength) value = kernelSize - i - 1;
-        blur = blur.replace("%value%", kernel[value].toString());
-        blurLoop += blur;
-        blurLoop += "\n";
-    }
-    fragSource = fragSource.replace("%blur%", blurLoop);
-    fragSource = fragSource.replace("%size%", kernelSize.toString());
-    return fragSource;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2L9ZL":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "ColorMatrixFilter", ()=>(0, _colorMatrixFilterMjs.ColorMatrixFilter));
-var _colorMatrixFilterMjs = require("./ColorMatrixFilter.mjs");
-
-},{"./ColorMatrixFilter.mjs":"e0AQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"e0AQt":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "ColorMatrixFilter", ()=>ColorMatrixFilter);
-var _core = require("pixijs/core");
-var _colorMatrixMjs = require("./colorMatrix.mjs");
-var _colorMatrixMjsDefault = parcelHelpers.interopDefault(_colorMatrixMjs);
-class ColorMatrixFilter extends (0, _core.Filter) {
-    constructor(){
-        const uniforms = {
-            m: new Float32Array([
-                1,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0
-            ]),
-            uAlpha: 1
-        };
-        super((0, _core.defaultFilterVertex), (0, _colorMatrixMjsDefault.default), uniforms);
-        this.alpha = 1;
-    }
-    _loadMatrix(matrix, multiply = false) {
-        let newMatrix = matrix;
-        if (multiply) {
-            this._multiply(newMatrix, this.uniforms.m, matrix);
-            newMatrix = this._colorMatrix(newMatrix);
-        }
-        this.uniforms.m = newMatrix;
-    }
-    _multiply(out, a, b) {
-        out[0] = a[0] * b[0] + a[1] * b[5] + a[2] * b[10] + a[3] * b[15];
-        out[1] = a[0] * b[1] + a[1] * b[6] + a[2] * b[11] + a[3] * b[16];
-        out[2] = a[0] * b[2] + a[1] * b[7] + a[2] * b[12] + a[3] * b[17];
-        out[3] = a[0] * b[3] + a[1] * b[8] + a[2] * b[13] + a[3] * b[18];
-        out[4] = a[0] * b[4] + a[1] * b[9] + a[2] * b[14] + a[3] * b[19] + a[4];
-        out[5] = a[5] * b[0] + a[6] * b[5] + a[7] * b[10] + a[8] * b[15];
-        out[6] = a[5] * b[1] + a[6] * b[6] + a[7] * b[11] + a[8] * b[16];
-        out[7] = a[5] * b[2] + a[6] * b[7] + a[7] * b[12] + a[8] * b[17];
-        out[8] = a[5] * b[3] + a[6] * b[8] + a[7] * b[13] + a[8] * b[18];
-        out[9] = a[5] * b[4] + a[6] * b[9] + a[7] * b[14] + a[8] * b[19] + a[9];
-        out[10] = a[10] * b[0] + a[11] * b[5] + a[12] * b[10] + a[13] * b[15];
-        out[11] = a[10] * b[1] + a[11] * b[6] + a[12] * b[11] + a[13] * b[16];
-        out[12] = a[10] * b[2] + a[11] * b[7] + a[12] * b[12] + a[13] * b[17];
-        out[13] = a[10] * b[3] + a[11] * b[8] + a[12] * b[13] + a[13] * b[18];
-        out[14] = a[10] * b[4] + a[11] * b[9] + a[12] * b[14] + a[13] * b[19] + a[14];
-        out[15] = a[15] * b[0] + a[16] * b[5] + a[17] * b[10] + a[18] * b[15];
-        out[16] = a[15] * b[1] + a[16] * b[6] + a[17] * b[11] + a[18] * b[16];
-        out[17] = a[15] * b[2] + a[16] * b[7] + a[17] * b[12] + a[18] * b[17];
-        out[18] = a[15] * b[3] + a[16] * b[8] + a[17] * b[13] + a[18] * b[18];
-        out[19] = a[15] * b[4] + a[16] * b[9] + a[17] * b[14] + a[18] * b[19] + a[19];
-        return out;
-    }
-    _colorMatrix(matrix) {
-        const m = new Float32Array(matrix);
-        m[4] /= 255;
-        m[9] /= 255;
-        m[14] /= 255;
-        m[19] /= 255;
-        return m;
-    }
-    brightness(b, multiply) {
-        const matrix = [
-            b,
-            0,
-            0,
-            0,
-            0,
-            0,
-            b,
-            0,
-            0,
-            0,
-            0,
-            0,
-            b,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    tint(color, multiply) {
-        const r = color >> 16 & 255;
-        const g = color >> 8 & 255;
-        const b = color & 255;
-        const matrix = [
-            r / 255,
-            0,
-            0,
-            0,
-            0,
-            0,
-            g / 255,
-            0,
-            0,
-            0,
-            0,
-            0,
-            b / 255,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    greyscale(scale, multiply) {
-        const matrix = [
-            scale,
-            scale,
-            scale,
-            0,
-            0,
-            scale,
-            scale,
-            scale,
-            0,
-            0,
-            scale,
-            scale,
-            scale,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    blackAndWhite(multiply) {
-        const matrix = [
-            0.3,
-            0.6,
-            0.1,
-            0,
-            0,
-            0.3,
-            0.6,
-            0.1,
-            0,
-            0,
-            0.3,
-            0.6,
-            0.1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    hue(rotation, multiply) {
-        rotation = (rotation || 0) / 180 * Math.PI;
-        const cosR = Math.cos(rotation);
-        const sinR = Math.sin(rotation);
-        const sqrt = Math.sqrt;
-        const w = 1 / 3;
-        const sqrW = sqrt(w);
-        const a00 = cosR + (1 - cosR) * w;
-        const a01 = w * (1 - cosR) - sqrW * sinR;
-        const a02 = w * (1 - cosR) + sqrW * sinR;
-        const a10 = w * (1 - cosR) + sqrW * sinR;
-        const a11 = cosR + w * (1 - cosR);
-        const a12 = w * (1 - cosR) - sqrW * sinR;
-        const a20 = w * (1 - cosR) - sqrW * sinR;
-        const a21 = w * (1 - cosR) + sqrW * sinR;
-        const a22 = cosR + w * (1 - cosR);
-        const matrix = [
-            a00,
-            a01,
-            a02,
-            0,
-            0,
-            a10,
-            a11,
-            a12,
-            0,
-            0,
-            a20,
-            a21,
-            a22,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    contrast(amount, multiply) {
-        const v = (amount || 0) + 1;
-        const o = -0.5 * (v - 1);
-        const matrix = [
-            v,
-            0,
-            0,
-            0,
-            o,
-            0,
-            v,
-            0,
-            0,
-            o,
-            0,
-            0,
-            v,
-            0,
-            o,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    saturate(amount = 0, multiply) {
-        const x = amount * 2 / 3 + 1;
-        const y = (x - 1) * -0.5;
-        const matrix = [
-            x,
-            y,
-            y,
-            0,
-            0,
-            y,
-            x,
-            y,
-            0,
-            0,
-            y,
-            y,
-            x,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    desaturate() {
-        this.saturate(-1);
-    }
-    negative(multiply) {
-        const matrix = [
-            -1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            -1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            -1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    sepia(multiply) {
-        const matrix = [
-            0.393,
-            0.7689999,
-            0.18899999,
-            0,
-            0,
-            0.349,
-            0.6859999,
-            0.16799999,
-            0,
-            0,
-            0.272,
-            0.5339999,
-            0.13099999,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    technicolor(multiply) {
-        const matrix = [
-            1.9125277891456083,
-            -0.8545344976951645,
-            -0.09155508482755585,
-            0,
-            11.793603434377337,
-            -0.3087833385928097,
-            1.7658908555458428,
-            -0.10601743074722245,
-            0,
-            -70.35205161461398,
-            -0.231103377548616,
-            -0.7501899197440212,
-            1.847597816108189,
-            0,
-            30.950940869491138,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    polaroid(multiply) {
-        const matrix = [
-            1.438,
-            -0.062,
-            -0.062,
-            0,
-            0,
-            -0.122,
-            1.378,
-            -0.122,
-            0,
-            0,
-            -0.016,
-            -0.016,
-            1.483,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    toBGR(multiply) {
-        const matrix = [
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    kodachrome(multiply) {
-        const matrix = [
-            1.1285582396593525,
-            -0.3967382283601348,
-            -0.03992559172921793,
-            0,
-            63.72958762196502,
-            -0.16404339962244616,
-            1.0835251566291304,
-            -0.05498805115633132,
-            0,
-            24.732407896706203,
-            -0.16786010706155763,
-            -0.5603416277695248,
-            1.6014850761964943,
-            0,
-            35.62982807460946,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    browni(multiply) {
-        const matrix = [
-            0.5997023498159715,
-            0.34553243048391263,
-            -0.2708298674538042,
-            0,
-            47.43192855600873,
-            -0.037703249837783157,
-            0.8609577587992641,
-            0.15059552388459913,
-            0,
-            -36.96841498319127,
-            0.24113635128153335,
-            -0.07441037908422492,
-            0.44972182064877153,
-            0,
-            -7.562075277591283,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    vintage(multiply) {
-        const matrix = [
-            0.6279345635605994,
-            0.3202183420819367,
-            -0.03965408211312453,
-            0,
-            9.651285835294123,
-            0.02578397704808868,
-            0.6441188644374771,
-            0.03259127616149294,
-            0,
-            7.462829176470591,
-            0.0466055556782719,
-            -0.0851232987247891,
-            0.5241648018700465,
-            0,
-            5.159190588235296,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    colorTone(desaturation, toned, lightColor, darkColor, multiply) {
-        desaturation = desaturation || 0.2;
-        toned = toned || 0.15;
-        lightColor = lightColor || 16770432;
-        darkColor = darkColor || 3375104;
-        const lR = (lightColor >> 16 & 255) / 255;
-        const lG = (lightColor >> 8 & 255) / 255;
-        const lB = (lightColor & 255) / 255;
-        const dR = (darkColor >> 16 & 255) / 255;
-        const dG = (darkColor >> 8 & 255) / 255;
-        const dB = (darkColor & 255) / 255;
-        const matrix = [
-            0.3,
-            0.59,
-            0.11,
-            0,
-            0,
-            lR,
-            lG,
-            lB,
-            desaturation,
-            0,
-            dR,
-            dG,
-            dB,
-            toned,
-            0,
-            lR - dR,
-            lG - dG,
-            lB - dB,
-            0,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    night(intensity, multiply) {
-        intensity = intensity || 0.1;
-        const matrix = [
-            intensity * -2,
-            -intensity,
-            0,
-            0,
-            0,
-            -intensity,
-            0,
-            intensity,
-            0,
-            0,
-            0,
-            intensity,
-            intensity * 2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    predator(amount, multiply) {
-        const matrix = [
-            11.224130630493164 * amount,
-            -4.794486999511719 * amount,
-            -2.8746118545532227 * amount,
-            0 * amount,
-            0.40342438220977783 * amount,
-            -3.6330697536468506 * amount,
-            9.193157196044922 * amount,
-            -2.951810836791992 * amount,
-            0 * amount,
-            -1.316135048866272 * amount,
-            -3.2184197902679443 * amount,
-            -4.2375030517578125 * amount,
-            7.476448059082031 * amount,
-            0 * amount,
-            0.8044459223747253 * amount,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    lsd(multiply) {
-        const matrix = [
-            2,
-            -0.4,
-            0.5,
-            0,
-            0,
-            -0.5,
-            2,
-            -0.4,
-            0,
-            0,
-            -0.4,
-            -0.5,
-            3,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, multiply);
-    }
-    reset() {
-        const matrix = [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        ];
-        this._loadMatrix(matrix, false);
-    }
-    get matrix() {
-        return this.uniforms.m;
-    }
-    set matrix(value) {
-        this.uniforms.m = value;
-    }
-    get alpha() {
-        return this.uniforms.uAlpha;
-    }
-    set alpha(value) {
-        this.uniforms.uAlpha = value;
-    }
-}
-ColorMatrixFilter.prototype.grayscale = ColorMatrixFilter.prototype.greyscale;
-
-},{"pixijs/core":"5Xie9","./colorMatrix.mjs":"bevBO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bevBO":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>fragment);
-var fragment = "varying vec2 vTextureCoord;\nuniform sampler2D uSampler;\nuniform float m[20];\nuniform float uAlpha;\n\nvoid main(void)\n{\n    vec4 c = texture2D(uSampler, vTextureCoord);\n\n    if (uAlpha == 0.0) {\n        gl_FragColor = c;\n        return;\n    }\n\n    // Un-premultiply alpha before applying the color matrix. See issue #3539.\n    if (c.a > 0.0) {\n      c.rgb /= c.a;\n    }\n\n    vec4 result;\n\n    result.r = (m[0] * c.r);\n        result.r += (m[1] * c.g);\n        result.r += (m[2] * c.b);\n        result.r += (m[3] * c.a);\n        result.r += m[4];\n\n    result.g = (m[5] * c.r);\n        result.g += (m[6] * c.g);\n        result.g += (m[7] * c.b);\n        result.g += (m[8] * c.a);\n        result.g += m[9];\n\n    result.b = (m[10] * c.r);\n       result.b += (m[11] * c.g);\n       result.b += (m[12] * c.b);\n       result.b += (m[13] * c.a);\n       result.b += m[14];\n\n    result.a = (m[15] * c.r);\n       result.a += (m[16] * c.g);\n       result.a += (m[17] * c.b);\n       result.a += (m[18] * c.a);\n       result.a += m[19];\n\n    vec3 rgb = mix(c.rgb, result.rgb, uAlpha);\n\n    // Premultiply alpha again.\n    rgb *= result.a;\n\n    gl_FragColor = vec4(rgb, result.a);\n}\n";
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Hl9xP":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "DisplacementFilter", ()=>(0, _displacementFilterMjs.DisplacementFilter));
-var _displacementFilterMjs = require("./DisplacementFilter.mjs");
-
-},{"./DisplacementFilter.mjs":"miiR8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"miiR8":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "DisplacementFilter", ()=>DisplacementFilter);
-var _core = require("pixijs/core");
-var _displacementMjs = require("./displacement.mjs");
-var _displacementMjsDefault = parcelHelpers.interopDefault(_displacementMjs);
-var _displacement2Mjs = require("./displacement2.mjs");
-var _displacement2MjsDefault = parcelHelpers.interopDefault(_displacement2Mjs);
-class DisplacementFilter extends (0, _core.Filter) {
-    constructor(sprite, scale){
-        const maskMatrix = new (0, _core.Matrix)();
-        sprite.renderable = false;
-        super((0, _displacement2MjsDefault.default), (0, _displacementMjsDefault.default), {
-            mapSampler: sprite._texture,
-            filterMatrix: maskMatrix,
-            scale: {
-                x: 1,
-                y: 1
-            },
-            rotation: new Float32Array([
-                1,
-                0,
-                0,
-                1
-            ])
-        });
-        this.maskSprite = sprite;
-        this.maskMatrix = maskMatrix;
-        if (scale === null || scale === void 0) scale = 20;
-        this.scale = new (0, _core.Point)(scale, scale);
-    }
-    apply(filterManager, input, output, clearMode) {
-        this.uniforms.filterMatrix = filterManager.calculateSpriteMatrix(this.maskMatrix, this.maskSprite);
-        this.uniforms.scale.x = this.scale.x;
-        this.uniforms.scale.y = this.scale.y;
-        const wt = this.maskSprite.worldTransform;
-        const lenX = Math.sqrt(wt.a * wt.a + wt.b * wt.b);
-        const lenY = Math.sqrt(wt.c * wt.c + wt.d * wt.d);
-        if (lenX !== 0 && lenY !== 0) {
-            this.uniforms.rotation[0] = wt.a / lenX;
-            this.uniforms.rotation[1] = wt.b / lenX;
-            this.uniforms.rotation[2] = wt.c / lenY;
-            this.uniforms.rotation[3] = wt.d / lenY;
-        }
-        filterManager.applyFilter(this, input, output, clearMode);
-    }
-    get map() {
-        return this.uniforms.mapSampler;
-    }
-    set map(value) {
-        this.uniforms.mapSampler = value;
-    }
-}
-
-},{"pixijs/core":"5Xie9","./displacement.mjs":"hrM9v","./displacement2.mjs":"6rT1X","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hrM9v":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>fragment);
-var fragment = "varying vec2 vFilterCoord;\nvarying vec2 vTextureCoord;\n\nuniform vec2 scale;\nuniform mat2 rotation;\nuniform sampler2D uSampler;\nuniform sampler2D mapSampler;\n\nuniform highp vec4 inputSize;\nuniform vec4 inputClamp;\n\nvoid main(void)\n{\n  vec4 map =  texture2D(mapSampler, vFilterCoord);\n\n  map -= 0.5;\n  map.xy = scale * inputSize.zw * (rotation * map.xy);\n\n  gl_FragColor = texture2D(uSampler, clamp(vec2(vTextureCoord.x + map.x, vTextureCoord.y + map.y), inputClamp.xy, inputClamp.zw));\n}\n";
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6rT1X":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>vertex);
-var vertex = "attribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix;\nuniform mat3 filterMatrix;\n\nvarying vec2 vTextureCoord;\nvarying vec2 vFilterCoord;\n\nuniform vec4 inputSize;\nuniform vec4 outputFrame;\n\nvec4 filterVertexPosition( void )\n{\n    vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n\n    return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n}\n\nvec2 filterTextureCoord( void )\n{\n    return aVertexPosition * (outputFrame.zw * inputSize.zw);\n}\n\nvoid main(void)\n{\n	gl_Position = filterVertexPosition();\n	vTextureCoord = filterTextureCoord();\n	vFilterCoord = ( filterMatrix * vec3( vTextureCoord, 1.0)  ).xy;\n}\n";
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lPdWj":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "FXAAFilter", ()=>(0, _fxaafilterMjs.FXAAFilter));
-var _fxaafilterMjs = require("./FXAAFilter.mjs");
-
-},{"./FXAAFilter.mjs":"jD1Im","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jD1Im":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "FXAAFilter", ()=>FXAAFilter);
-var _core = require("pixijs/core");
-var _fxaaMjs = require("./fxaa.mjs");
-var _fxaaMjsDefault = parcelHelpers.interopDefault(_fxaaMjs);
-var _fxaa2Mjs = require("./fxaa2.mjs");
-var _fxaa2MjsDefault = parcelHelpers.interopDefault(_fxaa2Mjs);
-class FXAAFilter extends (0, _core.Filter) {
-    constructor(){
-        super((0, _fxaaMjsDefault.default), (0, _fxaa2MjsDefault.default));
-    }
-}
-
-},{"pixijs/core":"5Xie9","./fxaa.mjs":"8fXfm","./fxaa2.mjs":"ibzmf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8fXfm":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>vertex);
-var vertex = "\nattribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix;\n\nvarying vec2 v_rgbNW;\nvarying vec2 v_rgbNE;\nvarying vec2 v_rgbSW;\nvarying vec2 v_rgbSE;\nvarying vec2 v_rgbM;\n\nvarying vec2 vFragCoord;\n\nuniform vec4 inputSize;\nuniform vec4 outputFrame;\n\nvec4 filterVertexPosition( void )\n{\n    vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n\n    return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n}\n\nvoid texcoords(vec2 fragCoord, vec2 inverseVP,\n               out vec2 v_rgbNW, out vec2 v_rgbNE,\n               out vec2 v_rgbSW, out vec2 v_rgbSE,\n               out vec2 v_rgbM) {\n    v_rgbNW = (fragCoord + vec2(-1.0, -1.0)) * inverseVP;\n    v_rgbNE = (fragCoord + vec2(1.0, -1.0)) * inverseVP;\n    v_rgbSW = (fragCoord + vec2(-1.0, 1.0)) * inverseVP;\n    v_rgbSE = (fragCoord + vec2(1.0, 1.0)) * inverseVP;\n    v_rgbM = vec2(fragCoord * inverseVP);\n}\n\nvoid main(void) {\n\n   gl_Position = filterVertexPosition();\n\n   vFragCoord = aVertexPosition * outputFrame.zw;\n\n   texcoords(vFragCoord, inputSize.zw, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);\n}\n";
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ibzmf":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>fragment);
-var fragment = 'varying vec2 v_rgbNW;\nvarying vec2 v_rgbNE;\nvarying vec2 v_rgbSW;\nvarying vec2 v_rgbSE;\nvarying vec2 v_rgbM;\n\nvarying vec2 vFragCoord;\nuniform sampler2D uSampler;\nuniform highp vec4 inputSize;\n\n\n/**\n Basic FXAA implementation based on the code on geeks3d.com with the\n modification that the texture2DLod stuff was removed since it\'s\n unsupported by WebGL.\n\n --\n\n From:\n https://github.com/mitsuhiko/webgl-meincraft\n\n Copyright (c) 2011 by Armin Ronacher.\n\n Some rights reserved.\n\n Redistribution and use in source and binary forms, with or without\n modification, are permitted provided that the following conditions are\n met:\n\n * Redistributions of source code must retain the above copyright\n notice, this list of conditions and the following disclaimer.\n\n * Redistributions in binary form must reproduce the above\n copyright notice, this list of conditions and the following\n disclaimer in the documentation and/or other materials provided\n with the distribution.\n\n * The names of the contributors may not be used to endorse or\n promote products derived from this software without specific\n prior written permission.\n\n THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\n OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n */\n\n#ifndef FXAA_REDUCE_MIN\n#define FXAA_REDUCE_MIN   (1.0/ 128.0)\n#endif\n#ifndef FXAA_REDUCE_MUL\n#define FXAA_REDUCE_MUL   (1.0 / 8.0)\n#endif\n#ifndef FXAA_SPAN_MAX\n#define FXAA_SPAN_MAX     8.0\n#endif\n\n//optimized version for mobile, where dependent\n//texture reads can be a bottleneck\nvec4 fxaa(sampler2D tex, vec2 fragCoord, vec2 inverseVP,\n          vec2 v_rgbNW, vec2 v_rgbNE,\n          vec2 v_rgbSW, vec2 v_rgbSE,\n          vec2 v_rgbM) {\n    vec4 color;\n    vec3 rgbNW = texture2D(tex, v_rgbNW).xyz;\n    vec3 rgbNE = texture2D(tex, v_rgbNE).xyz;\n    vec3 rgbSW = texture2D(tex, v_rgbSW).xyz;\n    vec3 rgbSE = texture2D(tex, v_rgbSE).xyz;\n    vec4 texColor = texture2D(tex, v_rgbM);\n    vec3 rgbM  = texColor.xyz;\n    vec3 luma = vec3(0.299, 0.587, 0.114);\n    float lumaNW = dot(rgbNW, luma);\n    float lumaNE = dot(rgbNE, luma);\n    float lumaSW = dot(rgbSW, luma);\n    float lumaSE = dot(rgbSE, luma);\n    float lumaM  = dot(rgbM,  luma);\n    float lumaMin = min(lumaM, min(min(lumaNW, lumaNE), min(lumaSW, lumaSE)));\n    float lumaMax = max(lumaM, max(max(lumaNW, lumaNE), max(lumaSW, lumaSE)));\n\n    mediump vec2 dir;\n    dir.x = -((lumaNW + lumaNE) - (lumaSW + lumaSE));\n    dir.y =  ((lumaNW + lumaSW) - (lumaNE + lumaSE));\n\n    float dirReduce = max((lumaNW + lumaNE + lumaSW + lumaSE) *\n                          (0.25 * FXAA_REDUCE_MUL), FXAA_REDUCE_MIN);\n\n    float rcpDirMin = 1.0 / (min(abs(dir.x), abs(dir.y)) + dirReduce);\n    dir = min(vec2(FXAA_SPAN_MAX, FXAA_SPAN_MAX),\n              max(vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX),\n                  dir * rcpDirMin)) * inverseVP;\n\n    vec3 rgbA = 0.5 * (\n                       texture2D(tex, fragCoord * inverseVP + dir * (1.0 / 3.0 - 0.5)).xyz +\n                       texture2D(tex, fragCoord * inverseVP + dir * (2.0 / 3.0 - 0.5)).xyz);\n    vec3 rgbB = rgbA * 0.5 + 0.25 * (\n                                     texture2D(tex, fragCoord * inverseVP + dir * -0.5).xyz +\n                                     texture2D(tex, fragCoord * inverseVP + dir * 0.5).xyz);\n\n    float lumaB = dot(rgbB, luma);\n    if ((lumaB < lumaMin) || (lumaB > lumaMax))\n        color = vec4(rgbA, texColor.a);\n    else\n        color = vec4(rgbB, texColor.a);\n    return color;\n}\n\nvoid main() {\n\n      vec4 color;\n\n      color = fxaa(uSampler, vFragCoord, inputSize.zw, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);\n\n      gl_FragColor = color;\n}\n';
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iKqmh":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "NoiseFilter", ()=>(0, _noiseFilterMjs.NoiseFilter));
-var _noiseFilterMjs = require("./NoiseFilter.mjs");
-
-},{"./NoiseFilter.mjs":"kHJ0L","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kHJ0L":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "NoiseFilter", ()=>NoiseFilter);
-var _core = require("pixijs/core");
-var _noiseMjs = require("./noise.mjs");
-var _noiseMjsDefault = parcelHelpers.interopDefault(_noiseMjs);
-class NoiseFilter extends (0, _core.Filter) {
-    constructor(noise = 0.5, seed = Math.random()){
-        super((0, _core.defaultFilterVertex), (0, _noiseMjsDefault.default), {
-            uNoise: 0,
-            uSeed: 0
-        });
-        this.noise = noise;
-        this.seed = seed;
-    }
-    get noise() {
-        return this.uniforms.uNoise;
-    }
-    set noise(value) {
-        this.uniforms.uNoise = value;
-    }
-    get seed() {
-        return this.uniforms.uSeed;
-    }
-    set seed(value) {
-        this.uniforms.uSeed = value;
-    }
-}
-
-},{"pixijs/core":"5Xie9","./noise.mjs":"9GBE5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9GBE5":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>fragment);
-var fragment = "precision highp float;\n\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\n\nuniform float uNoise;\nuniform float uSeed;\nuniform sampler2D uSampler;\n\nfloat rand(vec2 co)\n{\n    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n}\n\nvoid main()\n{\n    vec4 color = texture2D(uSampler, vTextureCoord);\n    float randomValue = rand(gl_FragCoord.xy * uSeed);\n    float diff = (randomValue - 0.5) * uNoise;\n\n    // Un-premultiply alpha before applying the color matrix. See issue #3539.\n    if (color.a > 0.0) {\n        color.rgb /= color.a;\n    }\n\n    color.r += diff;\n    color.g += diff;\n    color.b += diff;\n\n    // Premultiply alpha again.\n    color.rgb *= color.a;\n\n    gl_FragColor = color;\n}\n";
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"227zZ":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "CacheData", ()=>CacheData);
-var _core = require("pixijs/core");
-var _sprite = require("pixijs/sprite");
-var _display = require("pixijs/display");
-const _tempMatrix = new (0, _core.Matrix)();
-(0, _display.DisplayObject).prototype._cacheAsBitmap = false;
-(0, _display.DisplayObject).prototype._cacheData = null;
-(0, _display.DisplayObject).prototype._cacheAsBitmapResolution = null;
-(0, _display.DisplayObject).prototype._cacheAsBitmapMultisample = null;
-class CacheData {
-    constructor(){
-        this.textureCacheId = null;
-        this.originalRender = null;
-        this.originalRenderCanvas = null;
-        this.originalCalculateBounds = null;
-        this.originalGetLocalBounds = null;
-        this.originalUpdateTransform = null;
-        this.originalDestroy = null;
-        this.originalMask = null;
-        this.originalFilterArea = null;
-        this.originalContainsPoint = null;
-        this.sprite = null;
-    }
-}
-Object.defineProperties((0, _display.DisplayObject).prototype, {
-    cacheAsBitmapResolution: {
-        get () {
-            return this._cacheAsBitmapResolution;
-        },
-        set (resolution) {
-            if (resolution === this._cacheAsBitmapResolution) return;
-            this._cacheAsBitmapResolution = resolution;
-            if (this.cacheAsBitmap) {
-                this.cacheAsBitmap = false;
-                this.cacheAsBitmap = true;
-            }
-        }
-    },
-    cacheAsBitmapMultisample: {
-        get () {
-            return this._cacheAsBitmapMultisample;
-        },
-        set (multisample) {
-            if (multisample === this._cacheAsBitmapMultisample) return;
-            this._cacheAsBitmapMultisample = multisample;
-            if (this.cacheAsBitmap) {
-                this.cacheAsBitmap = false;
-                this.cacheAsBitmap = true;
-            }
-        }
-    },
-    cacheAsBitmap: {
-        get () {
-            return this._cacheAsBitmap;
-        },
-        set (value) {
-            if (this._cacheAsBitmap === value) return;
-            this._cacheAsBitmap = value;
-            let data;
-            if (value) {
-                if (!this._cacheData) this._cacheData = new CacheData();
-                data = this._cacheData;
-                data.originalRender = this.render;
-                data.originalRenderCanvas = this.renderCanvas;
-                data.originalUpdateTransform = this.updateTransform;
-                data.originalCalculateBounds = this.calculateBounds;
-                data.originalGetLocalBounds = this.getLocalBounds;
-                data.originalDestroy = this.destroy;
-                data.originalContainsPoint = this.containsPoint;
-                data.originalMask = this._mask;
-                data.originalFilterArea = this.filterArea;
-                this.render = this._renderCached;
-                this.renderCanvas = this._renderCachedCanvas;
-                this.destroy = this._cacheAsBitmapDestroy;
-            } else {
-                data = this._cacheData;
-                if (data.sprite) this._destroyCachedDisplayObject();
-                this.render = data.originalRender;
-                this.renderCanvas = data.originalRenderCanvas;
-                this.calculateBounds = data.originalCalculateBounds;
-                this.getLocalBounds = data.originalGetLocalBounds;
-                this.destroy = data.originalDestroy;
-                this.updateTransform = data.originalUpdateTransform;
-                this.containsPoint = data.originalContainsPoint;
-                this._mask = data.originalMask;
-                this.filterArea = data.originalFilterArea;
-            }
-        }
-    }
-});
-(0, _display.DisplayObject).prototype._renderCached = function _renderCached(renderer) {
-    if (!this.visible || this.worldAlpha <= 0 || !this.renderable) return;
-    this._initCachedDisplayObject(renderer);
-    this._cacheData.sprite.transform._worldID = this.transform._worldID;
-    this._cacheData.sprite.worldAlpha = this.worldAlpha;
-    this._cacheData.sprite._render(renderer);
-};
-(0, _display.DisplayObject).prototype._initCachedDisplayObject = function _initCachedDisplayObject(renderer) {
-    if (this._cacheData?.sprite) return;
-    const cacheAlpha = this.alpha;
-    this.alpha = 1;
-    renderer.batch.flush();
-    const bounds = this.getLocalBounds(null, true).clone();
-    if (this.filters?.length) {
-        const padding = this.filters[0].padding;
-        bounds.pad(padding);
-    }
-    bounds.ceil((0, _core.settings).RESOLUTION);
-    const cachedRenderTexture = renderer.renderTexture.current;
-    const cachedSourceFrame = renderer.renderTexture.sourceFrame.clone();
-    const cachedDestinationFrame = renderer.renderTexture.destinationFrame.clone();
-    const cachedProjectionTransform = renderer.projection.transform;
-    const renderTexture = (0, _core.RenderTexture).create({
-        width: bounds.width,
-        height: bounds.height,
-        resolution: this.cacheAsBitmapResolution || renderer.resolution,
-        multisample: this.cacheAsBitmapMultisample ?? renderer.multisample
-    });
-    const textureCacheId = `cacheAsBitmap_${(0, _core.utils).uid()}`;
-    this._cacheData.textureCacheId = textureCacheId;
-    (0, _core.BaseTexture).addToCache(renderTexture.baseTexture, textureCacheId);
-    (0, _core.Texture).addToCache(renderTexture, textureCacheId);
-    const m = this.transform.localTransform.copyTo(_tempMatrix).invert().translate(-bounds.x, -bounds.y);
-    this.render = this._cacheData.originalRender;
-    renderer.render(this, {
-        renderTexture,
-        clear: true,
-        transform: m,
-        skipUpdateTransform: false
-    });
-    renderer.framebuffer.blit();
-    renderer.projection.transform = cachedProjectionTransform;
-    renderer.renderTexture.bind(cachedRenderTexture, cachedSourceFrame, cachedDestinationFrame);
-    this.render = this._renderCached;
-    this.updateTransform = this.displayObjectUpdateTransform;
-    this.calculateBounds = this._calculateCachedBounds;
-    this.getLocalBounds = this._getCachedLocalBounds;
-    this._mask = null;
-    this.filterArea = null;
-    this.alpha = cacheAlpha;
-    const cachedSprite = new (0, _sprite.Sprite)(renderTexture);
-    cachedSprite.transform.worldTransform = this.transform.worldTransform;
-    cachedSprite.anchor.x = -(bounds.x / bounds.width);
-    cachedSprite.anchor.y = -(bounds.y / bounds.height);
-    cachedSprite.alpha = cacheAlpha;
-    cachedSprite._bounds = this._bounds;
-    this._cacheData.sprite = cachedSprite;
-    this.transform._parentID = -1;
-    if (!this.parent) {
-        this.enableTempParent();
-        this.updateTransform();
-        this.disableTempParent(null);
-    } else this.updateTransform();
-    this.containsPoint = cachedSprite.containsPoint.bind(cachedSprite);
-};
-(0, _display.DisplayObject).prototype._renderCachedCanvas = function _renderCachedCanvas(renderer) {
-    if (!this.visible || this.worldAlpha <= 0 || !this.renderable) return;
-    this._initCachedDisplayObjectCanvas(renderer);
-    this._cacheData.sprite.worldAlpha = this.worldAlpha;
-    this._cacheData.sprite._renderCanvas(renderer);
-};
-(0, _display.DisplayObject).prototype._initCachedDisplayObjectCanvas = function _initCachedDisplayObjectCanvas(renderer) {
-    if (this._cacheData?.sprite) return;
-    const bounds = this.getLocalBounds(null, true);
-    const cacheAlpha = this.alpha;
-    this.alpha = 1;
-    const cachedRenderTarget = renderer.canvasContext.activeContext;
-    const cachedProjectionTransform = renderer._projTransform;
-    bounds.ceil((0, _core.settings).RESOLUTION);
-    const renderTexture = (0, _core.RenderTexture).create({
-        width: bounds.width,
-        height: bounds.height
-    });
-    const textureCacheId = `cacheAsBitmap_${(0, _core.utils).uid()}`;
-    this._cacheData.textureCacheId = textureCacheId;
-    (0, _core.BaseTexture).addToCache(renderTexture.baseTexture, textureCacheId);
-    (0, _core.Texture).addToCache(renderTexture, textureCacheId);
-    const m = _tempMatrix;
-    this.transform.localTransform.copyTo(m);
-    m.invert();
-    m.tx -= bounds.x;
-    m.ty -= bounds.y;
-    this.renderCanvas = this._cacheData.originalRenderCanvas;
-    renderer.render(this, {
-        renderTexture,
-        clear: true,
-        transform: m,
-        skipUpdateTransform: false
-    });
-    renderer.canvasContext.activeContext = cachedRenderTarget;
-    renderer._projTransform = cachedProjectionTransform;
-    this.renderCanvas = this._renderCachedCanvas;
-    this.updateTransform = this.displayObjectUpdateTransform;
-    this.calculateBounds = this._calculateCachedBounds;
-    this.getLocalBounds = this._getCachedLocalBounds;
-    this._mask = null;
-    this.filterArea = null;
-    this.alpha = cacheAlpha;
-    const cachedSprite = new (0, _sprite.Sprite)(renderTexture);
-    cachedSprite.transform.worldTransform = this.transform.worldTransform;
-    cachedSprite.anchor.x = -(bounds.x / bounds.width);
-    cachedSprite.anchor.y = -(bounds.y / bounds.height);
-    cachedSprite.alpha = cacheAlpha;
-    cachedSprite._bounds = this._bounds;
-    this._cacheData.sprite = cachedSprite;
-    this.transform._parentID = -1;
-    if (!this.parent) {
-        this.parent = renderer._tempDisplayObjectParent;
-        this.updateTransform();
-        this.parent = null;
-    } else this.updateTransform();
-    this.containsPoint = cachedSprite.containsPoint.bind(cachedSprite);
-};
-(0, _display.DisplayObject).prototype._calculateCachedBounds = function _calculateCachedBounds() {
-    this._bounds.clear();
-    this._cacheData.sprite.transform._worldID = this.transform._worldID;
-    this._cacheData.sprite._calculateBounds();
-    this._bounds.updateID = this._boundsID;
-};
-(0, _display.DisplayObject).prototype._getCachedLocalBounds = function _getCachedLocalBounds() {
-    return this._cacheData.sprite.getLocalBounds(null);
-};
-(0, _display.DisplayObject).prototype._destroyCachedDisplayObject = function _destroyCachedDisplayObject() {
-    this._cacheData.sprite._texture.destroy(true);
-    this._cacheData.sprite = null;
-    (0, _core.BaseTexture).removeFromCache(this._cacheData.textureCacheId);
-    (0, _core.Texture).removeFromCache(this._cacheData.textureCacheId);
-    this._cacheData.textureCacheId = null;
-};
-(0, _display.DisplayObject).prototype._cacheAsBitmapDestroy = function _cacheAsBitmapDestroy(options) {
-    this.cacheAsBitmap = false;
-    this.destroy(options);
-};
-
-},{"pixijs/core":"5Xie9","pixijs/sprite":"5cfR2","pixijs/display":"5dBvH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"faizK":[function(require,module,exports) {
-var _display = require("pixijs/display");
-(0, _display.DisplayObject).prototype.name = null;
-(0, _display.Container).prototype.getChildByName = function getChildByName(name, deep) {
-    for(let i = 0, j = this.children.length; i < j; i++){
-        if (this.children[i].name === name) return this.children[i];
-    }
-    if (deep) for(let i1 = 0, j1 = this.children.length; i1 < j1; i1++){
-        const child = this.children[i1];
-        if (!child.getChildByName) continue;
-        const target = child.getChildByName(name, true);
-        if (target) return target;
-    }
-    return null;
-};
-
-},{"pixijs/display":"5dBvH"}],"3sRUh":[function(require,module,exports) {
-var _display = require("pixijs/display");
-var _core = require("pixijs/core");
-(0, _display.DisplayObject).prototype.getGlobalPosition = function getGlobalPosition(point = new (0, _core.Point)(), skipUpdate = false) {
-    if (this.parent) this.parent.toGlobal(this.position, point, skipUpdate);
-    else {
-        point.x = this.position.x;
-        point.y = this.position.y;
-    }
-    return point;
-};
-
-},{"pixijs/display":"5dBvH","pixijs/core":"5Xie9"}],"d0TrC":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "PlaneGeometry", ()=>(0, _planeGeometryMjs.PlaneGeometry));
-parcelHelpers.export(exports, "RopeGeometry", ()=>(0, _ropeGeometryMjs.RopeGeometry));
-parcelHelpers.export(exports, "SimpleRope", ()=>(0, _simpleRopeMjs.SimpleRope));
-parcelHelpers.export(exports, "SimplePlane", ()=>(0, _simplePlaneMjs.SimplePlane));
-parcelHelpers.export(exports, "SimpleMesh", ()=>(0, _simpleMeshMjs.SimpleMesh));
-parcelHelpers.export(exports, "NineSlicePlane", ()=>(0, _nineSlicePlaneMjs.NineSlicePlane));
-var _planeGeometryMjs = require("./geometry/PlaneGeometry.mjs");
-var _ropeGeometryMjs = require("./geometry/RopeGeometry.mjs");
-var _simpleRopeMjs = require("./SimpleRope.mjs");
-var _simplePlaneMjs = require("./SimplePlane.mjs");
-var _simpleMeshMjs = require("./SimpleMesh.mjs");
-var _nineSlicePlaneMjs = require("./NineSlicePlane.mjs");
-
-},{"./geometry/PlaneGeometry.mjs":"8Saw0","./geometry/RopeGeometry.mjs":"bTiDD","./SimpleRope.mjs":"4TbY2","./SimplePlane.mjs":"jJ725","./SimpleMesh.mjs":"2lT7Y","./NineSlicePlane.mjs":"84efU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Saw0":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "PlaneGeometry", ()=>PlaneGeometry);
-var _mesh = require("pixijs/mesh");
-class PlaneGeometry extends (0, _mesh.MeshGeometry) {
-    constructor(width = 100, height = 100, segWidth = 10, segHeight = 10){
-        super();
-        this.segWidth = segWidth;
-        this.segHeight = segHeight;
-        this.width = width;
-        this.height = height;
-        this.build();
-    }
-    build() {
-        const total = this.segWidth * this.segHeight;
-        const verts = [];
-        const uvs = [];
-        const indices = [];
-        const segmentsX = this.segWidth - 1;
-        const segmentsY = this.segHeight - 1;
-        const sizeX = this.width / segmentsX;
-        const sizeY = this.height / segmentsY;
-        for(let i = 0; i < total; i++){
-            const x = i % this.segWidth;
-            const y = i / this.segWidth | 0;
-            verts.push(x * sizeX, y * sizeY);
-            uvs.push(x / segmentsX, y / segmentsY);
-        }
-        const totalSub = segmentsX * segmentsY;
-        for(let i1 = 0; i1 < totalSub; i1++){
-            const xpos = i1 % segmentsX;
-            const ypos = i1 / segmentsX | 0;
-            const value = ypos * this.segWidth + xpos;
-            const value2 = ypos * this.segWidth + xpos + 1;
-            const value3 = (ypos + 1) * this.segWidth + xpos;
-            const value4 = (ypos + 1) * this.segWidth + xpos + 1;
-            indices.push(value, value2, value3, value2, value4, value3);
-        }
-        this.buffers[0].data = new Float32Array(verts);
-        this.buffers[1].data = new Float32Array(uvs);
-        this.indexBuffer.data = new Uint16Array(indices);
-        this.buffers[0].update();
-        this.buffers[1].update();
-        this.indexBuffer.update();
-    }
-}
-
-},{"pixijs/mesh":"bxy0X","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bTiDD":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "RopeGeometry", ()=>RopeGeometry);
-var _mesh = require("pixijs/mesh");
-class RopeGeometry extends (0, _mesh.MeshGeometry) {
-    constructor(width = 200, points, textureScale = 0){
-        super(new Float32Array(points.length * 4), new Float32Array(points.length * 4), new Uint16Array((points.length - 1) * 6));
-        this.points = points;
-        this._width = width;
-        this.textureScale = textureScale;
-        this.build();
-    }
-    get width() {
-        return this._width;
-    }
-    build() {
-        const points = this.points;
-        if (!points) return;
-        const vertexBuffer = this.getBuffer("aVertexPosition");
-        const uvBuffer = this.getBuffer("aTextureCoord");
-        const indexBuffer = this.getIndex();
-        if (points.length < 1) return;
-        if (vertexBuffer.data.length / 4 !== points.length) {
-            vertexBuffer.data = new Float32Array(points.length * 4);
-            uvBuffer.data = new Float32Array(points.length * 4);
-            indexBuffer.data = new Uint16Array((points.length - 1) * 6);
-        }
-        const uvs = uvBuffer.data;
-        const indices = indexBuffer.data;
-        uvs[0] = 0;
-        uvs[1] = 0;
-        uvs[2] = 0;
-        uvs[3] = 1;
-        let amount = 0;
-        let prev = points[0];
-        const textureWidth = this._width * this.textureScale;
-        const total = points.length;
-        for(let i = 0; i < total; i++){
-            const index = i * 4;
-            if (this.textureScale > 0) {
-                const dx = prev.x - points[i].x;
-                const dy = prev.y - points[i].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                prev = points[i];
-                amount += distance / textureWidth;
-            } else amount = i / (total - 1);
-            uvs[index] = amount;
-            uvs[index + 1] = 0;
-            uvs[index + 2] = amount;
-            uvs[index + 3] = 1;
-        }
-        let indexCount = 0;
-        for(let i1 = 0; i1 < total - 1; i1++){
-            const index1 = i1 * 2;
-            indices[indexCount++] = index1;
-            indices[indexCount++] = index1 + 1;
-            indices[indexCount++] = index1 + 2;
-            indices[indexCount++] = index1 + 2;
-            indices[indexCount++] = index1 + 1;
-            indices[indexCount++] = index1 + 3;
-        }
-        uvBuffer.update();
-        indexBuffer.update();
-        this.updateVertices();
-    }
-    updateVertices() {
-        const points = this.points;
-        if (points.length < 1) return;
-        let lastPoint = points[0];
-        let nextPoint;
-        let perpX = 0;
-        let perpY = 0;
-        const vertices = this.buffers[0].data;
-        const total = points.length;
-        for(let i = 0; i < total; i++){
-            const point = points[i];
-            const index = i * 4;
-            if (i < points.length - 1) nextPoint = points[i + 1];
-            else nextPoint = point;
-            perpY = -(nextPoint.x - lastPoint.x);
-            perpX = nextPoint.y - lastPoint.y;
-            let ratio = (1 - i / (total - 1)) * 10;
-            if (ratio > 1) ratio = 1;
-            const perpLength = Math.sqrt(perpX * perpX + perpY * perpY);
-            const num = this.textureScale > 0 ? this.textureScale * this._width / 2 : this._width / 2;
-            perpX /= perpLength;
-            perpY /= perpLength;
-            perpX *= num;
-            perpY *= num;
-            vertices[index] = point.x + perpX;
-            vertices[index + 1] = point.y + perpY;
-            vertices[index + 2] = point.x - perpX;
-            vertices[index + 3] = point.y - perpY;
-            lastPoint = point;
-        }
-        this.buffers[0].update();
-    }
-    update() {
-        if (this.textureScale > 0) this.build();
-        else this.updateVertices();
-    }
-}
-
-},{"pixijs/mesh":"bxy0X","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4TbY2":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SimpleRope", ()=>SimpleRope);
-var _mesh = require("pixijs/mesh");
-var _core = require("pixijs/core");
-var _ropeGeometryMjs = require("./geometry/RopeGeometry.mjs");
-class SimpleRope extends (0, _mesh.Mesh) {
-    constructor(texture, points, textureScale = 0){
-        const ropeGeometry = new (0, _ropeGeometryMjs.RopeGeometry)(texture.height, points, textureScale);
-        const meshMaterial = new (0, _mesh.MeshMaterial)(texture);
-        if (textureScale > 0) texture.baseTexture.wrapMode = (0, _core.WRAP_MODES).REPEAT;
-        super(ropeGeometry, meshMaterial);
-        this.autoUpdate = true;
-    }
-    _render(renderer) {
-        const geometry = this.geometry;
-        if (this.autoUpdate || geometry._width !== this.shader.texture.height) {
-            geometry._width = this.shader.texture.height;
-            geometry.update();
-        }
-        super._render(renderer);
-    }
-}
-
-},{"pixijs/mesh":"bxy0X","pixijs/core":"5Xie9","./geometry/RopeGeometry.mjs":"bTiDD","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jJ725":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SimplePlane", ()=>SimplePlane);
-var _core = require("pixijs/core");
-var _mesh = require("pixijs/mesh");
-var _planeGeometryMjs = require("./geometry/PlaneGeometry.mjs");
-class SimplePlane extends (0, _mesh.Mesh) {
-    constructor(texture, verticesX, verticesY){
-        const planeGeometry = new (0, _planeGeometryMjs.PlaneGeometry)(texture.width, texture.height, verticesX, verticesY);
-        const meshMaterial = new (0, _mesh.MeshMaterial)((0, _core.Texture).WHITE);
-        super(planeGeometry, meshMaterial);
-        this.texture = texture;
-        this.autoResize = true;
-    }
-    textureUpdated() {
-        this._textureID = this.shader.texture._updateID;
-        const geometry = this.geometry;
-        const { width , height  } = this.shader.texture;
-        if (this.autoResize && (geometry.width !== width || geometry.height !== height)) {
-            geometry.width = this.shader.texture.width;
-            geometry.height = this.shader.texture.height;
-            geometry.build();
-        }
-    }
-    set texture(value) {
-        if (this.shader.texture === value) return;
-        this.shader.texture = value;
-        this._textureID = -1;
-        if (value.baseTexture.valid) this.textureUpdated();
-        else value.once("update", this.textureUpdated, this);
-    }
-    get texture() {
-        return this.shader.texture;
-    }
-    _render(renderer) {
-        if (this._textureID !== this.shader.texture._updateID) this.textureUpdated();
-        super._render(renderer);
-    }
-    destroy(options) {
-        this.shader.texture.off("update", this.textureUpdated, this);
-        super.destroy(options);
-    }
-}
-
-},{"pixijs/core":"5Xie9","pixijs/mesh":"bxy0X","./geometry/PlaneGeometry.mjs":"8Saw0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2lT7Y":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SimpleMesh", ()=>SimpleMesh);
-var _mesh = require("pixijs/mesh");
-var _core = require("pixijs/core");
-class SimpleMesh extends (0, _mesh.Mesh) {
-    constructor(texture = (0, _core.Texture).EMPTY, vertices, uvs, indices, drawMode){
-        const geometry = new (0, _mesh.MeshGeometry)(vertices, uvs, indices);
-        geometry.getBuffer("aVertexPosition").static = false;
-        const meshMaterial = new (0, _mesh.MeshMaterial)(texture);
-        super(geometry, meshMaterial, null, drawMode);
-        this.autoUpdate = true;
-    }
-    get vertices() {
-        return this.geometry.getBuffer("aVertexPosition").data;
-    }
-    set vertices(value) {
-        this.geometry.getBuffer("aVertexPosition").data = value;
-    }
-    _render(renderer) {
-        if (this.autoUpdate) this.geometry.getBuffer("aVertexPosition").update();
-        super._render(renderer);
-    }
-}
-
-},{"pixijs/mesh":"bxy0X","pixijs/core":"5Xie9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"84efU":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "NineSlicePlane", ()=>NineSlicePlane);
-var _core = require("pixijs/core");
-var _simplePlaneMjs = require("./SimplePlane.mjs");
-const DEFAULT_BORDER_SIZE = 10;
-class NineSlicePlane extends (0, _simplePlaneMjs.SimplePlane) {
-    constructor(texture, leftWidth = DEFAULT_BORDER_SIZE, topHeight = DEFAULT_BORDER_SIZE, rightWidth = DEFAULT_BORDER_SIZE, bottomHeight = DEFAULT_BORDER_SIZE){
-        super((0, _core.Texture).WHITE, 4, 4);
-        this._origWidth = texture.orig.width;
-        this._origHeight = texture.orig.height;
-        this._width = this._origWidth;
-        this._height = this._origHeight;
-        this._leftWidth = leftWidth;
-        this._rightWidth = rightWidth;
-        this._topHeight = topHeight;
-        this._bottomHeight = bottomHeight;
-        this.texture = texture;
-    }
-    textureUpdated() {
-        this._textureID = this.shader.texture._updateID;
-        this._refresh();
-    }
-    get vertices() {
-        return this.geometry.getBuffer("aVertexPosition").data;
-    }
-    set vertices(value) {
-        this.geometry.getBuffer("aVertexPosition").data = value;
-    }
-    updateHorizontalVertices() {
-        const vertices = this.vertices;
-        const scale = this._getMinScale();
-        vertices[9] = vertices[11] = vertices[13] = vertices[15] = this._topHeight * scale;
-        vertices[17] = vertices[19] = vertices[21] = vertices[23] = this._height - this._bottomHeight * scale;
-        vertices[25] = vertices[27] = vertices[29] = vertices[31] = this._height;
-    }
-    updateVerticalVertices() {
-        const vertices = this.vertices;
-        const scale = this._getMinScale();
-        vertices[2] = vertices[10] = vertices[18] = vertices[26] = this._leftWidth * scale;
-        vertices[4] = vertices[12] = vertices[20] = vertices[28] = this._width - this._rightWidth * scale;
-        vertices[6] = vertices[14] = vertices[22] = vertices[30] = this._width;
-    }
-    _getMinScale() {
-        const w = this._leftWidth + this._rightWidth;
-        const scaleW = this._width > w ? 1 : this._width / w;
-        const h = this._topHeight + this._bottomHeight;
-        const scaleH = this._height > h ? 1 : this._height / h;
-        const scale = Math.min(scaleW, scaleH);
-        return scale;
-    }
-    get width() {
-        return this._width;
-    }
-    set width(value) {
-        this._width = value;
-        this._refresh();
-    }
-    get height() {
-        return this._height;
-    }
-    set height(value) {
-        this._height = value;
-        this._refresh();
-    }
-    get leftWidth() {
-        return this._leftWidth;
-    }
-    set leftWidth(value) {
-        this._leftWidth = value;
-        this._refresh();
-    }
-    get rightWidth() {
-        return this._rightWidth;
-    }
-    set rightWidth(value) {
-        this._rightWidth = value;
-        this._refresh();
-    }
-    get topHeight() {
-        return this._topHeight;
-    }
-    set topHeight(value) {
-        this._topHeight = value;
-        this._refresh();
-    }
-    get bottomHeight() {
-        return this._bottomHeight;
-    }
-    set bottomHeight(value) {
-        this._bottomHeight = value;
-        this._refresh();
-    }
-    _refresh() {
-        const texture = this.texture;
-        const uvs = this.geometry.buffers[1].data;
-        this._origWidth = texture.orig.width;
-        this._origHeight = texture.orig.height;
-        const _uvw = 1 / this._origWidth;
-        const _uvh = 1 / this._origHeight;
-        uvs[0] = uvs[8] = uvs[16] = uvs[24] = 0;
-        uvs[1] = uvs[3] = uvs[5] = uvs[7] = 0;
-        uvs[6] = uvs[14] = uvs[22] = uvs[30] = 1;
-        uvs[25] = uvs[27] = uvs[29] = uvs[31] = 1;
-        uvs[2] = uvs[10] = uvs[18] = uvs[26] = _uvw * this._leftWidth;
-        uvs[4] = uvs[12] = uvs[20] = uvs[28] = 1 - _uvw * this._rightWidth;
-        uvs[9] = uvs[11] = uvs[13] = uvs[15] = _uvh * this._topHeight;
-        uvs[17] = uvs[19] = uvs[21] = uvs[23] = 1 - _uvh * this._bottomHeight;
-        this.updateHorizontalVertices();
-        this.updateVerticalVertices();
-        this.geometry.buffers[0].update();
-        this.geometry.buffers[1].update();
-    }
-}
-
-},{"pixijs/core":"5Xie9","./SimplePlane.mjs":"jJ725","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jeCDy":[function(require,module,exports) {
+},{"pixijs/core":"5Xie9","pixijs/assets":"l5zUJ","./BitmapFont.mjs":"1NVee","./formats/index.mjs":"28ovf","./formats/TextFormat.mjs":"fWKNp","./formats/XMLStringFormat.mjs":"fcLF6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jeCDy":[function(require,module,exports) {
 module.exports = require("4ee5150a591530c4").getBundleURL("aNMIV") + "perlin.4bfdf2c9.jpg" + "?" + Date.now();
 
 },{"4ee5150a591530c4":"lgJ39"}],"lgJ39":[function(require,module,exports) {
