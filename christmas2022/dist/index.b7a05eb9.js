@@ -687,7 +687,7 @@ vec3 map( vec3 p)
 
 vec3 march( vec3 cam, vec3 rd, out vec3 p, out float travel)
 {
-    for( int i = 0; i < 200; i++)
+    for( int i = 0; i < 20; i++)
     {
         p = cam + rd*travel;
         vec3 r = map( p );
