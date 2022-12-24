@@ -676,9 +676,9 @@ vec3 map( vec3 p)
 {
     float s1 = sphere(p, 0.25);
     
-    glow +=smoothstep(0.1, 0.0, s1);
+    glow +=smoothstep(0.1, 0.05, s1);
     
-    float c1 = cylinder( RotX(3.14*0.5)*p, 0.0035);
+    float c1 = cylinder( RotX(3.14*0.5)*p, 0.005);
     
     if(c1 < s1 && p.y > 0.0) return vec3(c1, 2.0, 0.0);
     
@@ -687,7 +687,7 @@ vec3 map( vec3 p)
 
 vec3 march( vec3 cam, vec3 rd, out vec3 p, out float travel)
 {
-    for( int i = 0; i < 100; i++)
+    for( int i = 0; i < 200; i++)
     {
         p = cam + rd*travel;
         vec3 r = map( p );
@@ -754,7 +754,7 @@ void main(  )
         ouv += 0.5;
         vec3 bgc = texture2D( iChannel3, ouv).rgb;
         col = bgc;// texture2D( iChannel3, ouv).rgb;
-        //col *=1.0+ glow*0.03;
+        col *=1.0+ glow*0.015;
     }
     else if(res.y < 1.5) {
         // sphere
@@ -766,7 +766,7 @@ void main(  )
         float noise = cubemap( iChannel0, p1*1.0).r + cubemap( iChannel1, p2*2.0).r;
         
         
-        float noiseHilight = smoothstep( 0.95, 1.5, noise);
+        float noiseHilight = smoothstep( 0.915, 1.25, noise);
         float noiseBase = smoothstep(0.02, 1.0, noise);
         
         float intensity =  diffuse( p, light, n);
@@ -780,6 +780,7 @@ void main(  )
         vec3 bgc = texture2D( iChannel3, ouv).rgb;
 
         col =  col*0.3+ refcol*1.0 + bgc*0.9;
+        col *=1.0+ glow*0.015;
     }
     else if(res.y < 2.5){
         ouv -= 0.5;
