@@ -932,7 +932,7 @@ void main(  )
     app.ticker.add((delta)=>{
         time += 1 / 60;
         quad.shader.uniforms.iTime = time;
-        quad2.shader.uniforms.iTime = time;
+        quad2.shader.uniforms.iTime = time / 2;
         quad.position.set(window.innerWidth / 2, window.innerHeight / 2);
         quad.scale.set(window.innerWidth / 200, window.innerHeight / 200);
         quad2.scale = quad.scale;
