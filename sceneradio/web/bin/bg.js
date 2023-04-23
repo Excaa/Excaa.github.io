@@ -108,6 +108,15 @@
 			show.forEach( p => p.element.style.display = "block");
 		}
 		
+		//2023 players.
+		generatePlayer("2023compo/01 - conffa - Mauri Mursun kaljanhakureissu (NES).mp3", "1. conffa - Mauri Mursun kaljanhakureissu (NES)", false, 2023);
+		generatePlayer("2023compo/02 - VonDemus - Twilight of a Cold Star.mp3", "2. VonDemus - Twilight of a Cold Star", false, 2023);
+		generatePlayer("2023compo/03 - Tawsky - View From the Edge.mp3", "3. Tawsky - View From the Edge", false, 2023);
+		generatePlayer("2023compo/04 - eimink - samplejunkka.mp3", "4. eimink - samplejunkka", false, 2023);
+		generatePlayer("2023compo/05 - Tuoreet Eksotit - Nousevan Auringon Maa.mp3", "5. Tuoreet Eksotit - Nousevan Auringon Maa", false, 2023);
+		generatePlayer("2023compo/06 - bitofhope - vaihteeksi joku muu kuin pipeline koveri.mp3", "6. bitofhope - vaihteeksi joku muu kuin pipeline koveri", false, 2023);
+		generatePlayer("2023compo/07 - IlmariTonttu - Ilman menoo.mp3", "Late entry: IlmariTonttu - Ilman menoo", false, 2023);
+		
 		//2022 players.
 		generatePlayer("2022compo/01 - Leposyke - Nahkanaama.mp3", "1. Leposyke - Nahkanaama", false, 2022);
 		generatePlayer("2022compo/02 - VonDemus - Phantom Charger.mp3", "2. VonDemus - Phantom Charger", false, 2022);
@@ -148,8 +157,9 @@
 		generatePlayer("2016compo/Terwiz_-_WappuRide.mp3", "3. Terwiz - Wappuride", false, 2016);
 		generatePlayer("2016compo/Oksaperseessa2000_-_Mayra_jatkaa_elamaansa_rumpuna.mp3", "4. Oksaperseessä2000 - Mäyrä jatkaa elämäänsä rumpuna", false, 2016);
 		
-		changeYear(2022);
+		changeYear(2023);
 		
+		document.getElementById("c2023").addEventListener("click", e => changeYear(2023));
 		document.getElementById("c2022").addEventListener("click", e => changeYear(2022));
 		document.getElementById("c2021").addEventListener("click", e => changeYear(2021));
 		document.getElementById("c2020").addEventListener("click", e => changeYear(2020));
