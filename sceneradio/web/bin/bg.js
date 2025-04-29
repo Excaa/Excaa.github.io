@@ -110,7 +110,7 @@
 		
 		//2025 players.
 		generatePlayer("2025compo/01_Tayskersantti_VonDemus_Viidakkoraivo.mp3", "1. Tayskersantti & VonDemus - Viidakkoraivo", false, 2025);
-		generatePlayer("2025compo/02_TheWing_Citydream.mp3", "2. TheWin - Citydream", false, 2025);
+		generatePlayer("2025compo/02_TheWing_Citydream.mp3", "2. TheWing - Citydream", false, 2025);
 		generatePlayer("2025compo/03_Tawsky_The_Call_of_Great_Tits.mp3", "3. Tawsky - The Call of Great Tits", false, 2025);
 		generatePlayer("2025compo/04_Joner_Rapu_Tahlberg.mp3", "4. Joner - Rapu Tahlberg", false, 2025);
 		generatePlayer("2025compo/05_OHRU_Bit_Walkers.mp3", "5. OHRU - Bit Walkers", false, 2025);
