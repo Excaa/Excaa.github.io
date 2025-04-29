@@ -108,6 +108,13 @@
 			show.forEach( p => p.element.style.display = "block");
 		}
 		
+		//2025 players.
+		generatePlayer("2025compo/01_Tayskersantti_VonDemus_Viidakkoraivo.mp3", "1. Tayskersantti & VonDemus - Viidakkoraivo", false, 2025);
+		generatePlayer("2025compo/02_TheWing_Citydream.mp3", "2. TheWin - Citydream", false, 2025);
+		generatePlayer("2025compo/03_Tawsky_The_Call_of_Great_Tits.mp3", "3. Tawsky - The Call of Great Tits", false, 2025);
+		generatePlayer("2025compo/04_Joner_Rapu_Tahlberg.mp3", "4. Joner - Rapu Tahlberg", false, 2025);
+		generatePlayer("2025compo/05_OHRU_Bit_Walkers.mp3", "5. OHRU - Bit Walkers", false, 2025);
+		
 		//2024 players.
 		generatePlayer("2024compo/01_Karl Phaser - Da-Capocalypse.mp3", "1. Karl Phaser - Da-Capocalypse", false, 2024);
 		generatePlayer("2024compo/02_vurpo - soundinlavaytin_wappuaattona.mp3", "2. vurpo - Soundinläväytin wappuaattona", false, 2024);
@@ -167,8 +174,9 @@
 		generatePlayer("2016compo/Terwiz_-_WappuRide.mp3", "3. Terwiz - Wappuride", false, 2016);
 		generatePlayer("2016compo/Oksaperseessa2000_-_Mayra_jatkaa_elamaansa_rumpuna.mp3", "4. Oksaperseessä2000 - Mäyrä jatkaa elämäänsä rumpuna", false, 2016);
 		
-		changeYear(2024);
+		changeYear(2025);
 		
+		document.getElementById("c2025").addEventListener("click", e => changeYear(2025));
 		document.getElementById("c2024").addEventListener("click", e => changeYear(2024));
 		document.getElementById("c2023").addEventListener("click", e => changeYear(2023));
 		document.getElementById("c2022").addEventListener("click", e => changeYear(2022));
